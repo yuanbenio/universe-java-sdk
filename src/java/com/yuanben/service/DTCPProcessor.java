@@ -35,17 +35,15 @@ public class DTCPProcessor {
     /**
      * 生成闪电dna
      * @param signature 16进制的metadata签名串
-     * @param blockHash metadata的区块哈希值
      * @return metadata的闪电dna
      * @throws InvalidException 入参为空
      */
-    public static String GeneratorDNA(String signature, String blockHash) throws InvalidException {
-        if (StringUtils.isBlank(signature) || StringUtils.isBlank(blockHash)) {
-            throw new InvalidException("signature or block hash is empty");
+    public static String GeneratorDNA(String signature) throws InvalidException {
+        if (StringUtils.isBlank(signature)) {
+            throw new InvalidException("signature is empty");
         }
         Keccak256 keccak256 = new Keccak256();
         keccak256.update(signature.getBytes());
-        keccak256.update(blockHash.getBytes());
         return Hex.toHexString(keccak256.digest());
     }
 
@@ -125,7 +123,7 @@ public class DTCPProcessor {
                 throw new InvalidException("content type is nonsupport");
         }
         String sign = GenMetadataSignature(metadata, privateKey);
-        String dna = GeneratorDNA(sign, metadata.getBlockHash());
+        String dna = GeneratorDNA(sign);
         metadata.setSignature(sign);
         metadata.setDna(dna);
         return metadata;

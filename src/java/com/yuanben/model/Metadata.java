@@ -41,7 +41,7 @@ public class Metadata {
 
     public static class License {
         private String type;
-        private Map<String, String> params;
+        private Map<String, String> parameters;
 
         public String getType() {
             return type;
@@ -51,12 +51,12 @@ public class Metadata {
             this.type = type;
         }
 
-        public Map<String, String> getParams() {
-            return params;
+        public Map<String, String> getParameters() {
+            return parameters;
         }
 
-        public void setParams(Map<String, String> params) {
-            this.params = params;
+        public void setParameters(Map<String, String> parameters) {
+            this.parameters = parameters;
         }
     }
 

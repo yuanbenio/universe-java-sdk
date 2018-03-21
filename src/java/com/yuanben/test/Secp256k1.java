@@ -184,7 +184,7 @@ public class Secp256k1 {
         params.put("data", "afgad");
         params.put("cata", "afgad");
         params.put("aata", "afgad");
-        license.setParams(params);
+        license.setParameters(params);
         metadata.setLicense(license);
         System.out.println(metadata.toJson());
 
