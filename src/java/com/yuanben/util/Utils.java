@@ -21,20 +21,17 @@ import org.slf4j.LoggerFactory;
 import org.spongycastle.util.encoders.DecoderException;
 import org.spongycastle.util.encoders.Hex;
 
+import javax.swing.*;
 import java.lang.reflect.Array;
 import java.math.BigInteger;
-
 import java.net.URL;
-
 import java.security.SecureRandom;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
-
-import javax.swing.*;
 
 public class Utils {
 
@@ -49,7 +46,7 @@ public class Utils {
         boolean match = Pattern.matches("0[xX][0-9a-fA-F]+", number);
         if (!match)
             return (new BigInteger(number));
-        else{
+        else {
             number = number.substring(2);
             number = number.length() % 2 != 0 ? "0".concat(number) : number;
             byte[] numberBytes = Hex.decode(number);
@@ -75,7 +72,7 @@ public class Utils {
         if (msec < 3000) return String.format("%.2fs", msec / 1000d);
         if (msec < 60 * 1000) return (msec / 1000) + "s";
         long sec = msec / 1000;
-        if (sec < 5 * 60) return (sec / 60) +  "m" + (sec % 60) + "s";
+        if (sec < 5 * 60) return (sec / 60) + "m" + (sec % 60) + "s";
         long min = sec / 60;
         if (min < 60) return min + "m";
         long hour = min / 60;
@@ -182,7 +179,7 @@ public class Utils {
         return unixTime * 1000;
     }
 
-    public static <T> T[] mergeArrays(T[] ... arr) {
+    public static <T> T[] mergeArrays(T[]... arr) {
         int size = 0;
         for (T[] ts : arr) {
             size += ts.length;
@@ -202,6 +199,7 @@ public class Utils {
         return alignRight ? alignString + s : s + alignString;
 
     }
+
     public static String repeat(String s, int n) {
         if (s.length() == 1) {
             byte[] bb = new byte[n];

@@ -21,30 +21,28 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.yuanben.crypto.zksnark.Params.B_Fp2;
-import static com.yuanben.crypto.zksnark.Params.PAIRING_FINAL_EXPONENT_Z;
-import static com.yuanben.crypto.zksnark.Params.TWIST;
+import static com.yuanben.crypto.zksnark.Params.*;
 
 
 /**
  * Implementation of a Pairing Check operation over points of two twisted Barreto–Naehrig curves {@link BN128Fp}, {@link BN128Fp2}<br/>
  * <br/>
- *
+ * <p>
  * The Pairing itself is a transformation of the form G1 x G2 -> Gt, <br/>
  * where G1 and G2 are members of {@link BN128G1} {@link BN128G2} respectively, <br/>
  * Gt is a subgroup of roots of unity in {@link Fp12} field, root degree equals to {@link Params#R} <br/>
  * <br/>
- *
+ * <p>
  * Pairing Check input is a sequence of point pairs, the result is either 1 or 0, 1 is considered as success, 0 as fail <br/>
  * <br/>
- *
+ * <p>
  * Usage:
  * <ul>
- *      <li>add pairs sequentially with {@link #addPair(BN128G1, BN128G2)}</li>
- *      <li>run check with {@link #run()} after all paris have been added</li>
- *      <li>get result with {@link #result()}</li>
+ * <li>add pairs sequentially with {@link #addPair(BN128G1, BN128G2)}</li>
+ * <li>run check with {@link #run()} after all paris have been added</li>
+ * <li>get result with {@link #result()}</li>
  * </ul>
- *
+ * <p>
  * Arithmetic has been ported from <a href="https://github.com/scipr-lab/libff/blob/master/libff/algebra/curves/alt_bn128/alt_bn128_pairing.cpp">libff</a>
  * Ate pairing algorithms
  *
@@ -58,7 +56,8 @@ public class PairingCheck {
     List<Pair> pairs = new ArrayList<>();
     Fp12 product = Fp12._1;
 
-    private PairingCheck() {}
+    private PairingCheck() {
+    }
 
     public static PairingCheck create() {
         return new PairingCheck();
@@ -99,7 +98,7 @@ public class PairingCheck {
         int idx = 0;
 
         // for each bit except most significant one
-        for (int i = LOOP_COUNT.bitLength() - 2; i >=0; i--) {
+        for (int i = LOOP_COUNT.bitLength() - 2; i >= 0; i--) {
 
             EllCoeffs c = coeffs.get(idx++);
             f = f.squared();
@@ -128,7 +127,7 @@ public class PairingCheck {
         BN128G2 addend = base;
 
         // for each bit except most significant one
-        for (int i = LOOP_COUNT.bitLength() - 2; i >=0; i--) {
+        for (int i = LOOP_COUNT.bitLength() - 2; i >= 0; i--) {
 
             Precomputed doubling = flippedMillerLoopDoubling(addend);
 
@@ -145,7 +144,7 @@ public class PairingCheck {
         BN128G2 q1 = base.mulByP();
         BN128G2 q2 = q1.mulByP();
 
-        q2 = new BN128G2(q2.x, q2.y.negate(), q2.z) ; // q2.y = -q2.y
+        q2 = new BN128G2(q2.x, q2.y.negate(), q2.z); // q2.y = -q2.y
 
         Precomputed addition = flippedMillerLoopMixedAddition(q1, addend);
         addend = addition.g2;
@@ -158,7 +157,7 @@ public class PairingCheck {
     }
 
     private static Precomputed flippedMillerLoopMixedAddition(BN128G2 base, BN128G2 addend) {
-        
+
         Fp2 x1 = addend.x, y1 = addend.y, z1 = addend.z;
         Fp2 x2 = base.x, y2 = base.y;
 

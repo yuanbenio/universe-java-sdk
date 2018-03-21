@@ -22,7 +22,7 @@ import static com.yuanben.crypto.zksnark.Params.B_Fp;
 
 /**
  * Definition of {@link BN128} over F_p, where "p" equals {@link Params#P} <br/>
- *
+ * <p>
  * Curve equation: <br/>
  * Y^2 = X^3 + b, where "b" equals {@link Params#B_Fp} <br/>
  *
@@ -61,7 +61,7 @@ public class BN128Fp extends BN128<Fp> {
     /**
      * Checks whether x and y belong to Fp,
      * then checks whether point with (x; y) coordinates lays on the curve.
-     *
+     * <p>
      * Returns new point if all checks have been passed,
      * otherwise returns null
      */

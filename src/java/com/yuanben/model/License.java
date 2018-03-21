@@ -1,8 +1,6 @@
 package com.yuanben.model;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import java.util.Map;
 
@@ -16,7 +14,7 @@ public class License {
 
     //数据类型
     private String type;
-    private Map<String,String> params;
+    private Map<String, String> params;
     private String desc;
     private String created;
     private String extra;
@@ -101,7 +99,7 @@ public class License {
         this.extra = extra;
     }
 
-    public String toJson(){
+    public String toJson() {
         return JSONObject.toJSONString(this);
     }
 }

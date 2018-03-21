@@ -18,13 +18,13 @@
 package com.yuanben.crypto;
 /**
  * Copyright 2011 Google Inc.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,13 +38,6 @@ import com.yuanben.crypto.jce.*;
 import com.yuanben.util.ByteUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.spongycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
-import org.spongycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
-import org.spongycastle.jce.spec.ECParameterSpec;
-import org.spongycastle.jce.spec.ECPrivateKeySpec;
-import org.spongycastle.jce.spec.ECPublicKeySpec;
-
 import org.spongycastle.asn1.ASN1InputStream;
 import org.spongycastle.asn1.ASN1Integer;
 import org.spongycastle.asn1.DLSequence;
@@ -58,6 +51,11 @@ import org.spongycastle.crypto.modes.SICBlockCipher;
 import org.spongycastle.crypto.params.*;
 import org.spongycastle.crypto.signers.ECDSASigner;
 import org.spongycastle.crypto.signers.HMacDSAKCalculator;
+import org.spongycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
+import org.spongycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
+import org.spongycastle.jce.spec.ECParameterSpec;
+import org.spongycastle.jce.spec.ECPrivateKeySpec;
+import org.spongycastle.jce.spec.ECPublicKeySpec;
 import org.spongycastle.math.ec.ECAlgorithms;
 import org.spongycastle.math.ec.ECCurve;
 import org.spongycastle.math.ec.ECPoint;
@@ -65,25 +63,16 @@ import org.spongycastle.util.BigIntegers;
 import org.spongycastle.util.encoders.Base64;
 import org.spongycastle.util.encoders.Hex;
 
+import javax.crypto.KeyAgreement;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
-import java.security.InvalidKeyException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.PrivateKey;
-import java.security.Provider;
-import java.security.PublicKey;
-import java.security.SecureRandom;
-import java.security.Signature;
-import java.security.SignatureException;
+import java.security.*;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
-
-import javax.crypto.KeyAgreement;
 
 import static com.yuanben.util.BIUtil.isLessThan;
 import static com.yuanben.util.ByteUtil.bigIntegerToBytes;
@@ -161,11 +150,11 @@ public class ECKey implements Serializable {
     /* Convert a Java JCE ECPublicKey into a BouncyCastle ECPoint
      */
     private static ECPoint extractPublicKey(final ECPublicKey ecPublicKey) {
-      final java.security.spec.ECPoint publicPointW = ecPublicKey.getW();
-      final BigInteger xCoord = publicPointW.getAffineX();
-      final BigInteger yCoord = publicPointW.getAffineY();
+        final java.security.spec.ECPoint publicPointW = ecPublicKey.getW();
+        final BigInteger xCoord = publicPointW.getAffineX();
+        final BigInteger yCoord = publicPointW.getAffineY();
 
-      return CURVE.getCurve().createPoint(xCoord, yCoord);
+        return CURVE.getCurve().createPoint(xCoord, yCoord);
     }
 
     /**
@@ -188,8 +177,8 @@ public class ECKey implements Serializable {
             pub = extractPublicKey((ECPublicKey) pubKey);
         } else {
             throw new AssertionError(
-                "Expected Provider " + provider.getName() +
-                " to produce a subtype of ECPublicKey, found " + pubKey.getClass());
+                    "Expected Provider " + provider.getName() +
+                            " to produce a subtype of ECPublicKey, found " + pubKey.getClass());
         }
     }
 
@@ -226,9 +215,9 @@ public class ECKey implements Serializable {
             this.privKey = privKey;
         } else {
             throw new IllegalArgumentException(
-                "Expected EC private key, given a private key object with class " +
-                privKey.getClass().toString() +
-                " and algorithm " + privKey.getAlgorithm());
+                    "Expected EC private key, given a private key object with class " +
+                            privKey.getClass().toString() +
+                            " and algorithm " + privKey.getAlgorithm());
         }
 
         if (pub == null) {
@@ -246,8 +235,8 @@ public class ECKey implements Serializable {
         } else {
             try {
                 return ECKeyFactory
-                    .getInstance(SpongyCastleProvider.getInstance())
-                    .generatePrivate(new ECPrivateKeySpec(priv, CURVE_SPEC));
+                        .getInstance(SpongyCastleProvider.getInstance())
+                        .generatePrivate(new ECPrivateKeySpec(priv, CURVE_SPEC));
             } catch (InvalidKeySpecException ex) {
                 throw new AssertionError("Assumed correct key spec statically");
             }
@@ -261,9 +250,9 @@ public class ECKey implements Serializable {
      */
     public ECKey(@Nullable BigInteger priv, ECPoint pub) {
         this(
-            SpongyCastleProvider.getInstance(),
-            privateKeyFromBigInteger(priv),
-            pub
+                SpongyCastleProvider.getInstance(),
+                privateKeyFromBigInteger(priv),
+                pub
         );
     }
 
@@ -432,7 +421,7 @@ public class ECKey implements Serializable {
      */
     public static byte[] computeAddress(byte[] pubBytes) {
         return HashUtil.sha3omit12(
-            Arrays.copyOfRange(pubBytes, 1, pubBytes.length));
+                Arrays.copyOfRange(pubBytes, 1, pubBytes.length));
     }
 
     /**
@@ -475,7 +464,7 @@ public class ECKey implements Serializable {
      */
     public byte[] getNodeId() {
         if (nodeId == null) {
-            nodeId  = pubBytesWithoutFormat(this.pub);
+            nodeId = pubBytesWithoutFormat(this.pub);
         }
         return nodeId;
     }
@@ -646,7 +635,10 @@ public class ECKey implements Serializable {
                 throw new RuntimeException(e);
             } finally {
                 if (decoder != null)
-                    try { decoder.close(); } catch (IOException x) {}
+                    try {
+                        decoder.close();
+                    } catch (IOException x) {
+                    }
             }
         }
 
@@ -687,7 +679,7 @@ public class ECKey implements Serializable {
         public byte[] toByteArray() {
             final byte fixedV = this.v >= 27
                     ? (byte) (this.v - 27)
-                    :this.v;
+                    : this.v;
 
             return ByteUtil.merge(
                     ByteUtil.bigIntegerToBytes(this.r),
@@ -804,11 +796,11 @@ public class ECKey implements Serializable {
             throw new SignatureException("Signature truncated, expected 65 bytes and got " + signatureEncoded.length);
 
         return signatureToKeyBytes(
-            messageHash,
-            ECDSASignature.fromComponents(
-                Arrays.copyOfRange(signatureEncoded, 1, 33),
-                Arrays.copyOfRange(signatureEncoded, 33, 65),
-                (byte) (signatureEncoded[0] & 0xFF)));
+                messageHash,
+                ECDSASignature.fromComponents(
+                        Arrays.copyOfRange(signatureEncoded, 1, 33),
+                        Arrays.copyOfRange(signatureEncoded, 33, 65),
+                        (byte) (signatureEncoded[0] & 0xFF)));
     }
 
     public static byte[] signatureToKeyBytes(byte[] messageHash, ECDSASignature sig) throws SignatureException {
@@ -887,8 +879,8 @@ public class ECKey implements Serializable {
                 final KeyAgreement agreement = ECKeyAgreement.getInstance(this.provider);
                 agreement.init(this.privKey);
                 agreement.doPhase(
-                    ECKeyFactory.getInstance(this.provider)
-                        .generatePublic(new ECPublicKeySpec(otherParty, CURVE_SPEC)),
+                        ECKeyFactory.getInstance(this.provider)
+                                .generatePublic(new ECPublicKeySpec(otherParty, CURVE_SPEC)),
                         /* lastPhase */ true);
                 return new BigInteger(1, agreement.generateSecret());
             } catch (IllegalStateException | InvalidKeyException | InvalidKeySpecException ex) {
@@ -904,7 +896,7 @@ public class ECKey implements Serializable {
      * @return decrypted cipher, equal length to the cipher.
      * @deprecated should not use EC private scalar value as an AES key
      */
-    public byte[] decryptAES(byte[] cipher){
+    public byte[] decryptAES(byte[] cipher) {
 
         if (privKey == null) {
             throw new MissingPrivateKeyException();
@@ -924,15 +916,15 @@ public class ECKey implements Serializable {
 
         int i = 0;
         byte[] out = new byte[cipher.length];
-        while(i < cipher.length){
+        while (i < cipher.length) {
             ctrEngine.processBlock(cipher, i, out, i);
             i += engine.getBlockSize();
-            if (cipher.length - i  < engine.getBlockSize())
+            if (cipher.length - i < engine.getBlockSize())
                 break;
         }
 
         // process left bytes
-        if (cipher.length - i > 0){
+        if (cipher.length - i > 0) {
             byte[] tmpBlock = new byte[16];
             System.arraycopy(cipher, i, tmpBlock, 0, cipher.length - i);
             ctrEngine.processBlock(tmpBlock, 0, tmpBlock, 0);
@@ -941,7 +933,6 @@ public class ECKey implements Serializable {
 
         return out;
     }
-
 
 
     /**
@@ -1188,7 +1179,6 @@ public class ECKey implements Serializable {
     public int hashCode() {
         return Arrays.hashCode(getPubKey());
     }
-
 
 
     @SuppressWarnings("serial")

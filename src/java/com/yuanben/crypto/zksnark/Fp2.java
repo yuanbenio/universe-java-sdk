@@ -22,11 +22,11 @@ import java.math.BigInteger;
 /**
  * Arithmetic in F_p2 <br/>
  * <br/>
- *
+ * <p>
  * "p" equals 21888242871839275222246405745257275088696311157297823662689037894645226208583,
  * elements of F_p2 are represented as a polynomials "a * i + b" modulo "i^2 + 1" from the ring F_p[i] <br/>
  * <br/>
- *
+ * <p>
  * Field arithmetic is ported from <a href="https://github.com/scipr-lab/libff/blob/master/libff/algebra/fields/fp2.tcc">libff</a> <br/>
  *
  * @author Mikhail Kalinin
@@ -35,10 +35,10 @@ import java.math.BigInteger;
 class Fp2 implements Field<Fp2> {
 
     static final Fp2 ZERO = new Fp2(Fp.ZERO, Fp.ZERO);
-    static final Fp2 _1  = new Fp2(Fp._1, Fp.ZERO);
+    static final Fp2 _1 = new Fp2(Fp._1, Fp.ZERO);
     static final Fp2 NON_RESIDUE = new Fp2(BigInteger.valueOf(9), BigInteger.ONE);
 
-    static final Fp[] FROBENIUS_COEFFS_B = new Fp[] {
+    static final Fp[] FROBENIUS_COEFFS_B = new Fp[]{
             new Fp(BigInteger.ONE),
             new Fp(new BigInteger("21888242871839275222246405745257275088696311157297823662689037894645226208582"))
     };

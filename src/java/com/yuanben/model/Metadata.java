@@ -1,18 +1,16 @@
 package com.yuanben.model;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONCreator;
 import com.alibaba.fastjson.annotation.JSONField;
-import com.alibaba.fastjson.annotation.JSONPOJOBuilder;
-import com.alibaba.fastjson.annotation.JSONType;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.sun.xml.internal.rngom.ast.builder.Include;
 
 import java.util.Map;
 
 public class Metadata {
+    @JSONField(name = "pubkey")
     private String pubKey;
+    @JSONField(name = "block_hash")
     private String blockHash;
+    @JSONField(name = "block_height")
     private Long blockHeight;
     private String signature;
     private String id;
@@ -20,6 +18,7 @@ public class Metadata {
 
     //用逗号隔开
     private String category;
+    @JSONField(name = "content_hash")
     private String contentHash;
     private String type;
     private String title;
@@ -30,6 +29,9 @@ public class Metadata {
     @JSONField(name = "abstract")
     private String abstractContent;  //其他版本该字段为：abstract
     private String dna;
+    @JSONField(name = "parent_dna")
+    private String parentDna;
+
     private String language;
     private String source;
     private Object extra;
@@ -39,7 +41,7 @@ public class Metadata {
 
     public static class License {
         private String type;
-        private Map<String,String> params;
+        private Map<String, String> params;
 
         public String getType() {
             return type;
@@ -178,6 +180,14 @@ public class Metadata {
         this.extra = extra;
     }
 
+    public String getParentDna() {
+        return parentDna;
+    }
+
+    public void setParentDna(String parentDna) {
+        this.parentDna = parentDna;
+    }
+
     public Object getData() {
         return data;
     }
@@ -204,7 +214,23 @@ public class Metadata {
     }
 
 
-    public String toJson(){
+    public String toJson() {
         return JSONObject.toJSONString(this);
+    }
+
+    /**
+     * 获取metadata去除签名和dna的json字符串
+     *
+     * @return json字符串
+     */
+    public String toJsonRmSign() {
+        String dna = this.getDna();
+        String signature = this.getSignature();
+        this.dna = null;
+        this.signature = null;
+        String js = JSONObject.toJSONString(this);
+        this.dna = dna;
+        this.signature = signature;
+        return js;
     }
 }

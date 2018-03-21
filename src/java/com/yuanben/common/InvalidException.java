@@ -1,13 +1,15 @@
 package com.yuanben.common;
 
 public class InvalidException extends Exception {
-    public InvalidException(){
+    public InvalidException() {
         super();
     }
-    public InvalidException(String msg){
+
+    public InvalidException(String msg) {
         super(msg);
     }
-    public InvalidException(String msg,Throwable e){
-        super(msg,e);
+
+    public InvalidException(String msg, Throwable e) {
+        super(msg, e);
     }
 }

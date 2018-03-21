@@ -29,7 +29,7 @@ public class CollectionUtils {
 
     public static <K, V> List<V> collectList(Collection<K> items, Function<K, V> collector) {
         List<V> collected = new ArrayList<>(items.size());
-        for(K item : items) {
+        for (K item : items) {
             collected.add(collector.apply(item));
         }
         return collected;
@@ -37,20 +37,20 @@ public class CollectionUtils {
 
     public static <K, V> Set<V> collectSet(Collection<K> items, Function<K, V> collector) {
         Set<V> collected = new HashSet<>();
-        for(K item : items) {
+        for (K item : items) {
             collected.add(collector.apply(item));
         }
         return collected;
     }
 
     public static <T> List<T> truncate(List<T> items, int limit) {
-        if(limit > items.size()) {
+        if (limit > items.size()) {
             return new ArrayList<>(items);
         }
         List<T> truncated = new ArrayList<>(limit);
-        for(T item : items) {
+        for (T item : items) {
             truncated.add(item);
-            if(truncated.size() == limit) {
+            if (truncated.size() == limit) {
                 break;
             }
         }
@@ -59,8 +59,8 @@ public class CollectionUtils {
 
     public static <T> List<T> selectList(Collection<T> items, Predicate<T> predicate) {
         List<T> selected = new ArrayList<>();
-        for(T item : items) {
-            if(predicate.test(item)) {
+        for (T item : items) {
+            if (predicate.test(item)) {
                 selected.add(item);
             }
         }
@@ -69,8 +69,8 @@ public class CollectionUtils {
 
     public static <T> Set<T> selectSet(Collection<T> items, Predicate<T> predicate) {
         Set<T> selected = new HashSet<>();
-        for(T item : items) {
-            if(predicate.test(item)) {
+        for (T item : items) {
+            if (predicate.test(item)) {
                 selected.add(item);
             }
         }

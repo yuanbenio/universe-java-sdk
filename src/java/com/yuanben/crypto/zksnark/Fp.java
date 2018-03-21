@@ -38,16 +38,49 @@ public class Fp implements Field<Fp> {
 
     BigInteger v;
 
-    Fp(BigInteger v) { this.v = v; }
+    Fp(BigInteger v) {
+        this.v = v;
+    }
 
-    @Override public Fp add(Fp o) { return new Fp(this.v.add(o.v).mod(P)); }
-    @Override public Fp mul(Fp o) { return new Fp(this.v.multiply(o.v).mod(P)); }
-    @Override public Fp sub(Fp o) { return new Fp(this.v.subtract(o.v).mod(P)); }
-    @Override public Fp squared() { return new Fp(v.multiply(v).mod(P)); }
-    @Override public Fp dbl() { return new Fp(v.add(v).mod(P)); }
-    @Override public Fp inverse() { return new Fp(v.modInverse(P)); }
-    @Override public Fp negate() { return new Fp(v.negate().mod(P)); }
-    @Override public boolean isZero() { return v.compareTo(BigInteger.ZERO) == 0; }
+    @Override
+    public Fp add(Fp o) {
+        return new Fp(this.v.add(o.v).mod(P));
+    }
+
+    @Override
+    public Fp mul(Fp o) {
+        return new Fp(this.v.multiply(o.v).mod(P));
+    }
+
+    @Override
+    public Fp sub(Fp o) {
+        return new Fp(this.v.subtract(o.v).mod(P));
+    }
+
+    @Override
+    public Fp squared() {
+        return new Fp(v.multiply(v).mod(P));
+    }
+
+    @Override
+    public Fp dbl() {
+        return new Fp(v.add(v).mod(P));
+    }
+
+    @Override
+    public Fp inverse() {
+        return new Fp(v.modInverse(P));
+    }
+
+    @Override
+    public Fp negate() {
+        return new Fp(v.negate().mod(P));
+    }
+
+    @Override
+    public boolean isZero() {
+        return v.compareTo(BigInteger.ZERO) == 0;
+    }
 
     /**
      * Checks if provided value is a valid Fp member
@@ -57,7 +90,9 @@ public class Fp implements Field<Fp> {
         return v.compareTo(P) < 0;
     }
 
-    Fp2 mul(Fp2 o) { return new Fp2(o.a.mul(this), o.b.mul(this)); }
+    Fp2 mul(Fp2 o) {
+        return new Fp2(o.a.mul(this), o.b.mul(this));
+    }
 
     static Fp create(byte[] v) {
         return new Fp(new BigInteger(1, v));

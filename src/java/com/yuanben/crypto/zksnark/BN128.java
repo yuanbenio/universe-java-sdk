@@ -26,20 +26,20 @@ import java.math.BigInteger;
  * and used by a proving system in
  * <a href="https://github.com/zcash/zcash/wiki/specification#zcash-protocol">ZCash protocol</a> <br/>
  * <br/>
- *
+ * <p>
  * Curve equation: <br/>
  * Y^2 = X^3 + b, where "b" is a constant number belonging to corresponding specific field <br/>
  * Point at infinity is encoded as <code>(0, 0, 0)</code> <br/>
  * <br/>
- *
+ * <p>
  * This curve has embedding degree 12 with respect to "r" (see {@link Params#R}), which means that "r" is a multiple of "p ^ 12 - 1",
  * this condition is important for pairing operation implemented in {@link PairingCheck}<br/>
  * <br/>
- *
+ * <p>
  * Code of curve arithmetic has been ported from
  * <a href="https://github.com/scipr-lab/libff/blob/master/libff/algebra/curves/alt_bn128/alt_bn128_g1.cpp">libff</a> <br/>
  * <br/>
- *
+ * <p>
  * Current implementation uses Jacobian coordinate system as
  * <a href="https://github.com/scipr-lab/libff/blob/master/libff/algebra/curves/alt_bn128/alt_bn128_g1.cpp">libff</a> does,
  * use {@link #toEthNotation()} to convert Jacobian coords to Ethereum encoding <br/>
@@ -64,8 +64,11 @@ public abstract class BN128<T extends Field<T>> {
      * {@link #isZero()} method called for that point, also, returns {@code true}
      */
     abstract protected BN128<T> zero();
+
     abstract protected BN128<T> instance(T x, T y, T z);
+
     abstract protected T b();
+
     abstract protected T one();
 
     /**
@@ -108,7 +111,7 @@ public abstract class BN128<T extends Field<T>> {
 
         T z6 = z.squared().mul(z).squared();
 
-        T left  = y.squared();                          // y^2
+        T left = y.squared();                          // y^2
         T right = x.squared().mul(x).add(b().mul(z6));  // x^3 + b * z^6
         return left.equals(right);
     }
@@ -119,7 +122,7 @@ public abstract class BN128<T extends Field<T>> {
         if (o.isZero()) return this; // P + 0 = P
 
         T x1 = this.x, y1 = this.y, z1 = this.z;
-        T x2 = o.x,    y2 = o.y,    z2 = o.z;
+        T x2 = o.x, y2 = o.y, z2 = o.z;
 
         // ported code is started from here
         // next calculations are done in Jacobian coordinates

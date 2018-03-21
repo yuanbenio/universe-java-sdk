@@ -22,11 +22,11 @@ import java.math.BigInteger;
 /**
  * Arithmetic in Fp_12 <br/>
  * <br/>
- *
+ * <p>
  * "p" equals 21888242871839275222246405745257275088696311157297823662689037894645226208583, <br/>
  * elements of Fp_12 are represented with 2 elements of {@link Fp6} <br/>
  * <br/>
- *
+ * <p>
  * Field arithmetic is ported from <a href="https://github.com/scipr-lab/libff/blob/master/libff/algebra/fields/fp12_2over3over2.tcc">libff</a>
  *
  * @author Mikhail Kalinin
@@ -40,7 +40,7 @@ class Fp12 implements Field<Fp12> {
     Fp6 a;
     Fp6 b;
 
-    Fp12 (Fp6 a, Fp6 b) {
+    Fp12(Fp6 a, Fp6 b) {
         this.a = a;
         this.b = b;
     }
@@ -143,7 +143,7 @@ class Fp12 implements Field<Fp12> {
     public Fp12 mul(Fp12 o) {
 
         Fp6 a2 = o.a, b2 = o.b;
-        Fp6 a1 = a,   b1 = b;
+        Fp6 a1 = a, b1 = b;
 
         Fp6 a1a2 = a1.mul(a2);
         Fp6 b1b2 = b1.mul(b2);
@@ -161,7 +161,7 @@ class Fp12 implements Field<Fp12> {
 
     @Override
     public Fp12 inverse() {
-        
+
         Fp6 t0 = a.squared();
         Fp6 t1 = b.squared();
         Fp6 t2 = t0.sub(t1.mulByNonResidue());
@@ -197,7 +197,7 @@ class Fp12 implements Field<Fp12> {
     }
 
     Fp12 cyclotomicSquared() {
-        
+
         Fp2 z0 = a.a;
         Fp2 z4 = a.b;
         Fp2 z3 = a.c;
@@ -255,7 +255,7 @@ class Fp12 implements Field<Fp12> {
         z5 = t3.add(z5);
         z5 = z5.add(z5);
         z5 = z5.add(t3);
-        
+
         return new Fp12(new Fp6(z0, z4, z3), new Fp6(z2, z1, z5));
     }
 
@@ -263,7 +263,7 @@ class Fp12 implements Field<Fp12> {
 
         Fp12 res = _1;
 
-        for (int i = pow.bitLength() - 1; i >=0; i--) {
+        for (int i = pow.bitLength() - 1; i >= 0; i--) {
             res = res.cyclotomicSquared();
 
             if (pow.testBit(i)) {
@@ -302,11 +302,11 @@ class Fp12 implements Field<Fp12> {
     public String toString() {
         return String.format(
                 "Fp12 (%s; %s)\n" +
-                "     (%s; %s)\n" +
-                "     (%s; %s)\n" +
-                "     (%s; %s)\n" +
-                "     (%s; %s)\n" +
-                "     (%s; %s)\n",
+                        "     (%s; %s)\n" +
+                        "     (%s; %s)\n" +
+                        "     (%s; %s)\n" +
+                        "     (%s; %s)\n" +
+                        "     (%s; %s)\n",
 
                 a.a.a, a.a.b,
                 a.b.a, a.b.b,
@@ -317,7 +317,7 @@ class Fp12 implements Field<Fp12> {
         );
     }
 
-    static final Fp2[] FROBENIUS_COEFFS_B = new Fp2[] {
+    static final Fp2[] FROBENIUS_COEFFS_B = new Fp2[]{
 
             new Fp2(BigInteger.ONE,
                     BigInteger.ZERO),

@@ -20,7 +20,10 @@ package com.yuanben.util;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
@@ -31,17 +34,17 @@ import java.util.function.Function;
  * Queues execution tasks into a single pipeline where some tasks can be executed in parallel
  * but preserve 'messages' order so the next task process messages on a single thread in
  * the same order they were added to the previous executor
- *
+ * <p>
  * Created by Anton Nashatyrev on 23.02.2016.
  */
-public class ExecutorPipeline <In, Out>{
+public class ExecutorPipeline<In, Out> {
 
     private BlockingQueue<Runnable> queue;
     private ThreadPoolExecutor exec;
     private boolean preserveOrder = false;
     private Function<In, Out> processor;
     private Consumer<Throwable> exceptionHandler;
-    private ExecutorPipeline <Out, ?> next;
+    private ExecutorPipeline<Out, ?> next;
 
     private AtomicLong orderCounter = new AtomicLong();
     private long nextOutTaskNumber = 0;
@@ -87,7 +90,7 @@ public class ExecutorPipeline <In, Out>{
                 try {
                     if (order == nextOutTaskNumber) {
                         next.push(res);
-                        while(true) {
+                        while (true) {
                             nextOutTaskNumber++;
                             Out out = orderMap.remove(nextOutTaskNumber);
                             if (out == null) break;
@@ -136,7 +139,8 @@ public class ExecutorPipeline <In, Out>{
     public void shutdown() {
         try {
             exec.shutdown();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         if (next != null) {
             exec.shutdown();
         }
@@ -149,6 +153,7 @@ public class ExecutorPipeline <In, Out>{
     /**
      * Shutdowns executors and waits until all pipeline
      * submitted tasks complete
+     *
      * @throws InterruptedException
      */
     public void join() throws InterruptedException {
@@ -168,7 +173,7 @@ public class ExecutorPipeline <In, Out>{
             try {
                 put(e);
                 return true;
-            } catch(InterruptedException ie) {
+            } catch (InterruptedException ie) {
                 Thread.currentThread().interrupt();
             }
             return false;

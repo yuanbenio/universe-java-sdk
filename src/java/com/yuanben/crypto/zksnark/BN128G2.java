@@ -19,21 +19,19 @@ package com.yuanben.crypto.zksnark;
 
 import java.math.BigInteger;
 
-import static com.yuanben.crypto.zksnark.Params.R;
-import static com.yuanben.crypto.zksnark.Params.TWIST_MUL_BY_P_X;
-import static com.yuanben.crypto.zksnark.Params.TWIST_MUL_BY_P_Y;
+import static com.yuanben.crypto.zksnark.Params.*;
 
 /**
  * Implementation of specific cyclic subgroup of points belonging to {@link BN128Fp2} <br/>
  * Members of this subgroup are passed as a second param to pairing input {@link PairingCheck#addPair(BN128G1, BN128G2)} <br/>
  * <br/>
- *
+ * <p>
  * The order of subgroup is {@link Params#R} <br/>
  * Generator of subgroup G = <br/>
  * (11559732032986387107991004021392285783925812861821192530917403151452391805634 * i + <br/>
- *  10857046999023057135944570762232829481370756359578518086990519993285655852781, <br/>
- *  4082367875863433681332203403145435568316851327593401208105741076214120093531 * i + <br/>
- *  8495653923123431417604973247489272438418190587263600148770280649306958101930) <br/>
+ * 10857046999023057135944570762232829481370756359578518086990519993285655852781, <br/>
+ * 4082367875863433681332203403145435568316851327593401208105741076214120093531 * i + <br/>
+ * 8495653923123431417604973247489272438418190587263600148770280649306958101930) <br/>
  * <br/>
  *
  * @author Mikhail Kalinin
@@ -77,6 +75,7 @@ public class BN128G2 extends BN128Fp2 {
         BN128<Fp2> left = p.mul(FR_NEG_ONE).add(p);
         return left.isZero(); // should satisfy condition: -1 * p + p == 0, where -1 belongs to F_r
     }
+
     static final BigInteger FR_NEG_ONE = BigInteger.ONE.negate().mod(R);
 
     BN128G2 mulByP() {

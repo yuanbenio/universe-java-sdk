@@ -20,7 +20,7 @@ package com.yuanben.crypto.zksnark;
 /**
  * Implementation of specific cyclic subgroup of points belonging to {@link BN128Fp} <br/>
  * Members of this subgroup are passed as a first param to pairing input {@link PairingCheck#addPair(BN128G1, BN128G2)} <br/>
- *
+ * <p>
  * Subgroup generator G = (1; 2)
  *
  * @author Mikhail Kalinin

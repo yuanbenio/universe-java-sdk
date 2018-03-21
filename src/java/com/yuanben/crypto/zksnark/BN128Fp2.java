@@ -23,7 +23,7 @@ import static com.yuanben.crypto.zksnark.Params.B_Fp2;
 
 /**
  * Definition of {@link BN128} over F_p2, where "p" equals {@link Params#P} <br/>
- *
+ * <p>
  * Curve equation: <br/>
  * Y^2 = X^3 + b, where "b" equals {@link Params#B_Fp2} <br/>
  *

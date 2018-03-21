@@ -22,11 +22,11 @@ import java.math.BigInteger;
 /**
  * Arithmetic in Fp_6 <br/>
  * <br/>
- *
+ * <p>
  * "p" equals 21888242871839275222246405745257275088696311157297823662689037894645226208583, <br/>
  * elements of Fp_6 are represented with 3 elements of {@link Fp2} <br/>
  * <br/>
- *
+ * <p>
  * Field arithmetic is ported from <a href="https://github.com/scipr-lab/libff/blob/master/libff/algebra/fields/fp6_3over2.tcc">libff</a>
  *
  * @author Mikhail Kalinin
@@ -74,7 +74,7 @@ class Fp6 implements Field<Fp6> {
     @Override
     public Fp6 mul(Fp6 o) {
 
-        Fp2 a1 = a,   b1 = b,   c1 = c;
+        Fp2 a1 = a, b1 = b, c1 = c;
         Fp2 a2 = o.a, b2 = o.b, c2 = o.c;
 
         Fp2 a1a2 = a1.mul(a2);
