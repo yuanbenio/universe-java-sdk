@@ -48,7 +48,7 @@ public class DTCPProcessor {
     }
 
     /**
-     * 对metadata签名 （移除了metadata中dna和signature字段的值)
+     * 对metadata签名 （签名内容为metadata中除去dna\content和signature字段外的所有字段值)
      * @param metadata metadata实例
      * @param privateKey 16进制的私钥
      * @return 16进制的metadata signature
@@ -62,10 +62,23 @@ public class DTCPProcessor {
     }
 
     /**
+     * 对metadata进行签名验证 （签名内容为metadata中除去dna\content和signature字段外的所有字段值)
+     * @param metadata metadata
+     * @return 验证结果
+     * @throws InvalidException metadata为空
+     */
+    public static boolean VerifyMetadataSignature(Metadata metadata) throws InvalidException {
+        if (metadata == null ) {
+            throw new InvalidException("metadata is null");
+        }
+        return ECKeyProcessor.VerifySignature(metadata.getPubKey(),metadata.getSignature(), metadata.toJsonRmSign().getBytes());
+    }
+
+    /**
      * 对metadata进行补全
-     * @param privateKey 私钥，用于签名
+     * @param privateKey 16进制的私钥，用于签名
      * @param metadata  必须包含content\title\type
-     * @return 信息补全对metadata
+     * @return 信息补全的metadata
      * @throws InvalidException
      */
     public static Metadata GenMetadataFromContent(String privateKey, Metadata metadata) throws InvalidException {

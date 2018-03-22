@@ -224,13 +224,17 @@ public class Metadata {
      * @return json字符串
      */
     public String toJsonRmSign() {
-        String dna = this.getDna();
-        String signature = this.getSignature();
+        String dna = this.dna;
+        String signature = this.signature;
+        String content = this.content;
         this.dna = null;
         this.signature = null;
+        this.content = content;
+
         String js = JSONObject.toJSONString(this);
         this.dna = dna;
         this.signature = signature;
+        this.content = content;
         return js;
     }
 }
