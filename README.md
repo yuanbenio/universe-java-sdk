@@ -6,7 +6,10 @@ sdk为maven项目，请使用idea中的maven打包或者使用命令：mvn clean
 
 ## API文档说明
 这个版本的SDK用来给java语言开发者提供便捷生成metadata的服务。
-NOTE 原本链中所有字节数组都以16进制都字符串存储，公钥为压缩格式。
+
+git路径：https://git.dev.yuanben.org/scm/unv/universe-java-sdk.git
+
+**NOTE** 原本链中所有字节数组都以16进制的字符串存储，公钥为压缩格式。
 
 #### 服务方法分布
   Java-SDK提供两个处理器来生成metadata的相关参数：service/KeyProcessor、service/DTCPProcessor。
