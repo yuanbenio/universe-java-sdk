@@ -100,6 +100,9 @@ public class DTCPProcessor {
         if (StringUtils.isEmpty(metadata.getType())) {
             throw new InvalidException("type is empty");
         }
+        if (metadata.getLicense() == null || StringUtils.isBlank(metadata.getLicense().getType())) {
+            throw new InvalidException("license is empty");
+        }
         if (StringUtils.isBlank(metadata.getId())) {
             metadata.setId(UUID.randomUUID().toString().replace("-", ""));
         }
@@ -139,6 +142,8 @@ public class DTCPProcessor {
         String dna = GeneratorDNA(sign);
         metadata.setSignature(sign);
         metadata.setDna(dna);
+        //node节点不需要content
+        metadata.setContent(null);
         return metadata;
 
     }

@@ -229,7 +229,7 @@ public class Metadata {
         String content = this.content;
         this.dna = null;
         this.signature = null;
-        this.content = content;
+        this.content = null;
 
         String js = JSONObject.toJSONString(this);
         this.dna = dna;

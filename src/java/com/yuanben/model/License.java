@@ -14,7 +14,7 @@ public class License {
 
     //数据类型
     private String type;
-    private Map<String, String> params;
+    private Map<String, String> parameters;
     private String desc;
     private String created;
     private String extra;
@@ -67,12 +67,12 @@ public class License {
         this.type = type;
     }
 
-    public Map<String, String> getParams() {
-        return params;
+    public Map<String, String> getParameters() {
+        return parameters;
     }
 
-    public void setParams(Map<String, String> params) {
-        this.params = params;
+    public void setParameters(Map<String, String> parameters) {
+        this.parameters = parameters;
     }
 
     public String getDesc() {
