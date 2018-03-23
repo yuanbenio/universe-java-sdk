@@ -5,19 +5,23 @@ SDK服务
 sdk为maven项目，请使用idea中的maven打包或者使用命令：mvn clean package打包即可，会在target下生成jar包
 
 ## API文档说明
-这个版本的SDK用来给java语言开发者提供便捷生成metadata的服务。
+>这个版本的SDK用来给java语言开发者提供便捷生成metadata的服务。
 
-git路径：https://git.dev.yuanben.org/scm/unv/universe-java-sdk.git
-
+#### git路径：
+```
+https://git.dev.yuanben.org/scm/unv/universe-java-sdk.git
+```
 **NOTE** 原本链中所有字节数组都以16进制的字符串存储，公钥为压缩格式。
 
 #### 服务方法分布
-  Java-SDK提供两个处理器来生成metadata的相关参数：service/KeyProcessor、service/DTCPProcessor。
+>  Java-SDK提供两个处理器来生成metadata的相关参数：service/KeyProcessor、service/DTCPProcessor。
+
+```
 1. service/KeyProcessor
   这是一个密钥处理器，支持密钥对生成、签名、签名验证以及通过私钥推导公钥。
 2. service/DTCPProcessor
   这是一个DTCP协议的处理器，可以用来计算metadata中的各项参数。 
-
+```
 **NOTE** 哈希函数的源码见com.yuanben.crypto，原本链的公私密钥检查工具见:com.yuanben.util.SecretUtil.java
 ***
 #### GeneratorSecp256k1Key
@@ -37,7 +41,8 @@ public static SecretKey GeneratorSecp256k1Key() {
         return secretKey;
 }
 ```
-该方法位于KeyProcessor.java，返回公私密钥，其中私钥为16进制的字符串，长度64，公钥为压缩格式的16进制字符串，长度66。
+> 该方法位于KeyProcessor.java，返回公私密钥，其中私钥为16进制的字符串，长度64，公钥为压缩格式的16进制字符串，长度66。
+
 ***
 #### GetPubKeyFromPri
 ```Java
@@ -57,7 +62,8 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
         return Hex.toHexString(encoded);
 }
 ```
-该方法位于KeyProcessor.java，需要传入16进制的私钥字符串，返回压缩格式的公钥。
+> 该方法位于KeyProcessor.java，需要传入16进制的私钥字符串，返回压缩格式的公钥。
+
 ***
 #### Sign
 ```Java
@@ -81,7 +87,8 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
         return ecdsaSignature.toHex();
     }
 ```
-该方法位于KeyProcessor.java，需要传入16进制的私钥字符串和需要签名的内容，返回16进制的签名字符串。
+> 该方法位于KeyProcessor.java，需要传入16进制的私钥字符串和需要签名的内容，返回16进制的签名字符串。
+
 ***
 #### VerifySignature
 ```Java
@@ -112,7 +119,8 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
         return ECKey.verify(data, sig, Hex.decode(publicKey));
     }
 ```
-该方法位于KeyProcessor.java，需要传入公钥、签名和原数据，返回签名验证结果。
+> 该方法位于KeyProcessor.java，需要传入公钥、签名和原数据，返回签名验证结果。
+
 ***
 #### Keccak256
 ```Java
@@ -146,7 +154,8 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
         return keccak256.digest();
     }
 ```
-该方法位于KeyProcessor.java，需要传入需要哈希的数据，返回哈希值。
+> 该方法位于KeyProcessor.java，需要传入需要哈希的数据，返回哈希值。
+
 ***
 #### GenContentHash
 ```Java
@@ -164,7 +173,27 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
         return Hex.toHexString(keccak256.digest());
     }
 ```
-该方法位于DTCPProcessor.java，需要传入metadata的Content，返回contentHash。
+> 该方法位于DTCPProcessor.java，需要传入metadata的Content，返回contentHash。
+
+***
+#### GenMetadataSignature
+```Java
+   /**
+     * 对metadata签名 （签名内容为metadata中除去dna\content和signature字段外的所有字段值)
+     * @param metadata metadata实例
+     * @param privateKey 16进制的私钥
+     * @return 16进制的metadata signature
+     * @throws InvalidException 入参为空
+     */
+    public static String GenMetadataSignature(Metadata metadata, String privateKey) throws InvalidException {
+        if (metadata == null || !SecretUtil.CheckPrivateKey(privateKey)) {
+            throw new InvalidException("metadata or privateKey is illegal");
+        }
+        return ECKeyProcessor.Sign(privateKey, metadata.toJsonRmSign().getBytes());
+    }
+```
+> 该方法位于DTCPProcessor.java，需要传入metadata，返回metadata的签名。
+
 ***
 #### GeneratorDNA
 ```Java
@@ -183,7 +212,8 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
         return Hex.toHexString(keccak256.digest());
     }
 ```
-该方法位于DTCPProcessor.java，需要传入metadata的Signature，返回DNA。
+> 该方法位于DTCPProcessor.java，需要传入metadata的Signature，返回DNA。
+
 ***
 #### VerifyMetadataSignature
 ```Java
@@ -194,20 +224,21 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
      * @throws InvalidException metadata为空
      */
     public static boolean VerifyMetadataSignature(Metadata metadata) throws InvalidException {
-            if (metadata == null ) {
-                throw new InvalidException("metadata is null");
-            }
-            return ECKeyProcessor.VerifySignature(metadata.getPubKey(),metadata.getSignature(), ECKeyProcessor.Keccak256(metadata.toJsonRmSign()));
+        if (metadata == null ) {
+            throw new InvalidException("metadata is null");
         }
+        return ECKeyProcessor.VerifySignature(metadata.getPubKey(),metadata.getSignature(), ECKeyProcessor.Keccak256(metadata.toJsonRmSign()));
+    }
 ```
-该方法位于DTCPProcessor.java，需要传入metadata，返回metadata的签名验证结果。
+> 该方法位于DTCPProcessor.java，需要传入metadata，返回metadata的签名验证结果。
+
 ***
 #### GenMetadataFromContent
 ```Java
    /**
      * 对metadata进行补全
      * @param privateKey 16进制的私钥，用于签名
-     * @param metadata  必须包含content\title\type
+     * @param metadata  必须包含content\title\type\License
      * @return 信息补全的metadata
      * @throws InvalidException
      */
@@ -215,8 +246,15 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
          ......
     }
 ```
-该方法位于DTCPProcessor.java，需要传入metadata和私钥，返回可被node节点接收的完整metadata。
+> 该方法位于DTCPProcessor.java，需要传入metadata和私钥，返回可被node节点接收的完整metadata。
+
 ***
+
+
+
+
+
+
 
 
 
