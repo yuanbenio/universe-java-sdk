@@ -194,11 +194,11 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
      * @throws InvalidException metadata为空
      */
     public static boolean VerifyMetadataSignature(Metadata metadata) throws InvalidException {
-        if (metadata == null ) {
-            throw new InvalidException("metadata is null");
+            if (metadata == null ) {
+                throw new InvalidException("metadata is null");
+            }
+            return ECKeyProcessor.VerifySignature(metadata.getPubKey(),metadata.getSignature(), ECKeyProcessor.Keccak256(metadata.toJsonRmSign()));
         }
-        return ECKeyProcessor.VerifySignature(metadata.getPubKey(),metadata.getSignature(), metadata.toJsonRmSign().getBytes());
-    }
 ```
 该方法位于DTCPProcessor.java，需要传入metadata，返回metadata的签名验证结果。
 ***

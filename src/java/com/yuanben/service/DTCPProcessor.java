@@ -71,7 +71,7 @@ public class DTCPProcessor {
         if (metadata == null ) {
             throw new InvalidException("metadata is null");
         }
-        return ECKeyProcessor.VerifySignature(metadata.getPubKey(),metadata.getSignature(), metadata.toJsonRmSign().getBytes());
+        return ECKeyProcessor.VerifySignature(metadata.getPubKey(),metadata.getSignature(), ECKeyProcessor.Keccak256(metadata.toJsonRmSign()));
     }
 
     /**

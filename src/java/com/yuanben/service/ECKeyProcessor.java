@@ -62,6 +62,7 @@ public class ECKeyProcessor {
         for (byte[] b : content) {
             keccak256.update(b);
         }
+        //只能对contentHash签名
         ECKey.ECDSASignature ecdsaSignature = ecKey.doSign(keccak256.digest());
         return ecdsaSignature.toHex();
     }
