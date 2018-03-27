@@ -242,7 +242,7 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
    /**
      * 对metadata进行补全
      * @param privateKey 16进制的私钥，用于签名
-     * @param metadata  必须包含content\title\type\License
+     * @param metadata  必须包含license\title\type,如果contentHash为空，则必须传入content的值；如果type不是article，则必须传入contentHash
      * @return 信息补全的metadata
      * @throws InvalidException
      */
