@@ -89,10 +89,10 @@ public class DTCPProcessor {
         if (metadata == null || !SecretUtil.CheckPrivateKey(privateKey)) {
             throw new InvalidException("metadata or privateKey is illegal");
         }
-        if (StringUtils.isBlank(metadata.getContent())) {
-            throw new InvalidException("content is empty");
-        }
         if (StringUtils.isBlank(metadata.getContentHash())) {
+            if (StringUtils.isBlank(metadata.getContent())) {
+                throw new InvalidException("content is empty");
+            }
             metadata.setContentHash(GenContentHash(metadata.getContent()));
         }
         if (StringUtils.isBlank(metadata.getPubKey())) {
