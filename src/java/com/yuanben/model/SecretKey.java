@@ -1,5 +1,9 @@
 package com.yuanben.model;
 
+/**
+ * <p>密钥模型</p>
+ * <p>包含公私钥</p>
+ */
 public class SecretKey {
 
     //16进制的私钥  长度64 chars

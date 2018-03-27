@@ -3,8 +3,11 @@ package com.yuanben.model;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 
-import java.util.Map;
+import java.util.HashMap;
 
+/**
+ * <p>dtcp协议抽象模型</p>
+ */
 public class Metadata {
     @JSONField(name = "pubkey")
     private String pubKey;
@@ -13,6 +16,7 @@ public class Metadata {
     @JSONField(name = "block_height")
     private Long blockHeight;
     private String signature;
+    @JSONField(name = "id")
     private String id;
 
 
@@ -41,7 +45,7 @@ public class Metadata {
 
     public static class License {
         private String type;
-        private Map<String, String> parameters;
+        private HashMap<String, Object> parameters;
 
         public String getType() {
             return type;
@@ -51,11 +55,11 @@ public class Metadata {
             this.type = type;
         }
 
-        public Map<String, String> getParameters() {
+        public HashMap<String, Object> getParameters() {
             return parameters;
         }
 
-        public void setParameters(Map<String, String> parameters) {
+        public void setParameters(HashMap<String, Object> parameters) {
             this.parameters = parameters;
         }
     }
@@ -237,4 +241,5 @@ public class Metadata {
         this.content = content;
         return js;
     }
+
 }

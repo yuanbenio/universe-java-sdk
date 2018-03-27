@@ -3,9 +3,10 @@ SDK服务
 ***
 ## jar
 sdk为maven项目，请使用idea中的maven打包或者使用命令：mvn clean package打包即可，会在target下生成jar包
+也可以直接下载jar包使用：[下载地址](https://git.dev.yuanben.org/projects/UNV/repos/universe-java-sdk/universe_java_sdk_jar/universe-java-sdk.jar)
 
 ## API文档说明
->这个版本的SDK用来给java语言开发者提供便捷生成metadata的服务。
+>这个版本的SDK用来给java语言开发者提供便捷生成metadata的服务。方法的具体使用请查看[examples](https://git.dev.yuanben.org/projects/UNV/repos/universe-java-sdk/browse/src/java/com/yuanben/examples)
 
 #### git路径：
 ```
@@ -14,13 +15,15 @@ https://git.dev.yuanben.org/scm/unv/universe-java-sdk.git
 **NOTE** 原本链中所有字节数组都以16进制的字符串存储，公钥为压缩格式。
 
 #### 服务方法分布
->  Java-SDK提供两个处理器来生成metadata的相关参数：service/KeyProcessor、service/DTCPProcessor。
+>  Java-SDK提供两个处理器来生成metadata的相关参数：service/KeyProcessor、service/DTCPProcessor、service/NodeProcessor。
 
 ```
 1. service/KeyProcessor
   这是一个密钥处理器，支持密钥对生成、签名、签名验证以及通过私钥推导公钥。
 2. service/DTCPProcessor
-  这是一个DTCP协议的处理器，可以用来计算metadata中的各项参数。 
+  这是一个DTCP协议的处理器，可以用来计算metadata中的各项参数。
+3. service/NodeProcessor
+  这是一个对接原本链node节点的处理器，可以对node节点发送http请求，主要用于注册metadata以及查询metadata、license和blockHash等数据。 
 ```
 **NOTE** 哈希函数的源码见com.yuanben.crypto，原本链的公私密钥检查工具见:com.yuanben.util.SecretUtil.java
 ***
@@ -233,7 +236,7 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
 > 该方法位于DTCPProcessor.java，需要传入metadata，返回metadata的签名验证结果。
 
 ***
-#### GenMetadataFromContent
+#### FullMetadata
 ```Java
    /**
      * 对metadata进行补全
@@ -242,26 +245,148 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
      * @return 信息补全的metadata
      * @throws InvalidException
      */
-    public static Metadata GenMetadataFromContent(String privateKey, Metadata metadata) throws InvalidException {
+    public static Metadata FullMetadata(String privateKey, Metadata metadata) throws InvalidException {
          ......
     }
 ```
 > 该方法位于DTCPProcessor.java，需要传入metadata和私钥，返回可被node节点接收的完整metadata。
 
 ***
+#### QueryMetadata
+```Java
+   /**
+     * 向node节点查询metadata
+     *
+     * @param url     node节点的地址 （http://119.23.22.129:9000)
+     * @param version node节点的版本 （默认v1)
+     * @param dna     metadata对应的闪电dna
+     * @return metadata的查询结果体
+     * @throws InvalidException 参数有误或网络请求错误
+     */
+    public static MetadataQueryResp QueryMetadata(String url, String version, String dna) throws InvalidException {
+        if (StringUtils.isBlank(url) || StringUtils.isBlank(dna)) {
+            throw new InvalidException("url or DNA is empty");
+        }
+        if (StringUtils.isBlank(version)) {
+            version = "v1";
+        }
+        url += "/" + version + "/metadata/" + dna;
+        String s = HttpUtil.sendGet(url);
+        return JSONObject.parseObject(s, MetadataQueryResp.class);
+    }
+```
+> 该方法位于NodeProcessor.java，需要传入metadata的dna，返回dna对应的metadata。
 
+***
+#### SaveMetadata
+```Java
+  /**
+     * 向node节点注册metadata
+     *
+     * @param url     node节点的地址 （http://119.23.22.129:9000)
+     * @param version node节点的版本 （默认v1)
+     * @param md      要注册的metadata，不需要传content
+     * @return metadata的注册结果体
+     * @throws InvalidException 参数有误或网络请求错误
+     */
+    public static MetadataSaveResp SaveMetadata(String url, String version, Metadata md) throws InvalidException {
+        if (StringUtils.isBlank(url)) {
+            throw new InvalidException("url is empty");
+        }
+        if (StringUtils.isBlank(version)) {
+            version = "v1";
+        }
+        url += "/" + version + "/metadata/";
+        if (md == null) {
+            throw new InvalidException("metadata is null");
+        }
+        if (StringUtils.isBlank(md.getSignature())) {
+            throw new InvalidException("signature is null");
+        }
+        if (md.getLicense() == null || StringUtils.isBlank(md.getLicense().getType()) || MapUtils.isEmpty(md.getLicense().getParameters())) {
+            throw new InvalidException("license is null");
+        }
+        String s = HttpUtil.sendPost(url, md.toJson());
+        return JSONObject.parseObject(s, MetadataSaveResp.class);
+    }
+```
+> 该方法位于NodeProcessor.java，需要传入metadata，注册成功则返回metadata的dna。
 
+***
+#### QueryLicense
+```Java
+  /**
+     * 向node节点查询license
+     *
+     * @param url         node节点的地址 （http://119.23.22.129:9000)
+     * @param version     node节点的版本 （默认v1)
+     * @param licenseType license's type
+     * @return license的查询结果体
+     * @throws InvalidException 参数有误或网络请求错误
+     */
+    public static LicenseQueryResp QueryLicense(String url, String version, String licenseType) throws InvalidException {
+        if (StringUtils.isBlank(url) || StringUtils.isBlank(licenseType)) {
+            throw new InvalidException("url or licenseType is empty");
+        }
+        if (StringUtils.isBlank(version)) {
+            version = "v1";
+        }
+        url += "/" + version + "/license/" + licenseType;
+        String s = HttpUtil.sendGet(url);
+        return JSONObject.parseObject(s, LicenseQueryResp.class);
 
+    }
+```
+> 该方法位于NodeProcessor.java，需要传入license的type，返回license的详细信息。
 
+***
+#### QueryLatestBlockHash
+```Java
+ /**
+     * 向node节点查询最新的blockHash
+     *
+     * @param url     node节点的地址 （http://119.23.22.129:9000)
+     * @param version node节点的版本 （默认v1)
+     * @return 最新的blcokHash封装
+     * @throws InvalidException 参数有误或网络请求错误
+     */
+    public static BlockHashQueryResp QueryLatestBlockHash(String url, String version) throws InvalidException {
+        if (StringUtils.isBlank(url)) {
+            throw new InvalidException("url is empty");
+        }
+        if (StringUtils.isBlank(version)) {
+            version = "v1";
+        }
+        url += "/" + version + "/block_hash/";
+        String s = HttpUtil.sendGet(url);
+        return JSONObject.parseObject(s, BlockHashQueryResp.class);
+    }
+```
+> 该方法位于NodeProcessor.java，用于查询原本链最新的区块信息。
+**NOTE** 原本链的处理的速度为毫秒级，由于网络延迟，获取到的可能不是最新的区块信息。该接口获取的值主要用于metadata中值的填充，只需要保证hash在链上即可，不需要最新的。
 
-
-
-
-
-
-
-
-
-
-
-
+***
+#### CheckBlockHash
+```Java
+   /**
+     * 向node节点查询blockHash是否在链上，并处于指定高度
+     *
+     * @param url     node节点的地址 （http://119.23.22.129:9000)
+     * @param version node节点的版本 （默认v1)
+     * @param req     请求体 （包括blockHash和blockHeight)
+     * @return 查询结果封装
+     * @throws InvalidException 参数有误或网络请求错误
+     */
+    public static BlockHashCheckResp CheckBlockHash(String url, String version, BlockHashCheckReq req) throws InvalidException {
+        if (StringUtils.isBlank(url) || req == null || StringUtils.isBlank(req.getHash())) {
+            throw new InvalidException("url or request body is empty");
+        }
+        if (StringUtils.isBlank(version)) {
+            version = "v1";
+        }
+        url += "/" + version + "/check_block_hash/";
+        String s = HttpUtil.sendPost(url, req.toJson());
+        return JSONObject.parseObject(s, BlockHashCheckResp.class);
+    }
+```
+> 该方法位于NodeProcessor.java，用于检查blockHash是否在链上，并处于指定高度。

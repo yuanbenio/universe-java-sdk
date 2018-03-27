@@ -9,6 +9,7 @@ import com.yuanben.util.SecretUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.spongycastle.util.encoders.Hex;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,6 +22,7 @@ public class DTCPProcessor {
     /**
      * 生成contentHash
      * contentHash = Keccak256(content)
+     *
      * @return 16进制的contentHash
      */
     public static String GenContentHash(String... content) {
@@ -34,6 +36,7 @@ public class DTCPProcessor {
 
     /**
      * 生成闪电dna
+     *
      * @param signature 16进制的metadata签名串
      * @return metadata的闪电dna
      * @throws InvalidException 入参为空
@@ -42,14 +45,13 @@ public class DTCPProcessor {
         if (StringUtils.isBlank(signature)) {
             throw new InvalidException("signature is empty");
         }
-        Keccak256 keccak256 = new Keccak256();
-        keccak256.update(signature.getBytes());
-        return Hex.toHexString(keccak256.digest());
+        return new BigInteger(Hex.toHexString(ECKeyProcessor.Keccak256(Hex.decode(signature))), 16).toString(36).toUpperCase();
     }
 
     /**
      * 对metadata签名 （签名内容为metadata中除去dna\content和signature字段外的所有字段值)
-     * @param metadata metadata实例
+     *
+     * @param metadata   metadata实例
      * @param privateKey 16进制的私钥
      * @return 16进制的metadata signature
      * @throws InvalidException 入参为空
@@ -63,25 +65,27 @@ public class DTCPProcessor {
 
     /**
      * 对metadata进行签名验证 （签名内容为metadata中除去dna\content和signature字段外的所有字段值)
+     *
      * @param metadata metadata
      * @return 验证结果
      * @throws InvalidException metadata为空
      */
     public static boolean VerifyMetadataSignature(Metadata metadata) throws InvalidException {
-        if (metadata == null ) {
+        if (metadata == null) {
             throw new InvalidException("metadata is null");
         }
-        return ECKeyProcessor.VerifySignature(metadata.getPubKey(),metadata.getSignature(), ECKeyProcessor.Keccak256(metadata.toJsonRmSign()));
+        return ECKeyProcessor.VerifySignature(metadata.getPubKey(), metadata.getSignature(), ECKeyProcessor.Keccak256(metadata.toJsonRmSign()));
     }
 
     /**
      * 对metadata进行补全
+     *
      * @param privateKey 16进制的私钥，用于签名
-     * @param metadata  必须包含content\title\type
+     * @param metadata   必须包含content\title\type
      * @return 信息补全的metadata
      * @throws InvalidException
      */
-    public static Metadata GenMetadataFromContent(String privateKey, Metadata metadata) throws InvalidException {
+    public static Metadata FullMetadata(String privateKey, Metadata metadata) throws InvalidException {
         if (metadata == null || !SecretUtil.CheckPrivateKey(privateKey)) {
             throw new InvalidException("metadata or privateKey is illegal");
         }
@@ -92,6 +96,7 @@ public class DTCPProcessor {
             metadata.setContentHash(GenContentHash(metadata.getContent()));
         }
         if (StringUtils.isBlank(metadata.getPubKey())) {
+            System.out.println("GetPubKeyFromPri : " + ECKeyProcessor.GetPubKeyFromPri(privateKey));
             metadata.setPubKey(ECKeyProcessor.GetPubKeyFromPri(privateKey));
         }
         if (StringUtils.isEmpty(metadata.getTitle())) {

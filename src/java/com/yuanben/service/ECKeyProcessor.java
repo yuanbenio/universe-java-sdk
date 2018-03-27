@@ -80,7 +80,9 @@ public class ECKeyProcessor {
             throw new InvalidException("public key`s format is error");
         }
 
-        byte[] decode = Hex.decode(signMsg);
+        byte recID = Byte.parseByte(signMsg.substring(signMsg.length() - 2), 16);
+        byte[] decode = Hex.decode(signMsg.substring(0, signMsg.length() - 2));
+
         byte[] rBs = new byte[decode.length / 2];
         byte[] sBs = new byte[decode.length / 2];
 
@@ -90,9 +92,12 @@ public class ECKeyProcessor {
         BigInteger r = new BigInteger(Hex.toHexString(rBs), 16);
         BigInteger s = new BigInteger(Hex.toHexString(sBs), 16);
 
-        ECKey.ECDSASignature sig = ECKey.ECDSASignature.fromComponents(r.toByteArray(), s.toByteArray(), (byte) 0x1b);
+
+        ECKey.ECDSASignature sig = ECKey.ECDSASignature.fromComponents(r.toByteArray(), s.toByteArray(), recID);
+
         return ECKey.verify(data, sig, Hex.decode(publicKey));
     }
+
 
     /**
      * keccak256哈希运算

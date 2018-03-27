@@ -12,6 +12,10 @@ public class Constants {
     public static final String TYPE_VIDEO = "video";
     public static final String TYPE_AUDIO = "audio";
 
+
+    public static final String CODE_ERROR = "error";
+
+
     private static final BigInteger SECP256K1N = new BigInteger("fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141", 16);
 
 
