@@ -96,7 +96,6 @@ public class DTCPProcessor {
             metadata.setContentHash(GenContentHash(metadata.getContent()));
         }
         if (StringUtils.isBlank(metadata.getPubKey())) {
-            System.out.println("GetPubKeyFromPri : " + ECKeyProcessor.GetPubKeyFromPri(privateKey));
             metadata.setPubKey(ECKeyProcessor.GetPubKeyFromPri(privateKey));
         }
         if (StringUtils.isEmpty(metadata.getTitle())) {
@@ -123,15 +122,17 @@ public class DTCPProcessor {
                     metadata.setAbstractContent(metadata.getContent().length() < 200 ? metadata.getContent() :
                             metadata.getContent().substring(0, 200));
                 }
-                List<String> strings = HanLP.extractKeyword(metadata.getContent(), 5);
-                String category = "";
-                for (String s : strings) {
-                    category += s + ",";
+                if (StringUtils.isNotBlank(metadata.getContent())) {
+                    List<String> strings = HanLP.extractKeyword(metadata.getContent(), 5);
+                    String category = "";
+                    for (String s : strings) {
+                        category += s + ",";
+                    }
+                    if (StringUtils.isNotBlank(category)) {
+                        category = category.substring(0, category.length() - 1);
+                    }
+                    metadata.setCategory(category);
                 }
-                if (StringUtils.isNotBlank(category)) {
-                    category = category.substring(0, category.length() - 1);
-                }
-                metadata.setCategory(category);
                 break;
             case Constants.TYPE_AUDIO:
             case Constants.TYPE_IMAGE:

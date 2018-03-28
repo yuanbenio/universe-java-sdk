@@ -8,11 +8,14 @@ import com.yuanben.service.DTCPProcessor;
 import com.yuanben.service.ECKeyProcessor;
 import com.yuanben.service.NodeProcessor;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class NodeTest {
 
-    private static String URL = "http://119.23.22.129:9000";
+    private static String URL = "http://127.0.0.1:9000";
+//    private static String URL = "http://119.23.22.129:9000";
     private static String private_key = "3c4dbee4485557edce3c8878be34373c1a41d955f38d977cfba373642983ce4c";
     private static String public_key = "03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77";
     private static String content = "原本链是一个分布式的底层数据网络；" +
@@ -41,9 +44,9 @@ public class NodeTest {
     }
 
     //examples result:
-
+    //查询成功。{"code":"ok","data":{"data":{},"extra":{},"license":{}},"tx":{"block_hash":"d7f2d8f9298165bff258d1672003cdd3c20c8023","block_height":285,"data_height":4,"sender":"013887f8340163832be8cc5fdeb617462b599ccd4073c05aaf9bb5d187e3b57170","time":1522221709}}
     private static void QueryMetadataTest() {
-        String dna = "3Y8DCROXXKLDSN3TPSBS20FELZA5PE26A001YKR5EAHHUJIXEX";
+        String dna = "3Q7QAE45H6AUM95YCOGQ0GWVADF24G91YDLWII4E1WA2VWV012";
         try {
             MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, null, dna);
             if (resp == null) {
@@ -58,6 +61,10 @@ public class NodeTest {
         }
     }
 
+    //example result:
+    //true
+    //{"abstract":"原本链是一个分布式的底层数据网络；原本链是一个高效的，安全的，易用的，易扩展的，全球性质的，企业级的可信联盟链；原本链通过智能合约系统以及数字加密算法，实现了链上数据可持续性交互以及数据传输的安全；原本链通过高度抽象的“DTCP协议”与世界上独一无二的“原本DNA”互锁，确保链上数据100%不可篡改；原本链通过优化设计后的共识机制和独创的“闪电DNA”算法，已将区块写入速度提高至毫秒级别","block_hash":"4D36473D2FF1FE0772A6C0C55D7911295D8E1E27","category":"原本,数据,DNA,安全,区块","content_hash":"54ce1d0eb4759bae08f31d00095368b239af91d0dbb51f233092b65788f2a526","created":"1522221708050","id":"d23df85914f54b908d6d65422a7f9494","language":"zh-cn","license":{"parameters":{"b":"2","y":"4"},"type":"cc"},"pubkey":"03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77","title":"原本链java版本sdk测试","type":"article"}
+    //注册成功。3Q7QAE45H6AUM95YCOGQ0GWVADF24G91YDLWII4E1WA2VWV012
     private static void SaveMetadataTest() {
         Metadata metadata = new Metadata();
         metadata.setContent(content);
@@ -137,116 +144,7 @@ public class NodeTest {
         }
     }
 
-
-    public static void test3() throws InvalidException {
-        Metadata metadata = new Metadata();
-        metadata.setAbstractContent("原本链是一个分布式的底层数据网络；原本链是一个高效的，安全的，易用的，易扩展的，全球性质的，企业级的可信联盟链；原本链通过智能合约系统以及数字加密算法，实现了链上数据可持续性交互以及数据传输的安全；原本链通过高度抽象的“DTCP协议”与世界上独一无二的“原本DNA”互锁，确保链上数据100%不可篡改；原本链通过优化设计后的共识机制和独创的“闪电DNA”算法，已将区块写入速度提高至毫秒级别");
-        metadata.setBlockHash("4D36473D2FF1FE0772A6C0C55D7911295D8E1E27");
-        metadata.setCategory("原本,数据,DNA,安全,区块");
-        metadata.setContentHash("54ce1d0eb4759bae08f31d00095368b239af91d0dbb51f233092b65788f2a526");
-        metadata.setCreated("1522067969129");
-        metadata.setId("4c9b26e165344cf391822cb4c221e8b5");
-        metadata.setLanguage("zh-cn");
-        Metadata.License license = new Metadata.License();
-        license.setType("cc");
-        HashMap<String, Object> params = new HashMap<>();
-        params.put("y", "4");
-        params.put("b", "2");
-        license.setParameters(params);
-        metadata.setLicense(license);
-        metadata.setPubKey("03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77");
-        metadata.setTitle("原本链java版本sdk测试");
-        metadata.setType("article");
-        metadata.setSignature("ffd1515581f7962444291faf67f27f3ef13b9401f52ba076f2cd5b25f88341a923492d08b82cf7b6801c5d8e840bc771d960e74bde50c79387e151f8f86079b601");
-        metadata.setDna("65SO0BNCXRLWIEIKVFSZAAL8WG2964P91N3S29T8HS3YP1RQ67");
-
-        System.out.println("sign:" + DTCPProcessor.GenMetadataSignature(metadata, private_key));
-
-        System.out.println("pub from priKey :" + ECKeyProcessor.GetPubKeyFromPri(private_key));
-
-
-        System.out.println("sign:" + ECKeyProcessor.Sign(private_key, metadata.toJsonRmSign().getBytes()));
-
-        boolean b = ECKeyProcessor.VerifySignature(public_key, DTCPProcessor.GenMetadataSignature(metadata, private_key), ECKeyProcessor.Keccak256(metadata.toJsonRmSign()));
-        System.out.println("v:" + b);
-
-        b = ECKeyProcessor.VerifySignature(public_key, "ffd1515581f7962444291faf67f27f3ef13b9401f52ba076f2cd5b25f88341a923492d08b82cf7b6801c5d8e840bc771d960e74bde50c79387e151f8f86079b601", ECKeyProcessor.Keccak256(metadata.toJsonRmSign()));
-        System.out.println("v2:" + b);
-
-        System.out.println("from data sign:" + metadata.getSignature());
-        System.out.println("dna:" + DTCPProcessor.GeneratorDNA(metadata.getSignature()));
-        System.out.println("gen dna from sign_str:" + DTCPProcessor.GeneratorDNA("ffd1515581f7962444291faf67f27f3ef13b9401f52ba076f2cd5b25f88341a923492d08b82cf7b6801c5d8e840bc771d960e74bde50c79387e151f8f86079b600"));
-        System.out.println("from data dna:" + metadata.getDna());
-
-
-//        try {
-//            MetadataSaveResp resp = NodeProcessor.SaveMetadata(URL, null, metadata);
-//            if (resp == null) {
-//                System.out.println("结果体转换异常");
-//            }
-//            else if (Constants.CODE_ERROR.equalsIgnoreCase(resp.getCode())) {
-//                System.out.println("注册异常:"+ resp.getMsg());
-//            }
-//            else {
-//                System.out.println("注册成功。"+ resp.getData().getDna());
-//            }
-//        } catch (InvalidException e) {
-//            e.printStackTrace();
-//        }
-
-
-//        md := &kts.Metadata{
-//            Abstract:"原本链是一个分布式的底层数据网络；原本链是一个高效的，安全的，易用的，易扩展的，全球性质的，企业级的可信联盟链；原本链通过智能合约系统以及数字加密算法，实现了链上数据可持续性交互以及数据传输的安全；原本链通过高度抽象的“DTCP协议”与世界上独一无二的“原本DNA”互锁，确保链上数据100%不可篡改；原本链通过优化设计后的共识机制和独创的“闪电DNA”算法，已将区块写入速度提高至毫秒级别",
-//                    BlockHash:"4D36473D2FF1FE0772A6C0C55D7911295D8E1E27",
-//                    Category:"原本,数据,DNA,安全,区块",
-//                    ContentHash:"54ce1d0eb4759bae08f31d00095368b239af91d0dbb51f233092b65788f2a526",
-//                    Created:"1522067969129",
-//                    ID:"4c9b26e165344cf391822cb4c221e8b5",
-//                    Language:"zh-cn",
-//                    License: struct {
-//                Type       string            `json:"type,omitempty" binding:"required"`
-//                Parameters map[string]string `json:"parameters,omitempty" binding:"required"`
-//            }{Type: "cc", Parameters: map[string]string{
-//                "y": "4",
-//                        "b": "2",
-//            }},
-//            PubKey:"03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77",
-//                    Title:"原本链java版本sdk测试",
-//                    Type:"article",
-//                    Signature:"ffd1515581f7962444291faf67f27f3ef13b9401f52ba076f2cd5b25f88341a923492d08b82cf7b6801c5d8e840bc771d960e74bde50c79387e151f8f86079b601",
-//                    DNA:"65SO0BNCXRLWIEIKVFSZAAL8WG2964P91N3S29T8HS3YP1RQ67",
-//        }
-    }
-
-    private static void test4() {
-        String str = "9eda9afe54859080783c288fab3bdd3e78dda8878b33359a7e1ef0d4818e1ce0";
-        String priKey = "3c4dbee4485557edce3c8878be34373c1a41d955f38d977cfba373642983ce4c";
-
-        try {
-            System.out.println(DTCPProcessor.GeneratorDNA(str));
-            System.out.println(ECKeyProcessor.GetPubKeyFromPri(priKey));
-            System.out.println(ECKeyProcessor.Sign(priKey, str.getBytes()));
-        } catch (InvalidException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     public static void main(String[] args) {
-        ChechBlockHashTest();
-//        test4();
-//        try {
-//            test3();
-//        } catch (InvalidException e) {
-//            e.printStackTrace();
-//        }
-//        SaveMetadataTest();
-//        String s = "878c162b8bc31d5539c2200955caba4f4e9295041f3bdb51458eb0d56140607f439413e2086d279d732d285b52fa509ee3b85ddbe10eece2a0909b0b22d0d8c800";
-//
-//        try {
-//            System.out.println(DTCPProcessor.GeneratorDNA(s));
-//        } catch (InvalidException e) {
-//            e.printStackTrace();
-//        }
+        QueryMetadataTest();
     }
 }
