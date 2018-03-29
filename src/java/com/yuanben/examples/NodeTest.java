@@ -14,7 +14,8 @@ import java.util.HashMap;
 
 public class NodeTest {
 
-    private static String URL = "http://127.0.0.1:9000";
+    private static String URL = "http://119.23.22.129:8080";
+//    private static String URL = "http://127.0.0.1:9000";
 //    private static String URL = "http://119.23.22.129:9000";
     private static String private_key = "3c4dbee4485557edce3c8878be34373c1a41d955f38d977cfba373642983ce4c";
     private static String public_key = "03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77";
@@ -93,7 +94,7 @@ public class NodeTest {
         }
         System.out.println(metadata.toJsonRmSign());
         try {
-            MetadataSaveResp resp = NodeProcessor.SaveMetadata(URL, null, metadata);
+            MetadataSaveResp resp = NodeProcessor.SaveMetadata(URL, null, false,metadata);
             if (resp == null) {
                 System.out.println("结果体转换异常");
             } else if (Constants.CODE_ERROR.equalsIgnoreCase(resp.getCode())) {
@@ -145,6 +146,6 @@ public class NodeTest {
     }
 
     public static void main(String[] args) {
-        QueryMetadataTest();
+        SaveMetadataTest();
     }
 }

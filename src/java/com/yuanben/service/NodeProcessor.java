@@ -40,18 +40,19 @@ public class NodeProcessor {
      *
      * @param url     node节点的地址 （http://119.23.22.129:9000)
      * @param version node节点的版本 （默认v1)
+     * @param async   是否异步发送 async=true为异步发送,async=false为同步发送
      * @param md      要注册的metadata，不需要传content
      * @return metadata的注册结果体
      * @throws InvalidException 参数有误或网络请求错误
      */
-    public static MetadataSaveResp SaveMetadata(String url, String version, Metadata md) throws InvalidException {
+    public static MetadataSaveResp SaveMetadata(String url, String version, boolean async, Metadata md) throws InvalidException {
         if (StringUtils.isBlank(url)) {
             throw new InvalidException("url is empty");
         }
         if (StringUtils.isBlank(version)) {
             version = "v1";
         }
-        url += "/" + version + "/metadata/";
+        url += "/" + version + "/metadata?async=" + async;
         if (md == null) {
             throw new InvalidException("metadata is null");
         }

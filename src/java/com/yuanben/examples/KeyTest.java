@@ -33,6 +33,7 @@ public class KeyTest {
     private static void GetPubKeyFromPriTest() {
 
         try {
+            private_key = "E28D61220ADBBEFC0BE9421570C3B77BC24CA33C18CB62FCCFBC982C40B8F888A59A0F38301CF02E82666541D78D6981C5A6481D9AD25EC933FC9E2FB97C29FC";
             String pubKeyFromPri = ECKeyProcessor.GetPubKeyFromPri(private_key);
             System.out.println(pubKeyFromPri);
         } catch (InvalidException e) {
@@ -71,6 +72,8 @@ public class KeyTest {
 
 
     public static void main(String[] args) {
-        Keccak256Test();
+
+        GetPubKeyFromPriTest();
+//        Keccak256Test();
     }
 }
