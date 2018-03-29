@@ -42,6 +42,7 @@ https://git.dev.yuanben.org/scm/unv/universe-java-sdk.git
 | dna            | string  | metadata dna                             |系统生成|
 | parent_dna            | string  | 该metadata修改前的dna                             |用户传入，如果时修改前一个metadata的数据，则需要传入前一个metadata的dna|
 | block_hash            | string  | 区块链上的一个block_hash值                             |用户传入，会到链上做校验|
+| block_height            | long  | block_hash对应的区块的height值                             |用户传入，会到链上做校验|
 | created        | integer | 创建的时间,时间戳,10位长度, 1506302092               |系统生成|
 | content_hash   | string  | 内容哈希,hash算法(keccak256)                   |可用户传入，如果没有，系统根据content生成|
 | extra          | object  | 扩展内容,自定义内容                               |用户传入|
