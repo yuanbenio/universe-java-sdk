@@ -14,7 +14,7 @@ public class Metadata {
     @JSONField(name = "block_hash")
     private String blockHash;
     @JSONField(name = "block_height")
-    private Long blockHeight;
+    private String blockHeight;
     private String signature;
     @JSONField(name = "id")
     private String id;
@@ -72,11 +72,11 @@ public class Metadata {
         this.pubKey = pubKey;
     }
 
-    public Long getBlockHeight() {
+    public String getBlockHeight() {
         return blockHeight;
     }
 
-    public void setBlockHeight(Long blockHeight) {
+    public void setBlockHeight(String blockHeight) {
         this.blockHeight = blockHeight;
     }
 

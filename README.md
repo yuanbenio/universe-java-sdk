@@ -42,7 +42,7 @@ https://git.dev.yuanben.org/scm/unv/universe-java-sdk.git
 | dna            | string  | metadata dna                             |系统生成|
 | parent_dna            | string  | 该metadata修改前的dna                             |用户传入，如果时修改前一个metadata的数据，则需要传入前一个metadata的dna|
 | block_hash            | string  | 区块链上的一个block_hash值                             |用户传入，会到链上做校验|
-| block_height            | long  | block_hash对应的区块的height值                             |用户传入，会到链上做校验|
+| block_height            | string  | block_hash对应的区块的height值                             |用户传入，会到链上做校验|
 | created        | integer | 创建的时间,时间戳,10位长度, 1506302092               |系统生成|
 | content_hash   | string  | 内容哈希,hash算法(keccak256)                   |可用户传入，如果没有，系统根据content生成|
 | extra          | object  | 扩展内容,自定义内容                               |用户传入|
@@ -267,15 +267,84 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
 #### FullMetadata
 ```Java
    /**
-     * 对metadata进行补全
-     * @param privateKey 16进制的私钥，用于签名
-     * @param metadata  必须包含license\title\type\block_hash,如果contentHash为空，则必须传入content的值；如果type不是article，则必须传入contentHash
-     * @return 信息补全的metadata
-     * @throws InvalidException
-     */
-    public static Metadata FullMetadata(String privateKey, Metadata metadata) throws InvalidException {
-         ......
-    }
+        * 对metadata进行补全
+        *
+        * @param privateKey 16进制的私钥，用于签名
+        * @param metadata   必须包含license\title\type\block_hash|block_height,如果contentHash为空，则必须传入content的值；如果type不是article，则必须传入contentHash
+        * @return 信息补全的metadata
+        * @throws InvalidException
+        */
+       public static Metadata FullMetadata(String privateKey, Metadata metadata) throws InvalidException {
+           if (metadata == null || !SecretUtil.CheckPrivateKey(privateKey)) {
+               throw new InvalidException("metadata or privateKey is illegal");
+           }
+           if (StringUtils.isBlank(metadata.getContentHash())) {
+               if (StringUtils.isBlank(metadata.getContent())) {
+                   throw new InvalidException("content is empty");
+               }
+               metadata.setContentHash(GenContentHash(metadata.getContent()));
+           }
+           if (StringUtils.isBlank(metadata.getPubKey())) {
+               metadata.setPubKey(ECKeyProcessor.GetPubKeyFromPri(privateKey));
+           }
+           if (StringUtils.isEmpty(metadata.getTitle())) {
+               throw new InvalidException("title is empty");
+           }
+           if (StringUtils.isEmpty(metadata.getBlockHash()) || StringUtils.isEmpty(metadata.getBlockHeight())) {
+               throw new InvalidException("block hash or block height is empty");
+           }
+           if (StringUtils.isEmpty(metadata.getType())) {
+               throw new InvalidException("type is empty");
+           }
+           if (metadata.getLicense() == null || StringUtils.isBlank(metadata.getLicense().getType())) {
+               throw new InvalidException("license is empty");
+           }
+           if (StringUtils.isBlank(metadata.getId())) {
+               metadata.setId(UUID.randomUUID().toString().replace("-", ""));
+           }
+           if (StringUtils.isBlank(metadata.getLanguage())) {
+               metadata.setLanguage(Constants.Language_ZH);
+           }
+           if (StringUtils.isBlank(metadata.getCreated())) {
+               metadata.setCreated(Constants.STRING_EMPTY + System.currentTimeMillis());
+           }
+           switch (metadata.getType()) {
+               case Constants.TYPE_ARTICLE:
+                   if (StringUtils.isBlank(metadata.getAbstractContent())) {
+                       metadata.setAbstractContent(metadata.getContent().length() < 200 ? metadata.getContent() :
+                               metadata.getContent().substring(0, 200));
+                   }
+                   if (StringUtils.isNotBlank(metadata.getContent())) {
+                       List<String> strings = HanLP.extractKeyword(metadata.getContent(), 5);
+                       String category = "";
+                       for (String s : strings) {
+                           category += s + ",";
+                       }
+                       if (StringUtils.isNotBlank(category)) {
+                           category = category.substring(0, category.length() - 1);
+                       }
+                       metadata.setCategory(category);
+                   }
+                   break;
+               case Constants.TYPE_AUDIO:
+               case Constants.TYPE_IMAGE:
+               case Constants.TYPE_VIDEO:
+                   if (StringUtils.isBlank(metadata.getContentHash())) {
+                       throw new InvalidException("there must be a contentHash if the content type is image、video or audio");
+                   }
+                   break;
+               default:
+                   throw new InvalidException("content type is nonsupport");
+           }
+           String sign = GenMetadataSignature(metadata, privateKey);
+           String dna = GeneratorDNA(sign);
+           metadata.setSignature(sign);
+           metadata.setDna(dna);
+           //node节点不需要content
+           metadata.setContent(null);
+           return metadata;
+   
+       }
 ```
 > 该方法位于DTCPProcessor.java，需要传入metadata和私钥，返回可被node节点接收的完整metadata。
 

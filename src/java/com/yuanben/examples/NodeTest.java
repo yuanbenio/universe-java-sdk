@@ -1,5 +1,6 @@
 package com.yuanben.examples;
 
+import com.alibaba.fastjson.JSONObject;
 import com.yuanben.common.Constants;
 import com.yuanben.common.InvalidException;
 import com.yuanben.model.Metadata;
@@ -7,7 +8,9 @@ import com.yuanben.model.http.*;
 import com.yuanben.service.DTCPProcessor;
 import com.yuanben.service.ECKeyProcessor;
 import com.yuanben.service.NodeProcessor;
+import org.spongycastle.util.encoders.Hex;
 
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -51,7 +54,7 @@ public class NodeTest {
         try {
             MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, null, dna);
             if (resp == null) {
-                System.out.println("结果体转换异常");
+                System.out.println("返回体转换异常");
             } else if (Constants.CODE_ERROR.equalsIgnoreCase(resp.getCode())) {
                 System.out.println("查询异常:" + resp.getMsg());
             } else {
@@ -63,13 +66,14 @@ public class NodeTest {
     }
 
     //example result:
-    //true
-    //{"abstract":"原本链是一个分布式的底层数据网络；原本链是一个高效的，安全的，易用的，易扩展的，全球性质的，企业级的可信联盟链；原本链通过智能合约系统以及数字加密算法，实现了链上数据可持续性交互以及数据传输的安全；原本链通过高度抽象的“DTCP协议”与世界上独一无二的“原本DNA”互锁，确保链上数据100%不可篡改；原本链通过优化设计后的共识机制和独创的“闪电DNA”算法，已将区块写入速度提高至毫秒级别","block_hash":"4D36473D2FF1FE0772A6C0C55D7911295D8E1E27","category":"原本,数据,DNA,安全,区块","content_hash":"54ce1d0eb4759bae08f31d00095368b239af91d0dbb51f233092b65788f2a526","created":"1522221708050","id":"d23df85914f54b908d6d65422a7f9494","language":"zh-cn","license":{"parameters":{"b":"2","y":"4"},"type":"cc"},"pubkey":"03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77","title":"原本链java版本sdk测试","type":"article"}
-    //注册成功。3Q7QAE45H6AUM95YCOGQ0GWVADF24G91YDLWII4E1WA2VWV012
+//    true
+//    {"abstract":"原本链是一个分布式的底层数据网络；原本链是一个高效的，安全的，易用的，易扩展的，全球性质的，企业级的可信联盟链；原本链通过智能合约系统以及数字加密算法，实现了链上数据可持续性交互以及数据传输的安全；原本链通过高度抽象的“DTCP协议”与世界上独一无二的“原本DNA”互锁，确保链上数据100%不可篡改；原本链通过优化设计后的共识机制和独创的“闪电DNA”算法，已将区块写入速度提高至毫秒级别","block_hash":"4D36473D2FF1FE0772A6C0C55D7911295D8E1E27","block_height":"12345","category":"原本,数据,DNA,安全,区块","content_hash":"54ce1d0eb4759bae08f31d00095368b239af91d0dbb51f233092b65788f2a526","created":"1522386475044","id":"81300bedc6fb4771b1dbbe1801d991b6","language":"zh-cn","license":{"parameters":{"b":"2","y":"4"},"type":"cc"},"pubkey":"03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77","title":"原本链java版本sdk测试","type":"article"}
+//    注册成功。423Z4LIH0YV9NUKYCEVTTKYLJMK949VC543T5CC050LCU8HBJ5
     private static void SaveMetadataTest() {
         Metadata metadata = new Metadata();
         metadata.setContent(content);
         metadata.setBlockHash(block_hash);
+        metadata.setBlockHeight("12345");
         metadata.setType(Constants.TYPE_ARTICLE);
         metadata.setTitle("原本链java版本sdk测试");
         Metadata.License license = new Metadata.License();
@@ -94,7 +98,7 @@ public class NodeTest {
         }
         System.out.println(metadata.toJsonRmSign());
         try {
-            MetadataSaveResp resp = NodeProcessor.SaveMetadata(URL, null, false,metadata);
+            MetadataSaveResp resp = NodeProcessor.SaveMetadata(URL, null, true,metadata);
             if (resp == null) {
                 System.out.println("结果体转换异常");
             } else if (Constants.CODE_ERROR.equalsIgnoreCase(resp.getCode())) {

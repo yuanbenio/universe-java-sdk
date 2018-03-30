@@ -81,7 +81,7 @@ public class DTCPProcessor {
      * 对metadata进行补全
      *
      * @param privateKey 16进制的私钥，用于签名
-     * @param metadata   必须包含license\title\type,如果contentHash为空，则必须传入content的值；如果type不是article，则必须传入contentHash
+     * @param metadata   必须包含license\title\type\block_hash|block_height,如果contentHash为空，则必须传入content的值；如果type不是article，则必须传入contentHash
      * @return 信息补全的metadata
      * @throws InvalidException
      */
@@ -100,6 +100,9 @@ public class DTCPProcessor {
         }
         if (StringUtils.isEmpty(metadata.getTitle())) {
             throw new InvalidException("title is empty");
+        }
+        if (StringUtils.isEmpty(metadata.getBlockHash()) || StringUtils.isEmpty(metadata.getBlockHeight())) {
+            throw new InvalidException("block hash or block height is empty");
         }
         if (StringUtils.isEmpty(metadata.getType())) {
             throw new InvalidException("type is empty");
