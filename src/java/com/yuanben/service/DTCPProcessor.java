@@ -1,10 +1,12 @@
 package com.yuanben.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.hankcs.hanlp.HanLP;
 import com.yuanben.common.Constants;
 import com.yuanben.common.InvalidException;
 import com.yuanben.crypto.cryptohash.Keccak256;
 import com.yuanben.model.Metadata;
+import com.yuanben.model.http.RegisterAccountReq;
 import com.yuanben.util.SecretUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.spongycastle.util.encoders.Hex;
@@ -12,6 +14,8 @@ import org.spongycastle.util.encoders.Hex;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
+
+import static com.yuanben.service.ECKeyProcessor.Sign;
 
 /**
  * <p>DTCP处理器</p>
@@ -60,7 +64,7 @@ public class DTCPProcessor {
         if (metadata == null || !SecretUtil.CheckPrivateKey(privateKey)) {
             throw new InvalidException("metadata or privateKey is illegal");
         }
-        return ECKeyProcessor.Sign(privateKey, metadata.toJsonRmSign().getBytes());
+        return Sign(privateKey, metadata.toJsonRmSign().getBytes());
     }
 
     /**
@@ -83,7 +87,7 @@ public class DTCPProcessor {
      * @param privateKey 16进制的私钥，用于签名
      * @param metadata   必须包含license\title\type\block_hash|block_height,如果contentHash为空，则必须传入content的值；如果type不是article，则必须传入contentHash
      * @return 信息补全的metadata
-     * @throws InvalidException
+     * @throws InvalidException 参数错误
      */
     public static Metadata FullMetadata(String privateKey, Metadata metadata) throws InvalidException {
         if (metadata == null || !SecretUtil.CheckPrivateKey(privateKey)) {
@@ -157,5 +161,24 @@ public class DTCPProcessor {
 
     }
 
-
+    /**
+     * 生成用于注册公钥的请求体
+     *
+     * @param privateKey 16进制私钥
+     * @param subPubKeys 需要注册的公钥数组
+     * @return 请求体封装
+     * @throws InvalidException 参数错误
+     */
+    public static RegisterAccountReq GenRegisterAccountReq(String privateKey, String[] subPubKeys) throws InvalidException {
+        if (subPubKeys == null || subPubKeys.length < 1 || !SecretUtil.CheckPrivateKey(privateKey)) {
+            throw new InvalidException("subPubKeys or privateKey is illegal");
+        }
+        RegisterAccountReq req = new RegisterAccountReq();
+        req.setSubPubKeys(subPubKeys);
+        String pubKey = ECKeyProcessor.GetPubKeyFromPri(privateKey);
+        String sign = ECKeyProcessor.Sign(privateKey, JSONArray.toJSONString(subPubKeys).getBytes());
+        req.setPubKey(pubKey);
+        req.setSignature(sign);
+        return req;
+    }
 }

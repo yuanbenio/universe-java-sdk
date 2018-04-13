@@ -3,7 +3,9 @@ package com.yuanben.examples;
 import com.alibaba.fastjson.JSONObject;
 import com.yuanben.common.Constants;
 import com.yuanben.common.InvalidException;
+import com.yuanben.crypto.ECKey;
 import com.yuanben.model.Metadata;
+import com.yuanben.model.SecretKey;
 import com.yuanben.model.http.*;
 import com.yuanben.service.DTCPProcessor;
 import com.yuanben.service.ECKeyProcessor;
@@ -17,9 +19,7 @@ import java.util.HashMap;
 
 public class NodeTest {
 
-    private static String URL = "http://119.23.22.129:8080";
-//    private static String URL = "http://127.0.0.1:9000";
-//    private static String URL = "http://119.23.22.129:9000";
+    private static String URL = "http://localhost:8080";
     private static String private_key = "3c4dbee4485557edce3c8878be34373c1a41d955f38d977cfba373642983ce4c";
     private static String public_key = "03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77";
     private static String content = "原本链是一个分布式的底层数据网络；" +
@@ -84,9 +84,9 @@ public class NodeTest {
         license.setParameters(params);
         metadata.setLicense(license);
 
-
         try {
             metadata = DTCPProcessor.FullMetadata(private_key, metadata);
+            System.out.println(metadata.toJson());
         } catch (InvalidException e) {
             e.printStackTrace();
         }
@@ -149,7 +149,25 @@ public class NodeTest {
         }
     }
 
+
+    //rest result:
+    //{"code":"ok"}
+    private static void RegisterAccountTest() {
+        String[] subKeys = new String[2];
+        for (int i = 0; i < 2; i++) {
+            subKeys[i]=ECKeyProcessor.GeneratorSecp256k1Key().getPublicKey();
+        }
+        try {
+            RegisterAccountReq req = DTCPProcessor.GenRegisterAccountReq(private_key, subKeys);
+            NodeProcessor.RegisterAccount("http://localhost:8081",null,req);
+        } catch (InvalidException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public static void main(String[] args) {
-        SaveMetadataTest();
+        RegisterAccountTest();
+
     }
 }

@@ -5,6 +5,7 @@ import com.yuanben.common.InvalidException;
 import com.yuanben.model.Metadata;
 import com.yuanben.model.http.*;
 import com.yuanben.util.HttpUtil;
+import com.yuanben.util.SecretUtil;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -17,7 +18,7 @@ public class NodeProcessor {
     /**
      * 向node节点查询metadata
      *
-     * @param url     node节点的地址 （http://119.23.22.129:9000)
+     * @param url     node节点的地址 （http://localhost:9000)
      * @param version node节点的版本 （默认v1)
      * @param dna     metadata对应的闪电dna
      * @return metadata的查询结果体
@@ -38,7 +39,7 @@ public class NodeProcessor {
     /**
      * 向node节点注册metadata
      *
-     * @param url     node节点的地址 （http://119.23.22.129:9000)
+     * @param url     node节点的地址 （http://localhost:9000)
      * @param version node节点的版本 （默认v1)
      * @param async   是否异步发送 默认async=true为异步发送,如果async=false为同步发送
      * @param md      要注册的metadata，不需要传content
@@ -52,7 +53,7 @@ public class NodeProcessor {
         if (StringUtils.isBlank(version)) {
             version = "v1";
         }
-        if (async == null ){
+        if (async == null) {
             async = true;
         }
         url += "/" + version + "/metadata?async=" + async;
@@ -72,7 +73,7 @@ public class NodeProcessor {
     /**
      * 向node节点查询license
      *
-     * @param url         node节点的地址 （http://119.23.22.129:9000)
+     * @param url         node节点的地址 （http://localhost:9000)
      * @param version     node节点的版本 （默认v1)
      * @param licenseType license's type
      * @return license的查询结果体
@@ -94,7 +95,7 @@ public class NodeProcessor {
     /**
      * 向node节点查询最新的blockHash
      *
-     * @param url     node节点的地址 （http://119.23.22.129:9000)
+     * @param url     node节点的地址 （http://localhost:9000)
      * @param version node节点的版本 （默认v1)
      * @return 最新的blcokHash封装
      * @throws InvalidException 参数有误或网络请求错误
@@ -114,14 +115,14 @@ public class NodeProcessor {
     /**
      * 向node节点查询blockHash是否在链上，并处于指定高度
      *
-     * @param url     node节点的地址 （http://119.23.22.129:9000)
+     * @param url     node节点的地址 （http://localhost:9000)
      * @param version node节点的版本 （默认v1)
      * @param req     请求体 （包括blockHash和blockHeight)
      * @return 查询结果封装
      * @throws InvalidException 参数有误或网络请求错误
      */
     public static BlockHashCheckResp CheckBlockHash(String url, String version, BlockHashCheckReq req) throws InvalidException {
-        if (StringUtils.isBlank(url) || req == null || StringUtils.isBlank(req.getHash())) {
+        if (StringUtils.isBlank(url) || req == null) {
             throw new InvalidException("url or request body is empty");
         }
         if (StringUtils.isBlank(version)) {
@@ -132,5 +133,29 @@ public class NodeProcessor {
         return JSONObject.parseObject(s, BlockHashCheckResp.class);
     }
 
-
+    /**
+     * 注册公钥
+     *
+     * @param url     node节点的地址 （http://localhost:9000)
+     * @param version node节点的版本 （默认v1)
+     * @param req     请求体
+     * @return 返回结果封装
+     * @throws InvalidException 参数有误或网络请求错误
+     */
+    public static RegisterAccountResp RegisterAccount(String url, String version, RegisterAccountReq req) throws InvalidException {
+        if (StringUtils.isBlank(url) || req == null) {
+            throw new InvalidException("url or request body is empty");
+        }
+        if (!SecretUtil.CheckPublicKey(req.getPubKey(), true) ||
+                StringUtils.isEmpty(req.getSignature()) ||
+                req.getSubPubKeys() == null || req.getSubPubKeys().length < 1) {
+            throw new InvalidException("request parameters error");
+        }
+        if (StringUtils.isBlank(version)) {
+            version = "v1";
+        }
+        url += "/" + version + "/accounts/";
+        String s = HttpUtil.sendPost(url, req.toJson());
+        return JSONObject.parseObject(s, RegisterAccountResp.class);
+    }
 }
