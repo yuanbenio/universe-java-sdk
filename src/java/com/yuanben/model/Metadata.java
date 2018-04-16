@@ -231,6 +231,14 @@ public class Metadata {
         String dna = this.dna;
         String signature = this.signature;
         String content = this.content;
+
+        //对paramters排序
+        if (this.getLicense() != null ) {
+            HashMap<String,Object> paramters = new HashMap<>();
+            paramters.putAll(this.getLicense().getParameters());
+            this.getLicense().setParameters(paramters);
+        }
+
         this.dna = null;
         this.signature = null;
         this.content = null;
