@@ -1,25 +1,19 @@
 package com.yuanben.examples;
 
-import com.alibaba.fastjson.JSONObject;
 import com.yuanben.common.Constants;
 import com.yuanben.common.InvalidException;
-import com.yuanben.crypto.ECKey;
 import com.yuanben.model.Metadata;
-import com.yuanben.model.SecretKey;
 import com.yuanben.model.http.*;
 import com.yuanben.service.DTCPProcessor;
 import com.yuanben.service.ECKeyProcessor;
 import com.yuanben.service.NodeProcessor;
-import org.spongycastle.util.encoders.Hex;
 
-import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
+import java.util.TreeMap;
 
 public class NodeTest {
 
-    private static String URL = "http://localhost:8080";
+//    private static String URL = "http://localhost:8080";
+    private static String URL = "https://openapi.yuanbenlian.com";
     private static String private_key = "3c4dbee4485557edce3c8878be34373c1a41d955f38d977cfba373642983ce4c";
     private static String public_key = "03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77";
     private static String content = "原本链是一个分布式的底层数据网络；" +
@@ -78,7 +72,7 @@ public class NodeTest {
         metadata.setTitle("原本链java版本sdk测试");
         Metadata.License license = new Metadata.License();
         license.setType("cc");
-        HashMap<String, Object> params = new HashMap<>();
+        TreeMap<String, Object> params = new TreeMap<>();
         params.put("y", "4");
         params.put("b", "2");
         license.setParameters(params);
@@ -167,7 +161,7 @@ public class NodeTest {
 
 
     public static void main(String[] args) {
-        RegisterAccountTest();
+        SaveMetadataTest();
 
     }
 }

@@ -2,13 +2,12 @@ package com.yuanben.examples;
 
 import com.yuanben.common.Constants;
 import com.yuanben.common.InvalidException;
-import com.yuanben.crypto.ECKey;
 import com.yuanben.model.Metadata;
 import com.yuanben.model.http.RegisterAccountReq;
 import com.yuanben.service.DTCPProcessor;
 import com.yuanben.service.ECKeyProcessor;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * DTCPProcessor Test
@@ -42,7 +41,7 @@ public class DTCPTest {
         metadata.setTitle("原本链java版本sdk测试");
         Metadata.License license = new Metadata.License();
         license.setType("cc");
-        HashMap<String, Object> params = new HashMap<>();
+        TreeMap<String, Object> params = new TreeMap<>();
         params.put("y", "4");
         params.put("b", "2");
         license.setParameters(params);

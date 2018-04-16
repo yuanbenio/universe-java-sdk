@@ -2,9 +2,9 @@ package com.yuanben.model;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.yuanben.util.MapUtil;
 
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>dtcp协议抽象模型</p>
@@ -46,7 +46,7 @@ public class Metadata {
 
     public static class License {
         private String type;
-        private HashMap<String, Object> parameters;
+        private TreeMap<String, Object> parameters;
 
         public String getType() {
             return type;
@@ -56,11 +56,11 @@ public class Metadata {
             this.type = type;
         }
 
-        public HashMap<String, Object> getParameters() {
+        public TreeMap<String, Object> getParameters() {
             return parameters;
         }
 
-        public void setParameters(HashMap<String, Object> parameters) {
+        public void setParameters(TreeMap<String, Object> parameters) {
             this.parameters = parameters;
         }
     }
@@ -233,15 +233,9 @@ public class Metadata {
         String signature = this.signature;
         String content = this.content;
 
-        //对paramters排序
+//        对paramters排序
         if (this.getLicense() != null ) {
-            HashMap<String, Object> hashMap = this.getLicense().getParameters();
-            HashMap<String,Object> paramters = new HashMap<>();
-            Set<String> strings = hashMap.keySet();
-            for (String k:strings) {
-                paramters.put(k,hashMap.get(k));
-            }
-            this.getLicense().setParameters(paramters);
+            this.getLicense().setParameters(MapUtil.sortMapByKey(this.getLicense().getParameters()));
         }
 
         this.dna = null;
@@ -249,6 +243,7 @@ public class Metadata {
         this.content = null;
 
         String js = JSONObject.toJSONString(this);
+        System.out.println(js);
         this.dna = dna;
         this.signature = signature;
         this.content = content;
@@ -256,3 +251,5 @@ public class Metadata {
     }
 
 }
+
+
