@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * <p>dtcp协议抽象模型</p>
@@ -234,8 +235,12 @@ public class Metadata {
 
         //对paramters排序
         if (this.getLicense() != null ) {
+            HashMap<String, Object> hashMap = this.getLicense().getParameters();
             HashMap<String,Object> paramters = new HashMap<>();
-            paramters.putAll(this.getLicense().getParameters());
+            Set<String> strings = hashMap.keySet();
+            for (String k:strings) {
+                paramters.put(k,hashMap.get(k));
+            }
             this.getLicense().setParameters(paramters);
         }
 
