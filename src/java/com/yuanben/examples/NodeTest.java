@@ -80,7 +80,6 @@ public class NodeTest {
 
         try {
             metadata = DTCPProcessor.FullMetadata(private_key, metadata);
-            System.out.println(metadata.toJson());
         } catch (InvalidException e) {
             e.printStackTrace();
         }
@@ -90,7 +89,6 @@ public class NodeTest {
         } catch (InvalidException e) {
             e.printStackTrace();
         }
-        System.out.println(metadata.toJsonRmSign());
         try {
             MetadataSaveResp resp = NodeProcessor.SaveMetadata(URL, null, true,metadata);
             if (resp == null) {

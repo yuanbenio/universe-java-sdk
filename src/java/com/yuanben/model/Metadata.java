@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.yuanben.util.MapUtil;
 
-import java.util.*;
+import java.util.TreeMap;
 
 /**
  * <p>dtcp协议抽象模型</p>
@@ -39,8 +39,8 @@ public class Metadata {
 
     private String language;
     private String source;
-    private Object extra;
-    private Object data;
+    private TreeMap<String, Object> extra;
+    private TreeMap<String, Object> data;
 
     private Metadata.License license;
 
@@ -177,11 +177,11 @@ public class Metadata {
         this.source = source;
     }
 
-    public Object getExtra() {
+    public TreeMap<String, Object> getExtra() {
         return extra;
     }
 
-    public void setExtra(Object extra) {
+    public void setExtra(TreeMap<String, Object> extra) {
         this.extra = extra;
     }
 
@@ -193,11 +193,11 @@ public class Metadata {
         this.parentDna = parentDna;
     }
 
-    public Object getData() {
+    public TreeMap<String, Object> getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(TreeMap<String, Object> data) {
         this.data = data;
     }
 
@@ -233,9 +233,15 @@ public class Metadata {
         String signature = this.signature;
         String content = this.content;
 
-//        对paramters排序
-        if (this.getLicense() != null ) {
-            this.getLicense().setParameters(MapUtil.sortMapByKey(this.getLicense().getParameters()));
+        // sort attributes
+        if (getLicense() != null) {
+            getLicense().setParameters(MapUtil.sortMapByKey(getLicense().getParameters()));
+        }
+        if (getData() != null) {
+            setData(MapUtil.sortMapByKey(getData()));
+        }
+        if (getExtra() != null) {
+            setExtra(MapUtil.sortMapByKey(getExtra()));
         }
 
         this.dna = null;
@@ -243,7 +249,6 @@ public class Metadata {
         this.content = null;
 
         String js = JSONObject.toJSONString(this);
-        System.out.println(js);
         this.dna = dna;
         this.signature = signature;
         this.content = content;

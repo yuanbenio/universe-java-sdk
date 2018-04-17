@@ -94,7 +94,7 @@ public class DTCPProcessor {
             throw new InvalidException("metadata or privateKey is illegal");
         }
         if (StringUtils.isBlank(metadata.getContentHash())) {
-            if (! Constants.TYPE_ARTICLE.equals(metadata.getType())){
+            if (!Constants.TYPE_ARTICLE.equals(metadata.getType())) {
                 throw new InvalidException("there must be a contentHash if the content type is image、video or audio");
             }
             if (StringUtils.isBlank(metadata.getContent())) {
