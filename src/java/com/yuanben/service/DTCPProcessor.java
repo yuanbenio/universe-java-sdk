@@ -134,12 +134,9 @@ public class DTCPProcessor {
                 }
                 if (StringUtils.isNotBlank(metadata.getContent())) {
                     List<String> strings = HanLP.extractKeyword(metadata.getContent(), 5);
-                    String category = "";
+                    String category = metadata.getCategory();
                     for (String s : strings) {
-                        category += s + ",";
-                    }
-                    if (StringUtils.isNotBlank(category)) {
-                        category = category.substring(0, category.length() - 1);
+                        category += ","+s ;
                     }
                     metadata.setCategory(category);
                 }
