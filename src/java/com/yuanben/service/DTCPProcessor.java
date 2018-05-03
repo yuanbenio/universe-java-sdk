@@ -85,7 +85,7 @@ public class DTCPProcessor {
      * 对metadata进行补全
      *
      * @param privateKey 16进制的私钥，用于签名
-     * @param metadata   必须包含license\title\type\block_hash|block_height,如果contentHash为空，则必须传入content的值；如果type不是article，则必须传入contentHash
+     * @param metadata   必须包含license\title\type\block_hash|block_height,如果contentHash为空，则必须传入content的值；如果type不是article，则必须传入contentHash;如果category为空，则必须传入content
      * @return 信息补全的metadata
      * @throws InvalidException 参数错误
      */
@@ -129,7 +129,7 @@ public class DTCPProcessor {
         switch (metadata.getType()) {
             case Constants.TYPE_ARTICLE:
                 if (StringUtils.isBlank(metadata.getAbstractContent())) {
-                    metadata.setAbstractContent(metadata.getContent().length() < 200 ? metadata.getContent() :
+                    metadata.setAbstractContent(StringUtils.isEmpty(metadata.getContent()) || metadata.getContent().length() < 200 ? metadata.getContent() :
                             metadata.getContent().substring(0, 200));
                 }
                 if (StringUtils.isNotBlank(metadata.getContent())) {
@@ -154,6 +154,10 @@ public class DTCPProcessor {
             default:
                 throw new InvalidException("content type is nonsupport");
         }
+        if (StringUtils.isEmpty(metadata.getCategory())) {
+            throw new InvalidException("category is empty");
+        }
+
         String sign = GenMetadataSignature(metadata, privateKey);
         String dna = GeneratorDNA(sign);
         metadata.setSignature(sign);
