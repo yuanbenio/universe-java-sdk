@@ -13,12 +13,12 @@ public class MapUtil {
      * @param map
      * @return
      */
-    public static TreeMap<String, Object> sortMapByKey(Map<String, Object> map) {
+    public static TreeMap sortMapByKey(Map map) {
         if (map == null || map.isEmpty()) {
             return null;
         }
 
-        TreeMap<String, Object> sortMap = new TreeMap<String, Object>(
+        TreeMap<String, Object> sortMap = new TreeMap<>(
                 new MapKeyComparator());
 
         sortMap.putAll(map);

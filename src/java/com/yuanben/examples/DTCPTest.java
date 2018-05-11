@@ -41,7 +41,7 @@ public class DTCPTest {
         metadata.setTitle("原本链java版本sdk测试");
         Metadata.License license = new Metadata.License();
         license.setType("cc");
-        TreeMap<String, Object> params = new TreeMap<>();
+        TreeMap<String, String> params = new TreeMap<>();
         params.put("y", "4");
         params.put("b", "2");
         license.setParameters(params);

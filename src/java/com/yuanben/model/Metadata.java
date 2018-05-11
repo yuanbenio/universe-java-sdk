@@ -39,14 +39,14 @@ public class Metadata {
 
     private String language;
     private String source;
-    private TreeMap<String, Object> extra;
-    private TreeMap<String, Object> data;
+    private TreeMap<String, String> extra;
+    private TreeMap<String, String> data;
 
     private Metadata.License license;
 
     public static class License {
         private String type;
-        private TreeMap<String, Object> parameters;
+        private TreeMap<String, String> parameters;
 
         public String getType() {
             return type;
@@ -56,11 +56,11 @@ public class Metadata {
             this.type = type;
         }
 
-        public TreeMap<String, Object> getParameters() {
+        public TreeMap<String, String> getParameters() {
             return parameters;
         }
 
-        public void setParameters(TreeMap<String, Object> parameters) {
+        public void setParameters(TreeMap<String, String> parameters) {
             this.parameters = parameters;
         }
     }
@@ -177,11 +177,11 @@ public class Metadata {
         this.source = source;
     }
 
-    public TreeMap<String, Object> getExtra() {
+    public TreeMap<String, String> getExtra() {
         return extra;
     }
 
-    public void setExtra(TreeMap<String, Object> extra) {
+    public void setExtra(TreeMap<String, String> extra) {
         this.extra = extra;
     }
 
@@ -193,11 +193,11 @@ public class Metadata {
         this.parentDna = parentDna;
     }
 
-    public TreeMap<String, Object> getData() {
+    public TreeMap<String, String> getData() {
         return data;
     }
 
-    public void setData(TreeMap<String, Object> data) {
+    public void setData(TreeMap<String, String> data) {
         this.data = data;
     }
 
