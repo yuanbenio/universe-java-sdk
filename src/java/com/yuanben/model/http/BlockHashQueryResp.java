@@ -1,7 +1,7 @@
 package com.yuanben.model.http;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
+import com.google.gson.annotations.SerializedName;
+import com.yuanben.util.GsonUtil;
 
 /**
  * <p>查询最新的blockHash的结果封装</p>
@@ -12,11 +12,11 @@ public class BlockHashQueryResp {
      * <p>查询的最新的blcokHash的相关参数</p>
      */
     public class BlockHashResp {
-        @JSONField(name = "latest_block_height")
+        @SerializedName(value = "latest_block_height")
         private Long latestBlockHeight;
-        @JSONField(name = "latest_block_hash")
+        @SerializedName(value = "latest_block_hash")
         private String latestBlockHash;
-        @JSONField(name = "latest_block_time")
+        @SerializedName(value = "latest_block_time")
         private String latestBlockTime;
 
         public Long getLatestBlockHeight() {
@@ -73,6 +73,6 @@ public class BlockHashQueryResp {
     }
 
     public String toJson() {
-        return JSONObject.toJSONString(this);
+        return GsonUtil.getInstance().toJson(this);
     }
 }

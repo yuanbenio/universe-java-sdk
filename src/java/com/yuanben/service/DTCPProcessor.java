@@ -1,12 +1,12 @@
 package com.yuanben.service;
 
-import com.alibaba.fastjson.JSONArray;
 import com.hankcs.hanlp.HanLP;
 import com.yuanben.common.Constants;
 import com.yuanben.common.InvalidException;
 import com.yuanben.crypto.cryptohash.Keccak256;
 import com.yuanben.model.Metadata;
 import com.yuanben.model.http.RegisterAccountReq;
+import com.yuanben.util.GsonUtil;
 import com.yuanben.util.SecretUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.spongycastle.util.encoders.Hex;
@@ -180,7 +180,7 @@ public class DTCPProcessor {
         RegisterAccountReq req = new RegisterAccountReq();
         req.setSubPubKeys(subPubKeys);
         String pubKey = ECKeyProcessor.GetPubKeyFromPri(privateKey);
-        String sign = ECKeyProcessor.Sign(privateKey, JSONArray.toJSONString(subPubKeys).getBytes());
+        String sign = ECKeyProcessor.Sign(privateKey, GsonUtil.getInstance().toJson(subPubKeys).getBytes());
         req.setPubKey(pubKey);
         req.setSignature(sign);
         return req;

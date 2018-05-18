@@ -1,6 +1,6 @@
 package com.yuanben.model.http;
 
-import com.alibaba.fastjson.JSONObject;
+import com.yuanben.util.GsonUtil;
 
 import java.util.Map;
 
@@ -52,10 +52,10 @@ public class LicenseQueryResp {
     }
 
     public String toJson() {
-        return JSONObject.toJSONString(this);
+        return GsonUtil.getInstance().toJson(this);
     }
 
     public LicenseQueryResp convert(String json) {
-        return JSONObject.parseObject(json, LicenseQueryResp.class);
+        return GsonUtil.getInstance().fromJson(json, LicenseQueryResp.class);
     }
 }

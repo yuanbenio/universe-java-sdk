@@ -1,7 +1,7 @@
 package com.yuanben.model.http;
 
-import com.alibaba.fastjson.JSONObject;
 import com.yuanben.model.Metadata;
+import com.yuanben.util.GsonUtil;
 
 /**
  * <p>查询metadata的响应结果体</p>
@@ -52,10 +52,10 @@ public class MetadataQueryResp {
     }
 
     public String toJson() {
-        return JSONObject.toJSONString(this);
+        return GsonUtil.getInstance().toJson(this);
     }
 
     public MetadataQueryResp convert(String json) {
-        return JSONObject.parseObject(json, MetadataQueryResp.class);
+        return GsonUtil.getInstance().fromJson(json, MetadataQueryResp.class);
     }
 }

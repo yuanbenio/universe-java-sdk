@@ -1,6 +1,7 @@
 package com.yuanben.common;
 
 import java.math.BigInteger;
+import java.util.HashMap;
 
 public class Constants {
     public static final String STRING_EMPTY = "";
@@ -25,4 +26,12 @@ public class Constants {
     public static BigInteger getSECP256K1N() {
         return SECP256K1N;
     }
+
+
+    public static final HashMap<String, String> HTML_SAFE_REPLACEMENT_CHARS =
+            new HashMap<String, String>() {{
+                put(">", "\\u003e");
+                put("<", "\\u003c");
+                put("&", "\\u0026");
+            }};
 }

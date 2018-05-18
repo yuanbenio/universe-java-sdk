@@ -1,6 +1,6 @@
 package com.yuanben.model.http;
 
-import com.alibaba.fastjson.JSONObject;
+import com.yuanben.util.GsonUtil;
 
 /**
  * <p>检查blcokHash是否在链上的结果封装</p>
@@ -36,6 +36,6 @@ public class BlockHashCheckResp {
     }
 
     public String toJson() {
-        return JSONObject.toJSONString(this);
+        return GsonUtil.getInstance().toJson(this);
     }
 }

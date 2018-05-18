@@ -1,6 +1,6 @@
 package com.yuanben.model.http;
 
-import com.alibaba.fastjson.JSONObject;
+import com.yuanben.util.GsonUtil;
 
 /**
  * <p>向node节点注册metadata的返回结果体</p>
@@ -54,10 +54,10 @@ public class MetadataSaveResp {
     }
 
     public String toJson() {
-        return JSONObject.toJSONString(this);
+        return GsonUtil.getInstance().toJson(this);
     }
 
     public MetadataSaveResp convert(String json) {
-        return JSONObject.parseObject(json, MetadataSaveResp.class);
+        return GsonUtil.getInstance().fromJson(json, MetadataSaveResp.class);
     }
 }

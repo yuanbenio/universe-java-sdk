@@ -1,6 +1,7 @@
 package com.yuanben.model.http;
 
-import com.alibaba.fastjson.JSONObject;
+
+import com.yuanben.util.GsonUtil;
 
 /**
  * <p>检查blockHash的请求封装</p>
@@ -27,6 +28,6 @@ public class BlockHashCheckReq {
     }
 
     public String toJson() {
-        return JSONObject.toJSONString(this);
+        return GsonUtil.getInstance().toJson(this);
     }
 }

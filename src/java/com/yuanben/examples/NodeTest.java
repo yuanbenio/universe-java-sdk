@@ -12,7 +12,6 @@ import java.util.TreeMap;
 
 public class NodeTest {
 
-//    private static String URL = "http://localhost:8080";
     private static String URL = "https://openapi.yuanbenlian.com";
     private static String private_key = "3c4dbee4485557edce3c8878be34373c1a41d955f38d977cfba373642983ce4c";
     private static String public_key = "03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77";
@@ -77,6 +76,12 @@ public class NodeTest {
         params.put("b", "2");
         license.setParameters(params);
         metadata.setLicense(license);
+
+        TreeMap<String,String> data = new TreeMap<>();
+        data.put("ext","jep");
+        data.put("height","4000");
+        data.put("original","http://meisudci.oss-cn-beijing.aliyuncs.com/works/596c49fe-83a4-36e3-22b8-2555370c848e.JPG");
+
 
         try {
             metadata = DTCPProcessor.FullMetadata(private_key, metadata);
@@ -156,7 +161,6 @@ public class NodeTest {
             e.printStackTrace();
         }
     }
-
 
     public static void main(String[] args) {
         SaveMetadataTest();

@@ -1,18 +1,18 @@
 package com.yuanben.model.http;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
+import com.google.gson.annotations.SerializedName;
+import com.yuanben.util.GsonUtil;
 
 /**
  * <p>注册公钥请求体</p>
  */
 public class RegisterAccountReq {
 
-    @JSONField(name = "signature")
+    @SerializedName(value = "signature")
     private String signature;
-    @JSONField(name = "pubkey")
+    @SerializedName(value = "pubkey")
     private String pubKey;
-    @JSONField(name = "subkeys")
+    @SerializedName(value = "subkeys")
     private String[] subPubKeys;
 
     public String getSignature() {
@@ -39,6 +39,6 @@ public class RegisterAccountReq {
         this.subPubKeys = subPubKeys;
     }
     public String toJson() {
-        return JSONObject.toJSONString(this);
+        return GsonUtil.getInstance().toJson(this);
     }
 }

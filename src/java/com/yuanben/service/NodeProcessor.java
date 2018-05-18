@@ -1,9 +1,9 @@
 package com.yuanben.service;
 
-import com.alibaba.fastjson.JSONObject;
 import com.yuanben.common.InvalidException;
 import com.yuanben.model.Metadata;
 import com.yuanben.model.http.*;
+import com.yuanben.util.GsonUtil;
 import com.yuanben.util.HttpUtil;
 import com.yuanben.util.SecretUtil;
 import org.apache.commons.collections4.MapUtils;
@@ -33,7 +33,7 @@ public class NodeProcessor {
         }
         url += "/" + version + "/metadata/" + dna;
         String s = HttpUtil.sendGet(url);
-        return JSONObject.parseObject(s, MetadataQueryResp.class);
+        return GsonUtil.getInstance().fromJson(s, MetadataQueryResp.class);
     }
 
     /**
@@ -67,7 +67,7 @@ public class NodeProcessor {
             throw new InvalidException("license is null");
         }
         String s = HttpUtil.sendPost(url, md.toJson());
-        return JSONObject.parseObject(s, MetadataSaveResp.class);
+        return GsonUtil.getInstance().fromJson(s, MetadataSaveResp.class);
     }
 
     /**
@@ -88,7 +88,7 @@ public class NodeProcessor {
         }
         url += "/" + version + "/license/" + licenseType;
         String s = HttpUtil.sendGet(url);
-        return JSONObject.parseObject(s, LicenseQueryResp.class);
+        return GsonUtil.getInstance().fromJson(s, LicenseQueryResp.class);
 
     }
 
@@ -109,7 +109,7 @@ public class NodeProcessor {
         }
         url += "/" + version + "/block_hash/";
         String s = HttpUtil.sendGet(url);
-        return JSONObject.parseObject(s, BlockHashQueryResp.class);
+        return GsonUtil.getInstance().fromJson(s, BlockHashQueryResp.class);
     }
 
     /**
@@ -130,7 +130,7 @@ public class NodeProcessor {
         }
         url += "/" + version + "/check_block_hash/";
         String s = HttpUtil.sendPost(url, req.toJson());
-        return JSONObject.parseObject(s, BlockHashCheckResp.class);
+        return GsonUtil.getInstance().fromJson(s, BlockHashCheckResp.class);
     }
 
     /**
@@ -156,6 +156,6 @@ public class NodeProcessor {
         }
         url += "/" + version + "/accounts/";
         String s = HttpUtil.sendPost(url, req.toJson());
-        return JSONObject.parseObject(s, RegisterAccountResp.class);
+        return GsonUtil.getInstance().fromJson(s, RegisterAccountResp.class);
     }
 }

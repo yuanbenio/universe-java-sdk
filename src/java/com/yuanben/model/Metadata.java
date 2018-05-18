@@ -1,29 +1,33 @@
 package com.yuanben.model;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.annotations.SerializedName;
+import com.yuanben.common.Constants;
+import com.yuanben.util.GsonUtil;
 import com.yuanben.util.MapUtil;
 
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
  * <p>dtcp协议抽象模型</p>
  */
 public class Metadata {
-    @JSONField(name = "pubkey")
+    @SerializedName("pubkey")
     private String pubKey;
-    @JSONField(name = "block_hash")
+    @SerializedName( "block_hash")
     private String blockHash;
-    @JSONField(name = "block_height")
+    @SerializedName( "block_height")
     private String blockHeight;
     private String signature;
-    @JSONField(name = "id")
+    @SerializedName( "id")
     private String id;
 
 
     //用逗号隔开
     private String category;
-    @JSONField(name = "content_hash")
+    @SerializedName( "content_hash")
     private String contentHash;
     private String type;
     private String title;
@@ -31,10 +35,10 @@ public class Metadata {
 
     //时间戳
     private String created;
-    @JSONField(name = "abstract")
+    @SerializedName( "abstract")
     private String abstractContent;  //其他版本该字段为：abstract
     private String dna;
-    @JSONField(name = "parent_dna")
+    @SerializedName( "parent_dna")
     private String parentDna;
 
     private String language;
@@ -220,7 +224,7 @@ public class Metadata {
 
 
     public String toJson() {
-        return JSONObject.toJSONString(this);
+        return GsonUtil.getInstance().toJson(this);
     }
 
     /**
@@ -248,11 +252,24 @@ public class Metadata {
         this.signature = null;
         this.content = null;
 
-        String js = JSONObject.toJSONString(this);
+        Gson gson = GsonUtil.getInstance();
+
+        JsonElement jsonElement = gson.toJsonTree(this);
+        GsonUtil.sort(jsonElement);
+
+        String json = gson.toJson(jsonElement);
+
+        Set<String> htmlChars = Constants.HTML_SAFE_REPLACEMENT_CHARS.keySet();
+        for (String s:htmlChars) {
+            if (json.contains(s)){
+                json = json.replace(s,Constants.HTML_SAFE_REPLACEMENT_CHARS.get(s));
+            }
+        }
+
         this.dna = dna;
         this.signature = signature;
         this.content = content;
-        return js;
+        return json;
     }
 
 }

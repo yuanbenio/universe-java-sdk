@@ -7,6 +7,7 @@ import com.yuanben.model.http.RegisterAccountReq;
 import com.yuanben.service.DTCPProcessor;
 import com.yuanben.service.ECKeyProcessor;
 
+import java.io.IOException;
 import java.util.TreeMap;
 
 /**
