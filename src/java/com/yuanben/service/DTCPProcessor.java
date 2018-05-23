@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.spongycastle.util.encoders.Hex;
 
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -124,7 +125,7 @@ public class DTCPProcessor {
             metadata.setLanguage(Constants.Language_ZH);
         }
         if (StringUtils.isBlank(metadata.getCreated())) {
-            metadata.setCreated(Constants.STRING_EMPTY + System.currentTimeMillis());
+            metadata.setCreated(Constants.STRING_EMPTY + System.currentTimeMillis()/1000);
         }
         switch (metadata.getType()) {
             case Constants.TYPE_ARTICLE:
