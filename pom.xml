@@ -12,45 +12,22 @@
 
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/com.google/bitcoinj -->
-        <!--<dependency>
-          <groupId>com.google</groupId>
-          <artifactId>bitcoinj</artifactId>
-          <version>0.11.3</version>
-        </dependency>
-        &lt;!&ndash; https://mvnrepository.com/artifact/com.google.guava/guava &ndash;&gt;
-        <dependency>
-          <groupId>com.google.guava</groupId>
-          <artifactId>guava</artifactId>
-          <version>24.0-jre</version>
-        </dependency>
-        <dependency>
-          <groupId>org.ethereum</groupId>
-          <artifactId>ethereumj-core</artifactId>
-          <version>1.6.3-RELEASE</version>
-        </dependency>
-    -->
-
-        <!-- https://mvnrepository.com/artifact/com.madgag.spongycastle/core -->
         <dependency>
             <groupId>com.madgag.spongycastle</groupId>
             <artifactId>core</artifactId>
             <version>1.53.0.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.madgag.spongycastle/prov -->
         <dependency>
             <groupId>com.madgag.spongycastle</groupId>
             <artifactId>prov</artifactId>
             <version>1.53.0.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.7</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
@@ -61,19 +38,16 @@
             <artifactId>guava</artifactId>
             <version>24.0-jre</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.typesafe/config -->
         <dependency>
             <groupId>com.typesafe</groupId>
             <artifactId>config</artifactId>
             <version>1.2.1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -86,25 +60,22 @@
             <artifactId>hanlp</artifactId>
             <version>portable-1.6.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/commons-httpclient/commons-httpclient -->
+        <!--http-->
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
             <version>3.1</version>
         </dependency>
 
-    </dependencies>
-    <!--<repositories>
-        <repository>
-            <id>dl</id>
-            <name>dl.bintray.com</name>
-            <url>https://dl.bintray.com/ethereum/maven/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>-->
+        <!--test-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
 
+    </dependencies>
 
     <build>
         <plugins>
@@ -114,17 +85,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                </configuration>
-            </plugin>
-            <!-- eclipse插件, 设定wtp版本 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <version>2.9</version>
-                <configuration>
-                    <downloadSources>true</downloadSources>
-                    <downloadJavadocs>false</downloadJavadocs>
-                    <wtpversion>2.0</wtpversion>
                 </configuration>
             </plugin>
             <plugin>
