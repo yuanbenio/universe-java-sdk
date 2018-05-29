@@ -41,7 +41,7 @@ public class NodeProcessor {
      *
      * @param url     node节点的地址 （http://localhost:9000)
      * @param version node节点的版本 （默认v1)
-     * @param async   是否异步发送 默认async=true为异步发送,如果async=false为同步发送
+     * @param async   字段已废弃
      * @param md      要注册的metadata，不需要传content
      * @return metadata的注册结果体
      * @throws InvalidException 参数有误或网络请求错误
@@ -53,17 +53,14 @@ public class NodeProcessor {
         if (StringUtils.isBlank(version)) {
             version = "v1";
         }
-        if (async == null) {
-            async = true;
-        }
-        url += "/" + version + "/metadata?async=" + async;
+        url += "/" + version + "/metadata";
         if (md == null) {
             throw new InvalidException("metadata is null");
         }
         if (StringUtils.isBlank(md.getSignature())) {
             throw new InvalidException("signature is null");
         }
-        if (md.getLicense() == null || StringUtils.isBlank(md.getLicense().getType()) || MapUtils.isEmpty(md.getLicense().getParameters())) {
+        if (md.getLicense() == null || StringUtils.isBlank(md.getLicense().getType())) {
             throw new InvalidException("license is null");
         }
         String s = HttpUtil.sendPost(url, md.toJson());
