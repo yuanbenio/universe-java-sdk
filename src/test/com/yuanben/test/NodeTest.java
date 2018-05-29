@@ -90,7 +90,7 @@ public class NodeTest {
             e.printStackTrace();
         }
         try {
-            MetadataSaveResp resp = NodeProcessor.SaveMetadata(URL, null, true,metadata);
+            MetadataSaveResp resp = NodeProcessor.SaveMetadata(URL, null,metadata);
             if (resp == null) {
                 System.out.println("结果体转换异常");
             } else if (Constants.CODE_ERROR.equalsIgnoreCase(resp.getCode())) {

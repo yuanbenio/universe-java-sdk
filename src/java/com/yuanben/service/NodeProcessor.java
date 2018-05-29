@@ -46,7 +46,7 @@ public class NodeProcessor {
      * @return metadata的注册结果体
      * @throws InvalidException 参数有误或网络请求错误
      */
-    public static MetadataSaveResp SaveMetadata(String url, String version, Boolean async, Metadata md) throws InvalidException {
+    public static MetadataSaveResp SaveMetadata(String url, String version, Metadata md) throws InvalidException {
         if (StringUtils.isBlank(url)) {
             throw new InvalidException("url is empty");
         }
@@ -60,7 +60,7 @@ public class NodeProcessor {
         if (StringUtils.isBlank(md.getSignature())) {
             throw new InvalidException("signature is null");
         }
-        if (md.getLicense() == null || StringUtils.isBlank(md.getLicense().getType())) {
+        if (md.getLicense() == null || StringUtils.isBlank(md.getLicense().getType()) || MapUtils.isEmpty(md.getLicense().getParameters())) {
             throw new InvalidException("license is null");
         }
         String s = HttpUtil.sendPost(url, md.toJson());
