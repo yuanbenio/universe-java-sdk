@@ -13,7 +13,7 @@ import java.util.TreeMap;
 
 public class NodeTest {
 
-    public String URL = "https://openapi.yuanbenlian.com";
+    public String URL = "https://testnet.yuanbenlian.com";
     public String private_key = "3c4dbee4485557edce3c8878be34373c1a41d955f38d977cfba373642983ce4c";
     public String public_key = "03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77";
     public String content = "原本链是一个分布式的底层数据网络；" +
