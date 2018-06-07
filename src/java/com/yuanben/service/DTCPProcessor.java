@@ -1,6 +1,5 @@
 package com.yuanben.service;
 
-import com.hankcs.hanlp.HanLP;
 import com.yuanben.common.Constants;
 import com.yuanben.common.InvalidException;
 import com.yuanben.crypto.cryptohash.Keccak256;
@@ -12,8 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.spongycastle.util.encoders.Hex;
 
 import java.math.BigInteger;
-import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import static com.yuanben.service.ECKeyProcessor.Sign;
@@ -86,7 +83,7 @@ public class DTCPProcessor {
      * 对metadata进行补全
      *
      * @param privateKey 16进制的私钥，用于签名
-     * @param metadata   必须包含license\title\type\block_hash|block_height,如果contentHash为空，则必须传入content的值；如果type不是article，则必须传入contentHash;如果category为空，则必须传入content
+     * @param metadata   必须包含license\title\type\block_hash|block_height\category,如果contentHash为空，则必须传入content的值；如果type不是article，则必须传入contentHash;如果category为空，则必须传入content
      * @return 信息补全的metadata
      * @throws InvalidException 参数错误
      */
@@ -115,6 +112,9 @@ public class DTCPProcessor {
         if (StringUtils.isEmpty(metadata.getType())) {
             throw new InvalidException("type is empty");
         }
+        if (StringUtils.isEmpty(metadata.getCategory())) {
+            throw new InvalidException("category is empty");
+        }
         if (metadata.getLicense() == null || StringUtils.isBlank(metadata.getLicense().getType())) {
             throw new InvalidException("license is empty");
         }
@@ -132,14 +132,6 @@ public class DTCPProcessor {
                 if (StringUtils.isBlank(metadata.getAbstractContent())) {
                     metadata.setAbstractContent(StringUtils.isEmpty(metadata.getContent()) || metadata.getContent().length() < 200 ? metadata.getContent() :
                             metadata.getContent().substring(0, 200));
-                }
-                if (StringUtils.isNotBlank(metadata.getContent())) {
-                    List<String> strings = HanLP.extractKeyword(metadata.getContent(), 5);
-                    String category = metadata.getCategory();
-                    for (String s : strings) {
-                        category += ","+s ;
-                    }
-                    metadata.setCategory(category);
                 }
                 break;
             case Constants.TYPE_AUDIO:

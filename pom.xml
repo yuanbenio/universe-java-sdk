@@ -54,12 +54,6 @@
             <version>2.8.2</version>
         </dependency>
 
-        <!--hanlp分词-->
-        <dependency>
-            <groupId>com.hankcs</groupId>
-            <artifactId>hanlp</artifactId>
-            <version>portable-1.6.0</version>
-        </dependency>
         <!--http-->
         <dependency>
             <groupId>commons-httpclient</groupId>
