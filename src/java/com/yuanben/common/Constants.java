@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class Constants {
     public static final String STRING_EMPTY = "";
 
-    public static final String Language_ZH = "zh-cn";
+    public static final String Language_ZH = "zh-CN";
 
     public static final String TYPE_ARTICLE = "article";
     public static final String TYPE_IMAGE = "image";
