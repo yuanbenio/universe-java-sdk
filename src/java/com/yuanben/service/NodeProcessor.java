@@ -6,8 +6,8 @@ import com.yuanben.model.http.*;
 import com.yuanben.util.GsonUtil;
 import com.yuanben.util.HttpUtil;
 import com.yuanben.util.SecretUtil;
+import com.yuanben.util.StringUtils;
 import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * <p>原本链node节点处理器</p>

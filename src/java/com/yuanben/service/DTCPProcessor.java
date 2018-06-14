@@ -7,7 +7,7 @@ import com.yuanben.model.Metadata;
 import com.yuanben.model.http.RegisterAccountReq;
 import com.yuanben.util.GsonUtil;
 import com.yuanben.util.SecretUtil;
-import org.apache.commons.lang3.StringUtils;
+import com.yuanben.util.StringUtils;
 import org.spongycastle.util.encoders.Hex;
 
 import java.math.BigInteger;

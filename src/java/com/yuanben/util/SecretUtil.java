@@ -1,7 +1,5 @@
 package com.yuanben.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 public class SecretUtil {
 
     /**
