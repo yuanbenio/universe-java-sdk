@@ -7,13 +7,13 @@ import com.yuanben.model.http.*;
 import com.yuanben.service.DTCPProcessor;
 import com.yuanben.service.ECKeyProcessor;
 import com.yuanben.service.NodeProcessor;
-import org.junit.Test;
 
 import java.util.TreeMap;
 
 public class NodeTest {
 
     public String URL = "https://testnet.yuanbenlian.com";
+//    public String URL = "http://localhost:8081";
     public String private_key = "3c4dbee4485557edce3c8878be34373c1a41d955f38d977cfba373642983ce4c";
     public String public_key = "03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77";
     public String content = "原本链是一个分布式的底层数据网络；" +
@@ -23,7 +23,6 @@ public class NodeTest {
             "原本链通过优化设计后的共识机制和独创的“闪电DNA”算法，已将区块写入速度提高至毫秒级别";
     public String block_hash = "4D36473D2FF1FE0772A6C0C55D7911295D8E1E27";
 
-    @Test
     public void QueryLicenseTest() {
         String licenseType = "cc";
         try {
@@ -40,7 +39,6 @@ public class NodeTest {
         }
     }
 
-    @Test
     public void QueryMetadataTest() {
         String dna = "3Q7QAE45H6AUM95YCOGQ0GWVADF24G91YDLWII4E1WA2VWV012";
         try {
@@ -57,13 +55,13 @@ public class NodeTest {
         }
     }
 
-    @Test
     public void SaveMetadataTest() {
         Metadata metadata = new Metadata();
         metadata.setContent(content);
         metadata.setBlockHash(block_hash);
         metadata.setBlockHeight("12345");
         metadata.setType(Constants.TYPE_ARTICLE);
+        metadata.setCategory("原本链测试");
 
         metadata.setTitle("原本链测试");
         metadata.setParentDna("2QXZNC992KGDMMLU80YR5BMGMXTSNQI2ZPTN962J8ZBO4J1XNL");
@@ -103,7 +101,6 @@ public class NodeTest {
         }
     }
 
-    @Test
     public void QueryLatestBlockHashTest() {
         try {
             BlockHashQueryResp resp = NodeProcessor.QueryLatestBlockHash(URL, null);
@@ -119,7 +116,6 @@ public class NodeTest {
         }
     }
 
-    @Test
     public void ChechBlockHashTest() {
         try {
             BlockHashCheckReq req = new BlockHashCheckReq();
@@ -136,7 +132,6 @@ public class NodeTest {
         }
     }
 
-    @Test
     public void RegisterAccountTest() {
         String[] subKeys = new String[2];
         for (int i = 0; i < 2; i++) {

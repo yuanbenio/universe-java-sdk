@@ -21,8 +21,6 @@ import com.yuanben.crypto.cryptohash.Keccak256;
 import com.yuanben.crypto.cryptohash.Keccak512;
 import com.yuanben.util.RLP;
 import com.yuanben.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.spongycastle.crypto.Digest;
 import org.spongycastle.crypto.digests.RIPEMD160Digest;
 import org.spongycastle.util.encoders.Hex;
@@ -39,8 +37,6 @@ import static java.util.Arrays.copyOfRange;
 
 public class HashUtil {
 
-    private static final Logger LOG = LoggerFactory.getLogger(HashUtil.class);
-
     public static final byte[] EMPTY_DATA_HASH;
     public static final byte[] EMPTY_LIST_HASH;
     public static final byte[] EMPTY_TRIE_HASH;
@@ -53,7 +49,6 @@ public class HashUtil {
         try {
             sha256digest = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
-            LOG.error("Can't initialize HashUtils", e);
             throw new RuntimeException(e); // Can't happen.
         }
         EMPTY_DATA_HASH = sha3(EMPTY_BYTE_ARRAY);

@@ -6,7 +6,6 @@ import com.yuanben.model.Metadata;
 import com.yuanben.model.http.RegisterAccountReq;
 import com.yuanben.service.DTCPProcessor;
 import com.yuanben.service.ECKeyProcessor;
-import org.junit.Test;
 
 import java.util.TreeMap;
 
@@ -23,14 +22,13 @@ public class DTCPTest {
     public String block_hash = "4D36473D2FF1FE0772A6C0C55D7911295D8E1E27";
     public String sign_msg = "78c9082f22451fb9befd9adc8ebffa6e06599b94d4846cf7e52f45e92e42f16f2e5a8e411b560659735d13f4e2fa79031cf2a8dc752fe21f579c9ab5409e240e00";
 
-    @Test
     public void GenContentHashTest() {
         String contentHash = DTCPProcessor.GenContentHash(content);
         System.out.println(contentHash);
     }
 
 
-    @Test
+    
     public void GenMetadataFromContentTest() {
         GenMetadataFromContent();
     }
@@ -58,7 +56,6 @@ public class DTCPTest {
         return metadata;
     }
 
-    @Test
     public void GenMetadataSignatureTest() {
         Metadata metadata = GenMetadataFromContent();
         try {
@@ -70,7 +67,6 @@ public class DTCPTest {
     }
 
 
-    @Test
     public void GeneratorDNATest() {
         try {
             String dna = DTCPProcessor.GeneratorDNA(sign_msg);
@@ -80,7 +76,6 @@ public class DTCPTest {
         }
     }
 
-    @Test
     public void VerifyMetadataSignatureTest() {
 
         try {
@@ -92,7 +87,6 @@ public class DTCPTest {
         }
     }
 
-    @Test
     public void GenRegisterAccountReqTest() {
         String[] subKeys = new String[5];
         for (int i = 0; i < 5; i++) {

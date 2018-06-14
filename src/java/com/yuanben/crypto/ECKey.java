@@ -36,8 +36,6 @@ import com.sun.istack.internal.Nullable;
 import com.yuanben.common.Constants;
 import com.yuanben.crypto.jce.*;
 import com.yuanben.util.ByteUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.spongycastle.asn1.ASN1InputStream;
 import org.spongycastle.asn1.ASN1Integer;
 import org.spongycastle.asn1.DLSequence;
@@ -92,8 +90,6 @@ import static com.yuanben.util.ByteUtil.bigIntegerToBytes;
  * bitcoinj on GitHub</a>.
  */
 public class ECKey implements Serializable {
-    private static final Logger logger = LoggerFactory.getLogger(ECKey.class);
-
     /**
      * The parameters of the secp256k1 curve that Ethereum uses.
      */
@@ -943,7 +939,7 @@ public class ECKey implements Serializable {
         } catch (NullPointerException npe) {
             // Bouncy Castle contains a bug that can cause NPEs given specially crafted signatures.
             // Those signatures are inherently invalid/attack sigs so we just fail them here rather than crash the thread.
-            logger.error("Caught NPE inside bouncy castle", npe);
+            System.out.println("Caught NPE inside bouncy castle:"+npe.getMessage());
             return false;
         }
     }
