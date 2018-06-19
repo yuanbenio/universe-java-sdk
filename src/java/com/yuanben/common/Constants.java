@@ -12,6 +12,7 @@ public class Constants {
     public static final String TYPE_IMAGE = "image";
     public static final String TYPE_VIDEO = "video";
     public static final String TYPE_AUDIO = "audio";
+    public static final String TYPE_PRIVATE = "private";
 
     public static final String VERSION = "v1.0";
 

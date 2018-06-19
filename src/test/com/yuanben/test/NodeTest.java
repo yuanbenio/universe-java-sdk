@@ -21,7 +21,7 @@ public class NodeTest {
             "原本链通过智能合约系统以及数字加密算法，实现了链上数据可持续性交互以及数据传输的安全；" +
             "原本链通过高度抽象的“DTCP协议”与世界上独一无二的“原本DNA”互锁，确保链上数据100%不可篡改；" +
             "原本链通过优化设计后的共识机制和独创的“闪电DNA”算法，已将区块写入速度提高至毫秒级别";
-    public String block_hash = "4D36473D2FF1FE0772A6C0C55D7911295D8E1E27";
+    public static String block_hash = "4D36473D2FF1FE0772A6C0C55D7911295D8E1E27";
 
     public void QueryLicenseTest() {
         String licenseType = "cc";
@@ -144,5 +144,5 @@ public class NodeTest {
             e.printStackTrace();
         }
     }
-    
+
 }

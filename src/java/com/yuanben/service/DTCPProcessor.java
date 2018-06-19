@@ -11,7 +11,6 @@ import com.yuanben.util.StringUtils;
 import org.spongycastle.util.encoders.Hex;
 
 import java.math.BigInteger;
-import java.util.UUID;
 
 import static com.yuanben.service.ECKeyProcessor.Sign;
 
@@ -100,32 +99,27 @@ public class DTCPProcessor {
             }
             metadata.setContentHash(GenContentHash(metadata.getContent()));
         }
-        if (StringUtils.isBlank(metadata.getPubKey())) {
-            metadata.setPubKey(ECKeyProcessor.GetPubKeyFromPri(privateKey));
-        }
-        if (StringUtils.isEmpty(metadata.getTitle())) {
-            throw new InvalidException("title is empty");
-        }
         if (StringUtils.isEmpty(metadata.getBlockHash()) || StringUtils.isEmpty(metadata.getBlockHeight())) {
             throw new InvalidException("block hash or block height is empty");
         }
         if (StringUtils.isEmpty(metadata.getType())) {
             throw new InvalidException("type is empty");
         }
-        if (StringUtils.isEmpty(metadata.getCategory())) {
-            throw new InvalidException("category is empty");
+        if (StringUtils.isBlank(metadata.getPubKey())) {
+            metadata.setPubKey(ECKeyProcessor.GetPubKeyFromPri(privateKey));
         }
         if (metadata.getLicense() == null || StringUtils.isBlank(metadata.getLicense().getType())) {
             throw new InvalidException("license is empty");
         }
-        if (StringUtils.isBlank(metadata.getId())) {
-            metadata.setId(UUID.randomUUID().toString().replace("-", ""));
+        if (!metadata.getLicense().getType().equals("none") && (metadata.getLicense().getParameters() == null ||
+                metadata.getLicense().getParameters().size() < 1)) {
+            throw new InvalidException("license's parameters is empty");
         }
         if (StringUtils.isBlank(metadata.getLanguage())) {
             metadata.setLanguage(Constants.Language_ZH);
         }
         if (StringUtils.isBlank(metadata.getCreated())) {
-            metadata.setCreated(Constants.STRING_EMPTY + System.currentTimeMillis()/1000);
+            metadata.setCreated(Constants.STRING_EMPTY + System.currentTimeMillis() / 1000);
         }
         switch (metadata.getType()) {
             case Constants.TYPE_ARTICLE:
@@ -137,23 +131,28 @@ public class DTCPProcessor {
             case Constants.TYPE_AUDIO:
             case Constants.TYPE_IMAGE:
             case Constants.TYPE_VIDEO:
-                if (StringUtils.isBlank(metadata.getContentHash())) {
-                    throw new InvalidException("there must be a contentHash if the content type is image、video or audio");
+                if (metadata.getData() == null || metadata.getData().size() < 1) {
+                    throw new InvalidException("Please add extends data!");
                 }
+                break;
+            case Constants.TYPE_PRIVATE:
                 break;
             default:
                 throw new InvalidException("content type is nonsupport");
         }
-        if (StringUtils.isEmpty(metadata.getCategory())) {
-            throw new InvalidException("category is empty");
+        if (!metadata.getType().equals(Constants.TYPE_PRIVATE)) {
+            if (StringUtils.isEmpty(metadata.getCategory())) {
+                throw new InvalidException("category is empty");
+            }
+            if (StringUtils.isEmpty(metadata.getTitle())) {
+                throw new InvalidException("title is empty");
+            }
         }
 
         String sign = GenMetadataSignature(metadata, privateKey);
         String dna = GeneratorDNA(sign);
         metadata.setSignature(sign);
         metadata.setDna(dna);
-        //node节点不需要content
-        metadata.setContent(null);
         return metadata;
 
     }
