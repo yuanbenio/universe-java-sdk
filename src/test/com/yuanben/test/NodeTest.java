@@ -13,7 +13,6 @@ import java.util.TreeMap;
 public class NodeTest {
 
     public String URL = "https://testnet.yuanbenlian.com";
-//    public String URL = "http://localhost:8081";
     public String private_key = "3c4dbee4485557edce3c8878be34373c1a41d955f38d977cfba373642983ce4c";
     public String public_key = "03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77";
     public String content = "原本链是一个分布式的底层数据网络；" +
@@ -21,7 +20,7 @@ public class NodeTest {
             "原本链通过智能合约系统以及数字加密算法，实现了链上数据可持续性交互以及数据传输的安全；" +
             "原本链通过高度抽象的“DTCP协议”与世界上独一无二的“原本DNA”互锁，确保链上数据100%不可篡改；" +
             "原本链通过优化设计后的共识机制和独创的“闪电DNA”算法，已将区块写入速度提高至毫秒级别";
-    public static String block_hash = "4D36473D2FF1FE0772A6C0C55D7911295D8E1E27";
+    public String block_hash = "4D36473D2FF1FE0772A6C0C55D7911295D8E1E27";
 
     public void QueryLicenseTest() {
         String licenseType = "cc";
@@ -60,7 +59,7 @@ public class NodeTest {
         metadata.setContent(content);
         metadata.setBlockHash(block_hash);
         metadata.setBlockHeight("12345");
-        metadata.setType(Constants.TYPE_ARTICLE);
+        metadata.setType(Constants.TYPE_CUSTOM);
         metadata.setCategory("原本链测试");
 
         metadata.setTitle("原本链测试");
@@ -76,11 +75,11 @@ public class NodeTest {
         TreeMap<String,String> data = new TreeMap<>();
         data.put("ext","jep");
         data.put("height","4000");
-        data.put("original","http://meisuadci.oss-cn-beijing.aliyuncs.com/works/596c49fe-83a4-36e3-22b8-2555370c848e.JPG");
+        data.put("original","https://yuanbenlian.com/");
 
         TreeMap<String,String> extra = new TreeMap<>();
         extra.put("author","原本链");
-        metadata.setExtra(extra);//2QUC32K30ZR4CPEZQEORHUH23XS65M522L6VDFZY39QEW2DURS   2QUC32K30ZR4CPEZQEORHUH23XS65M522L6VDFZY39QEW2DURS
+        metadata.setExtra(extra);
 
         try {
             metadata = DTCPProcessor.FullMetadata(private_key, metadata);

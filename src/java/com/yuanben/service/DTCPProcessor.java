@@ -91,11 +91,8 @@ public class DTCPProcessor {
             throw new InvalidException("metadata or privateKey is illegal");
         }
         if (StringUtils.isBlank(metadata.getContentHash())) {
-            if (!Constants.TYPE_ARTICLE.equals(metadata.getType())) {
-                throw new InvalidException("there must be a contentHash if the content type is image、video or audio");
-            }
             if (StringUtils.isBlank(metadata.getContent())) {
-                throw new InvalidException("content is empty");
+                throw new InvalidException("content and contentHash can't be empty at the same time");
             }
             metadata.setContentHash(GenContentHash(metadata.getContent()));
         }
@@ -136,6 +133,7 @@ public class DTCPProcessor {
                 }
                 break;
             case Constants.TYPE_PRIVATE:
+            case Constants.TYPE_CUSTOM:
                 break;
             default:
                 throw new InvalidException("content type is nonsupport");

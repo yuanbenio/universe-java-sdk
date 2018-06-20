@@ -13,8 +13,9 @@ public class Constants {
     public static final String TYPE_VIDEO = "video";
     public static final String TYPE_AUDIO = "audio";
     public static final String TYPE_PRIVATE = "private";
+    public static final String TYPE_CUSTOM = "custom";
 
-    public static final String VERSION = "v1.0";
+    public static final String VERSION = "v1.1";
 
     public static final String CODE_ERROR = "error";
 
