@@ -1,7 +1,7 @@
 # services
 SDK服务 
 
-jdk版本：1.7
+jdk版本：1.8
 
 ***
 ## jar
