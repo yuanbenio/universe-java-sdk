@@ -135,7 +135,7 @@ public class ByteUtil {
      * @return <code>byte[]</code> of length 8, representing the long value
      */
     public static byte[] longToBytes(long val) {
-        return ByteBuffer.allocate(Long.BYTES).putLong(val).array();
+        return ByteBuffer.allocate(8).putLong(val).array();
     }
 
     /**
@@ -149,7 +149,7 @@ public class ByteUtil {
         // todo: improve performance by while strip numbers until (long >> 8 == 0)
         if (val == 0) return EMPTY_BYTE_ARRAY;
 
-        byte[] data = ByteBuffer.allocate(Long.BYTES).putLong(val).array();
+        byte[] data = ByteBuffer.allocate(8).putLong(val).array();
 
         return stripLeadingZeroes(data);
     }
@@ -161,7 +161,7 @@ public class ByteUtil {
      * @return <code>byte[]</code> of length 4, representing the int value
      */
     public static byte[] intToBytes(int val) {
-        return ByteBuffer.allocate(Integer.BYTES).putInt(val).array();
+        return ByteBuffer.allocate(4).putInt(val).array();
     }
 
     /**

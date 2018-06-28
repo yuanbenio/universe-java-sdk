@@ -11,7 +11,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="NB-api" target="1.8" />
-      <module name="universe-java-sdk" target="1.8" />
+      <module name="universe-java-sdk" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

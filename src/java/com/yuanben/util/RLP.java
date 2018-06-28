@@ -145,93 +145,93 @@ public class RLP {
         return 0;
     }
 
-    public static int decodeInt(byte[] data, int index) {
+//    public static int decodeInt(byte[] data, int index) {
+//
+//        int value = 0;
+//        // NOTE: From RLP doc:
+//        // Ethereum integers must be represented in big endian binary form
+//        // with no leading zeroes (thus making the integer value zero be
+//        // equivalent to the empty byte array)
+//
+//        if (data[index] == 0x00) {
+//            throw new RuntimeException("not a number");
+//        } else if ((data[index] & 0xFF) < OFFSET_SHORT_ITEM) {
+//
+//            return data[index];
+//
+//        } else if ((data[index] & 0xFF) <= OFFSET_SHORT_ITEM + Integer.BYTES) {
+//
+//            byte length = (byte) (data[index] - OFFSET_SHORT_ITEM);
+//            byte pow = (byte) (length - 1);
+//            for (int i = 1; i <= length; ++i) {
+//                // << (8 * pow) == bit shift to 0 (*1), 8 (*256) , 16 (*65..)..
+//                value += (data[index + i] & 0xFF) << (8 * pow);
+//                pow--;
+//            }
+//        } else {
+//
+//            // If there are more than 4 bytes, it is not going
+//            // to decode properly into an int.
+//            throw new RuntimeException("wrong decode attempt");
+//        }
+//        return value;
+//    }
+//
+//    static short decodeShort(byte[] data, int index) {
+//
+//        short value = 0;
+//
+//        if (data[index] == 0x00) {
+//            throw new RuntimeException("not a number");
+//        } else if ((data[index] & 0xFF) < OFFSET_SHORT_ITEM) {
+//
+//            return data[index];
+//
+//        } else if ((data[index] & 0xFF) <= OFFSET_SHORT_ITEM + Short.BYTES) {
+//
+//            byte length = (byte) (data[index] - OFFSET_SHORT_ITEM);
+//            byte pow = (byte) (length - 1);
+//            for (int i = 1; i <= length; ++i) {
+//                // << (8 * pow) == bit shift to 0 (*1), 8 (*256) , 16 (*65..)
+//                value += (data[index + i] & 0xFF) << (8 * pow);
+//                pow--;
+//            }
+//        } else {
+//
+//            // If there are more than 2 bytes, it is not going
+//            // to decode properly into a short.
+//            throw new RuntimeException("wrong decode attempt");
+//        }
+//        return value;
+//    }
 
-        int value = 0;
-        // NOTE: From RLP doc:
-        // Ethereum integers must be represented in big endian binary form
-        // with no leading zeroes (thus making the integer value zero be
-        // equivalent to the empty byte array)
-
-        if (data[index] == 0x00) {
-            throw new RuntimeException("not a number");
-        } else if ((data[index] & 0xFF) < OFFSET_SHORT_ITEM) {
-
-            return data[index];
-
-        } else if ((data[index] & 0xFF) <= OFFSET_SHORT_ITEM + Integer.BYTES) {
-
-            byte length = (byte) (data[index] - OFFSET_SHORT_ITEM);
-            byte pow = (byte) (length - 1);
-            for (int i = 1; i <= length; ++i) {
-                // << (8 * pow) == bit shift to 0 (*1), 8 (*256) , 16 (*65..)..
-                value += (data[index + i] & 0xFF) << (8 * pow);
-                pow--;
-            }
-        } else {
-
-            // If there are more than 4 bytes, it is not going
-            // to decode properly into an int.
-            throw new RuntimeException("wrong decode attempt");
-        }
-        return value;
-    }
-
-    static short decodeShort(byte[] data, int index) {
-
-        short value = 0;
-
-        if (data[index] == 0x00) {
-            throw new RuntimeException("not a number");
-        } else if ((data[index] & 0xFF) < OFFSET_SHORT_ITEM) {
-
-            return data[index];
-
-        } else if ((data[index] & 0xFF) <= OFFSET_SHORT_ITEM + Short.BYTES) {
-
-            byte length = (byte) (data[index] - OFFSET_SHORT_ITEM);
-            byte pow = (byte) (length - 1);
-            for (int i = 1; i <= length; ++i) {
-                // << (8 * pow) == bit shift to 0 (*1), 8 (*256) , 16 (*65..)
-                value += (data[index + i] & 0xFF) << (8 * pow);
-                pow--;
-            }
-        } else {
-
-            // If there are more than 2 bytes, it is not going
-            // to decode properly into a short.
-            throw new RuntimeException("wrong decode attempt");
-        }
-        return value;
-    }
-
-    public static long decodeLong(byte[] data, int index) {
-
-        long value = 0;
-
-        if (data[index] == 0x00) {
-            throw new RuntimeException("not a number");
-        } else if ((data[index] & 0xFF) < OFFSET_SHORT_ITEM) {
-
-            return data[index];
-
-        } else if ((data[index] & 0xFF) <= OFFSET_SHORT_ITEM + Long.BYTES) {
-
-            byte length = (byte) (data[index] - OFFSET_SHORT_ITEM);
-            byte pow = (byte) (length - 1);
-            for (int i = 1; i <= length; ++i) {
-                // << (8 * pow) == bit shift to 0 (*1), 8 (*256) , 16 (*65..)..
-                value += (long) (data[index + i] & 0xFF) << (8 * pow);
-                pow--;
-            }
-        } else {
-
-            // If there are more than 8 bytes, it is not going
-            // to decode properly into a long.
-            throw new RuntimeException("wrong decode attempt");
-        }
-        return value;
-    }
+//    public static long decodeLong(byte[] data, int index) {
+//
+//        long value = 0;
+//
+//        if (data[index] == 0x00) {
+//            throw new RuntimeException("not a number");
+//        } else if ((data[index] & 0xFF) < OFFSET_SHORT_ITEM) {
+//
+//            return data[index];
+//
+//        } else if ((data[index] & 0xFF) <= OFFSET_SHORT_ITEM + Long.BYTES) {
+//
+//            byte length = (byte) (data[index] - OFFSET_SHORT_ITEM);
+//            byte pow = (byte) (length - 1);
+//            for (int i = 1; i <= length; ++i) {
+//                // << (8 * pow) == bit shift to 0 (*1), 8 (*256) , 16 (*65..)..
+//                value += (long) (data[index + i] & 0xFF) << (8 * pow);
+//                pow--;
+//            }
+//        } else {
+//
+//            // If there are more than 8 bytes, it is not going
+//            // to decode properly into a long.
+//            throw new RuntimeException("wrong decode attempt");
+//        }
+//        return value;
+//    }
 
     private static String decodeStringItem(byte[] data, int index) {
 
