@@ -1,3 +1,18 @@
+/*
+ * Copyright 2018 Seven Seals Technology
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.yuanben.test;
 
 import com.yuanben.common.Constants;
@@ -8,9 +23,12 @@ import com.yuanben.service.DTCPProcessor;
 import com.yuanben.service.ECKeyProcessor;
 import com.yuanben.service.NodeProcessor;
 
+import java.io.UnsupportedEncodingException;
 import java.util.TreeMap;
 
 public class NodeTest {
+
+    private static final String OK = "ok";
 
     public String URL = "https://testnet.yuanbenlian.com";
     public String private_key = "3c4dbee4485557edce3c8878be34373c1a41d955f38d977cfba373642983ce4c";
@@ -28,7 +46,7 @@ public class NodeTest {
             LicenseQueryResp licenseQueryResp = NodeProcessor.QueryLicense(URL, null, licenseType);
             if (licenseQueryResp == null) {
                 System.out.println("结果体转换异常");
-            } else if (Constants.CODE_ERROR.equalsIgnoreCase(licenseQueryResp.getCode())) {
+            } else if ("ok".equalsIgnoreCase(licenseQueryResp.getCode())) {
                 System.out.println("查询异常:" + licenseQueryResp.getMsg());
             } else {
                 System.out.println("查询成功。" + licenseQueryResp.toJson());
@@ -39,15 +57,15 @@ public class NodeTest {
     }
 
     public void QueryMetadataTest() {
-        String dna = "3Q7QAE45H6AUM95YCOGQ0GWVADF24G91YDLWII4E1WA2VWV012";
+        String dna = "5546IYOJT02P3SDJWOQYNMVC1F0R7SCMUQFMR9P9QW2J2G59CJ";
         try {
             MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, null, dna);
             if (resp == null) {
                 System.out.println("返回体转换异常");
-            } else if (Constants.CODE_ERROR.equalsIgnoreCase(resp.getCode())) {
-                System.out.println("查询异常:" + resp.getMsg());
-            } else {
+            } else if (OK.equalsIgnoreCase(resp.getCode())) {
                 System.out.println("查询成功。" + resp.toJson());
+            } else {
+                System.out.println("查询异常:" + resp.getMsg());
             }
         } catch (InvalidException e) {
             e.printStackTrace();
@@ -72,28 +90,30 @@ public class NodeTest {
         license.setParameters(params);
         metadata.setLicense(license);
 
-        TreeMap<String,String> data = new TreeMap<>();
-        data.put("ext","jep");
-        data.put("height","4000");
-        data.put("original","https://yuanbenlian.com/");
+        TreeMap<String, String> data = new TreeMap<>();
+        data.put("ext", "jep");
+        data.put("height", "4000");
+        data.put("original", "https://yuanbenlian.com/");
 
-        TreeMap<String,String> extra = new TreeMap<>();
-        extra.put("author","原本链");
+        TreeMap<String, String> extra = new TreeMap<>();
+        extra.put("author", "原本链");
         metadata.setExtra(extra);
 
         try {
             metadata = DTCPProcessor.FullMetadata(private_key, metadata);
         } catch (InvalidException e) {
             e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
         try {
-            MetadataSaveResp resp = NodeProcessor.SaveMetadata(URL, null,metadata);
+            MetadataSaveResp resp = NodeProcessor.SaveMetadata(URL, null, metadata);
             if (resp == null) {
                 System.out.println("结果体转换异常");
-            } else if (Constants.CODE_ERROR.equalsIgnoreCase(resp.getCode())) {
-                System.out.println("注册异常:" + resp.getMsg());
-            } else {
+            } else if (OK.equalsIgnoreCase(resp.getCode())) {
                 System.out.println("注册成功。" + resp.getData().getDna());
+            } else {
+                System.out.println("注册异常:" + resp.getMsg());
             }
         } catch (InvalidException e) {
             e.printStackTrace();
@@ -103,7 +123,7 @@ public class NodeTest {
     public void QueryLatestBlockHashTest() {
         try {
             BlockHashQueryResp resp = NodeProcessor.QueryLatestBlockHash(URL, null);
-            if (resp == null || Constants.CODE_ERROR.equalsIgnoreCase(resp.getCode())) {
+            if (resp == null || !OK.equalsIgnoreCase(resp.getCode())) {
                 System.out.println("query failure :" + resp.getMsg());
             } else {
                 System.out.println("latest block hash:" + resp.getData().getLatestBlockHash());
@@ -121,7 +141,7 @@ public class NodeTest {
             req.setHash("4A7FCE024C64061D28BEB91A3FC935465BE54B3B");
             req.setHeight(22102L);
             BlockHashCheckResp resp = NodeProcessor.CheckBlockHash(URL, null, req);
-            if (resp == null || Constants.CODE_ERROR.equalsIgnoreCase(resp.getCode())) {
+            if (resp == null || !OK.equalsIgnoreCase(resp.getCode())) {
                 System.out.println("query failure :" + resp.getMsg());
             } else {
                 System.out.println("check result:" + resp.getData());
@@ -134,14 +154,13 @@ public class NodeTest {
     public void RegisterAccountTest() {
         String[] subKeys = new String[2];
         for (int i = 0; i < 2; i++) {
-            subKeys[i]=ECKeyProcessor.GeneratorSecp256k1Key().getPublicKey();
+            subKeys[i] = ECKeyProcessor.GeneratorSecp256k1Key().getPublicKey();
         }
         try {
             RegisterAccountReq req = DTCPProcessor.GenRegisterAccountReq(private_key, subKeys);
-            NodeProcessor.RegisterAccount("http://localhost:8081",null,req);
+            NodeProcessor.RegisterAccount("http://localhost:8081", null, req);
         } catch (InvalidException e) {
             e.printStackTrace();
         }
     }
-
 }

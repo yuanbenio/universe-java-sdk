@@ -43,6 +43,7 @@ public class ByteUtil {
         return result;
     }
 
+
     /**
      * The regular {@link java.math.BigInteger#toByteArray()} method isn't quite what we often need:
      * it appends a leading zero to indicate that the number is positive and may need padding.

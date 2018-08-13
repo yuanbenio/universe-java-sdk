@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 Seven Seals Technology
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.yuanben.service;
 
 import com.yuanben.common.Constants;
@@ -5,12 +21,13 @@ import com.yuanben.common.InvalidException;
 import com.yuanben.crypto.cryptohash.Keccak256;
 import com.yuanben.model.Metadata;
 import com.yuanben.model.http.RegisterAccountReq;
+import com.yuanben.util.Base36;
 import com.yuanben.util.GsonUtil;
 import com.yuanben.util.SecretUtil;
 import com.yuanben.util.StringUtils;
 import org.spongycastle.util.encoders.Hex;
 
-import java.math.BigInteger;
+import java.io.UnsupportedEncodingException;
 
 import static com.yuanben.service.ECKeyProcessor.Sign;
 
@@ -46,7 +63,7 @@ public class DTCPProcessor {
         if (StringUtils.isBlank(signature)) {
             throw new InvalidException("signature is empty");
         }
-        return new BigInteger(Hex.toHexString(ECKeyProcessor.Keccak256(Hex.decode(signature))), 16).toString(36).toUpperCase();
+        return Base36.EncodeBytes(ECKeyProcessor.Keccak256(Hex.decode(signature)));
     }
 
     /**
@@ -57,11 +74,11 @@ public class DTCPProcessor {
      * @return 16进制的metadata signature
      * @throws InvalidException 入参为空
      */
-    public static String GenMetadataSignature(Metadata metadata, String privateKey) throws InvalidException {
+    public static String GenMetadataSignature(Metadata metadata, String privateKey) throws InvalidException, UnsupportedEncodingException {
         if (metadata == null || !SecretUtil.CheckPrivateKey(privateKey)) {
             throw new InvalidException("metadata or privateKey is illegal");
         }
-        return Sign(privateKey, metadata.toJsonRmSign().getBytes());
+        return Sign(privateKey, metadata.toJsonRmSign().getBytes("utf-8"));
     }
 
     /**
@@ -86,7 +103,7 @@ public class DTCPProcessor {
      * @return 信息补全的metadata
      * @throws InvalidException 参数错误
      */
-    public static Metadata FullMetadata(String privateKey, Metadata metadata) throws InvalidException {
+    public static Metadata FullMetadata(String privateKey, Metadata metadata) throws InvalidException, UnsupportedEncodingException {
         if (metadata == null || !SecretUtil.CheckPrivateKey(privateKey)) {
             throw new InvalidException("metadata or privateKey is illegal");
         }

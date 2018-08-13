@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 Seven Seals Technology
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.yuanben.service;
 
 import com.yuanben.common.InvalidException;
@@ -64,6 +80,21 @@ public class NodeProcessor {
             throw new InvalidException("license is null");
         }
         String s = HttpUtil.sendPost(url, md.toJson());
+        return GsonUtil.getInstance().fromJson(s, MetadataSaveResp.class);
+    }
+
+    public static MetadataSaveResp SaveMetadata(String url, String version, byte[] data) throws InvalidException {
+        if (StringUtils.isBlank(url)) {
+            throw new InvalidException("url is empty");
+        }
+        if (StringUtils.isBlank(version)) {
+            version = "v1";
+        }
+        url += "/" + version + "/metadata";
+        if (data == null || data.length < 1) {
+            throw new InvalidException("metadata is null");
+        }
+        String s = HttpUtil.sendPost(url, data);
         return GsonUtil.getInstance().fromJson(s, MetadataSaveResp.class);
     }
 
