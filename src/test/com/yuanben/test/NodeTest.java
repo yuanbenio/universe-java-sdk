@@ -106,6 +106,7 @@ public class NodeTest {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        System.out.println(metadata.toJson());
         try {
             MetadataSaveResp resp = NodeProcessor.SaveMetadata(URL, null, metadata);
             if (resp == null) {

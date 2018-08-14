@@ -21,13 +21,13 @@ import com.yuanben.common.InvalidException;
 import com.yuanben.crypto.cryptohash.Keccak256;
 import com.yuanben.model.Metadata;
 import com.yuanben.model.http.RegisterAccountReq;
-import com.yuanben.util.Base36;
 import com.yuanben.util.GsonUtil;
 import com.yuanben.util.SecretUtil;
 import com.yuanben.util.StringUtils;
 import org.spongycastle.util.encoders.Hex;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 
 import static com.yuanben.service.ECKeyProcessor.Sign;
 
@@ -63,7 +63,16 @@ public class DTCPProcessor {
         if (StringUtils.isBlank(signature)) {
             throw new InvalidException("signature is empty");
         }
-        return Base36.EncodeBytes(ECKeyProcessor.Keccak256(Hex.decode(signature)));
+        byte[] bytes = ECKeyProcessor.Keccak256(Hex.decode(signature));
+        String prefix = "";
+        for (byte b : bytes) {
+            if (b == 0) {
+                prefix += "0";
+            } else {
+                break;
+            }
+        }
+        return prefix + new BigInteger(Hex.toHexString(bytes), 16).toString(36).toUpperCase();
     }
 
     /**
@@ -78,7 +87,7 @@ public class DTCPProcessor {
         if (metadata == null || !SecretUtil.CheckPrivateKey(privateKey)) {
             throw new InvalidException("metadata or privateKey is illegal");
         }
-        return Sign(privateKey, metadata.toJsonRmSign().getBytes("utf-8"));
+        return Sign(privateKey, metadata.toJsonRmSign().getBytes("UTF-8"));
     }
 
     /**
