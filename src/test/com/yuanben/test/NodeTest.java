@@ -106,7 +106,24 @@ public class NodeTest {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        System.out.println(metadata.toJson());
+
+        /*String str = "{\"pubkey\":\"02bf15f3abca71e9f4b6c836f597fdf760bc786bedaa02387f11d0709eaae055ee\",\"block_hash\":\"A89659D1444A03C41FDA0D59C9367C53ECCEB06E\",\"block_height\":\"210576\",\"signature\":\"61feab9dc32826fa5189e0ac978e91ee453f779fe4f2809986816cafe6fec487fc74512a5d255bbed8116999f7f3a2aef1c11b2566c60b0f12b5323007110200\",\"category\":\"货物跟踪\",\"content_hash\":\"7ec0a5ccd195aecf642f0d03f15e77cdcd00ac231f7e8879d77bcf84ca2b7bdc\",\"type\":\"custom\",\"title\":\"卓志海上丝路-原本链-订舱物流轨迹-1.0\",\"created\":\"1534232603\",\"dna\":\"QHUXOKRS0YQH94WMO7AO7QTCZ2U97LZL5W5SJRK4CNVN5GQTL\",\"language\":\"zh-CN\",\"extra\":{\"destAddress\":\"TEMA\",\"destCountry\":\"Ghana\",\"orderNo\":\"BK18081400002\",\"originAddress\":\"NANSHA\",\"originCountry\":\"China\",\"status\":\"生成订舱单\",\"time\":\"2018-08-14 15:43:23.557\",\"tracks\":\"【牛测】【一刀】提交订舱单\"},\"license\":{\"type\":\"cc\",\"parameters\":{\"bb\":\"22\",\"yy\":\"44\"}}}";
+
+        metadata = GsonUtil.getInstance().fromJson(str, Metadata.class);
+        System.out.println(metadata.getSignature());
+
+        try {
+            DTCPProcessor.FullMetadata("2a9511a7a90f5839318a0ecd85883800c1f58ec154e1a50b450dd3e8405766a7",metadata);
+        } catch (InvalidException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(metadata.getSignature());
+
+
+        System.out.println(metadata.toJson());*/
         try {
             MetadataSaveResp resp = NodeProcessor.SaveMetadata(URL, null, metadata);
             if (resp == null) {
@@ -164,4 +181,17 @@ public class NodeTest {
             e.printStackTrace();
         }
     }
+
+    /*public static void main (String[] args) {
+        NodeTest nodeTest = new NodeTest();
+        while (true) {
+            nodeTest.SaveMetadataTest();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+    }*/
 }
