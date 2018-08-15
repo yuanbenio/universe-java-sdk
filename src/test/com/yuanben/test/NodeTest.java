@@ -22,6 +22,7 @@ import com.yuanben.model.http.*;
 import com.yuanben.service.DTCPProcessor;
 import com.yuanben.service.ECKeyProcessor;
 import com.yuanben.service.NodeProcessor;
+import com.yuanben.util.GsonUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.util.TreeMap;
@@ -111,19 +112,21 @@ public class NodeTest {
 
         metadata = GsonUtil.getInstance().fromJson(str, Metadata.class);
         System.out.println(metadata.getSignature());
+        metadata.setPubKey(null);
 
         try {
-            DTCPProcessor.FullMetadata("2a9511a7a90f5839318a0ecd85883800c1f58ec154e1a50b450dd3e8405766a7",metadata);
+            DTCPProcessor.FullMetadata("125371e139beff7ad83423f4cd8fe8eb53e3a666a80200bd92c43172ed98ff7e",metadata);
+//            DTCPProcessor.FullMetadata("3a03447e2bde9c9341f4e93dd00422c9a179fa7c8f1d07c4b06aff9ff5c47467",metadata);
         } catch (InvalidException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
-        System.out.println(metadata.getSignature());
+        System.out.println(metadata.getSignature());*/
 
 
-        System.out.println(metadata.toJson());*/
+        System.out.println(metadata.toJson());
         try {
             MetadataSaveResp resp = NodeProcessor.SaveMetadata(URL, null, metadata);
             if (resp == null) {
@@ -182,16 +185,11 @@ public class NodeTest {
         }
     }
 
-    /*public static void main (String[] args) {
+    public static void main (String[] args) throws InterruptedException {
         NodeTest nodeTest = new NodeTest();
         while (true) {
             nodeTest.SaveMetadataTest();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return;
+            Thread.sleep(1000);
         }
-    }*/
+    }
 }

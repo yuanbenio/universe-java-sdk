@@ -666,23 +666,7 @@ public class ECKey implements Serializable {
                     ? (byte) (this.v - 27)
                     : this.v;
 
-            byte[] bytes = new byte[65];
-            final byte[] rbs = this.r.toByteArray();
-
-            int index = 0;
-            for (; index < 32 - rbs.length; index++) {
-                bytes[index] = 0;
-            }
-            for (byte b : rbs) {
-                bytes[index++] = b;
-            }
-            final byte[] sbs = this.s.toByteArray();
-            for (byte b : sbs) {
-                bytes[index++] = b;
-            }
-            bytes[64] = fixedV;
-
-            return bytes;
+            return ByteUtil.merge(bigIntegerToBytes(this.r,32),bigIntegerToBytes(this.s,32),new byte[]{fixedV});
         }
 
         public String toHex() {
