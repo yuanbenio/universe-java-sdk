@@ -158,7 +158,7 @@ Java-SDK provide three processors:service/KeyProcessor、service/DTCPProcessor�
            //.....
        }
 ```
-> location:NodeProcessor.java。Because of network latency, it may not be the latest block information. If you can't get it, please fill it with a fixed value. The value of the last request is a good choice.原本链的处理的速度为毫秒级，由于网络延迟，获取到的可能不是最新的区块信息。该接口获取的值主要用于metadata中值的填充，只需要保证hash在链上即可，不需要最新的。
+> location:NodeProcessor.java。Because of network latency, it may not be the latest block information. If you can't get it, please fill it with a fixed value. The value of the last request is a good choice.
 
 ***
 #### QueryMetadata
