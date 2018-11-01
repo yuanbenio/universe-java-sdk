@@ -7,7 +7,7 @@
 
     <name>universe-java-sdk</name>
     <artifactId>universe-java-sdk</artifactId>
-    <groupId>com.yuanben.com</groupId>
+    <groupId>yuanbenlian.com</groupId>
     <version>1.0-SNAPSHOT</version>
 
 
@@ -39,6 +39,7 @@
             <artifactId>commons-httpclient</artifactId>
             <version>3.1</version>
         </dependency>
+
 
     </dependencies>
 
