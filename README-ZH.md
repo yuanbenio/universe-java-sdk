@@ -1,4 +1,4 @@
-![原本链](https://github.com/yuanbenio/universe-java-sdk/yuanbenlian.png)
+![原本链](https://github.com/yuanbenio/universe-java-sdk/blob/master/yuanbenlian.png)
 
 >这个版本的SDK用来给java语言开发者提供便捷生成metadata的服务。方法的具体使用请查看[examples](https://github.com/yuanbenio/universe-java-sdk/tree/master/src/test/com/yuanben/test)
 

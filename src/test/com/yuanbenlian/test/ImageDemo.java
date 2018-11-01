@@ -26,7 +26,7 @@ public class ImageDemo {
     @Test
     public void SaveImage() {
         Metadata metadata = new Metadata();
-        String imgPath = "/Users/envin_xie/work/universe/universe-java-sdk/yuanbenlian.png";
+        String imgPath = "yuanbenlian.png";
         try {
 
             File f = new File(imgPath);

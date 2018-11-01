@@ -1,7 +1,7 @@
 # services
 Yuanben Chain SDK for Java developers
 
-![Yuanben chain](https://github.com/yuanbenio/universe-java-sdk/yuanbenlian.png)
+![Yuanben chain](https://github.com/yuanbenio/universe-java-sdk/blob/master/yuanbenlian.png)
 
 jdk version ：1.7
 
