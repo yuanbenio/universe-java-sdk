@@ -16,7 +16,6 @@
 
 package com.yuanbenlian.model.http;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.yuanbenlian.model.Metadata;
 import com.yuanbenlian.util.GsonUtil;
 
@@ -28,20 +27,13 @@ public class MetadataQueryResp {
     /**
      * code="error"表示请求失败
      */
-    @JSONField(name = "code")
     private String code;
     /**
      * 返回的错误信息
      * error message
      */
-    @JSONField(name = "msg")
-
     private String msg;
-    @JSONField(name = "data")
-
     private Metadata data;
-    @JSONField(name = "tx")
-
     private Transaction tx;
 
     public String getCode() {
