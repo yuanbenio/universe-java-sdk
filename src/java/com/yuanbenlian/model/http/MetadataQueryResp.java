@@ -16,16 +16,19 @@
 
 package com.yuanbenlian.model.http;
 
+import com.yuanbenlian.common.Constants;
 import com.yuanbenlian.model.Metadata;
 import com.yuanbenlian.util.GsonUtil;
 
 /**
- * <p>查询metadata的响应结果体</p>
+ * <p>查询metadata的返回封装</p>
+ * <p>the response of query metadata</p>
  */
 public class MetadataQueryResp {
 
     /**
-     * code="error"表示请求失败
+     * 如果code为"ok",表示请求数据成功
+     * ok : success
      */
     private String code;
     /**
@@ -74,5 +77,9 @@ public class MetadataQueryResp {
 
     public MetadataQueryResp convert(String json) {
         return GsonUtil.getInstance().fromJson(json, MetadataQueryResp.class);
+    }
+
+    public boolean success() {
+        return Constants.NODE_SUCCESS.equals(this.code);
     }
 }

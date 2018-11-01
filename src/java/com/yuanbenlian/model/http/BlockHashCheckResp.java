@@ -21,10 +21,19 @@ import com.yuanbenlian.util.GsonUtil;
 
 /**
  * <p>检查blcokHash是否在链上的结果封装</p>
+ * <p>result data</p>
  */
 public class BlockHashCheckResp {
 
+    /**
+     * 如果code为"ok",表示请求数据成功
+     * ok : success
+     */
     private String code;
+    /**
+     * 返回的错误信息
+     * error message
+     */
     private String msg;
     private Boolean data;
 

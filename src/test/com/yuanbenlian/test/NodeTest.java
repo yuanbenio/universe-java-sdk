@@ -22,71 +22,75 @@ import com.yuanbenlian.model.http.*;
 import com.yuanbenlian.service.DTCPProcessor;
 import com.yuanbenlian.service.ECKeyProcessor;
 import com.yuanbenlian.service.NodeProcessor;
+import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
 import java.util.TreeMap;
 
 public class NodeTest {
 
-    private static final String OK = "ok";
+    private static final String OK = Constants.NODE_SUCCESS;
 
-    public String URL = "http://localhost:8080";
+    public String URL = "https://testnet.yuanbenlian.com/v1";
     public String private_key = "3c4dbee4485557edce3c8878be34373c1a41d955f38d977cfba373642983ce4c";
     public String public_key = "03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77";
-    public String content = "原本链是一个分布式的底层数据网络；" +
-            "原本链是一个高效的，安全的，易用的，易扩展的，全球性质的，企业级的可信联盟链；" +
-            "原本链通过智能合约系统以及数字加密算法，实现了链上数据可持续性交互以及数据传输的安全；" +
-            "原本链通过高度抽象的“DTCP协议”与世界上独一无二的“原本DNA”互锁，确保链上数据100%不可篡改；" +
-            "原本链通过优化设计后的共识机制和独创的“闪电DNA”算法，已将区块写入速度提高至毫秒级别";
+    public String content = "The Yuanben Chain is a distributed underlying data network\n" +
+            "The Chain is efficient, secure, easy to use, scalable, global, enterprise-level trusted alliance chain\n" +
+            "Yuanben Chain supports sustainable on-chain data interaction and secures data which transfers through an intelligent contract and digital encryption algorithm\n" +
+            "The Chain provides a worlds first unique ‘Yuanben Chain DNA’ which makes sure the data on the chain cannot be tampered with\n" +
+            "The Chain has increased block-writing speeds to millisecond-levels by optimising the consensus mechanism and the original ‘Lightning DNA’ algorithm";
+
     public String block_hash = "4D36473D2FF1FE0772A6C0C55D7911295D8E1E27";
 
+    @Test
     public void QueryLicenseTest() {
         String licenseType = "cc";
         try {
-            LicenseQueryResp licenseQueryResp = NodeProcessor.QueryLicense(URL, null, licenseType);
+            LicenseQueryResp licenseQueryResp = NodeProcessor.QueryLicense(URL, licenseType, "v4.0");
             if (licenseQueryResp == null) {
-                System.out.println("结果体转换异常");
-            } else if ("ok".equalsIgnoreCase(licenseQueryResp.getCode())) {
-                System.out.println("查询异常:" + licenseQueryResp.getMsg());
+                System.out.println("convert fail");
+            } else if (Constants.NODE_SUCCESS.equalsIgnoreCase(licenseQueryResp.getCode())) {
+                System.out.println("failure:" + licenseQueryResp.getMsg());
             } else {
-                System.out.println("查询成功。" + licenseQueryResp.toJson());
+                System.out.println("success。" + licenseQueryResp.toJson());
             }
         } catch (InvalidException e) {
             e.printStackTrace();
         }
     }
 
+    @Test
     public void QueryMetadataTest() {
         String dna = "3QKUIFVATBU8DBXSOUP3UN32EUWAYG4DFTRLKFFHYQYX8MK64V";
         try {
-            MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, null, dna);
+            MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, dna);
             if (resp == null) {
-                System.out.println("返回体转换异常");
-            } else if (OK.equalsIgnoreCase(resp.getCode())) {
-                System.out.println("查询成功。" + resp.toJson());
+                System.out.println("convert failure");
+            } else if (Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode())) {
+                System.out.println("success。" + resp.toJson());
             } else {
-                System.out.println("查询异常:" + resp.getMsg());
+                System.out.println("failure:" + resp.getMsg());
             }
         } catch (InvalidException e) {
             e.printStackTrace();
         }
     }
 
+    @Test
     public void SaveMetadataTest() {
         Metadata metadata = new Metadata();
         metadata.setContent(content);
         metadata.setBlockHash(block_hash);
         metadata.setBlockHeight("12345");
         metadata.setType(Constants.TYPE_CUSTOM);
-        metadata.setCategory("原本链测试");
+        metadata.setCategory("test");
 
-        metadata.setTitle("原本链测试");
+        metadata.setTitle("YuanBen chain test");
         metadata.setParentDna("2QXZNC992KGDMMLU80YR5BMGMXTSNQI2ZPTN962J8ZBO4J1XNL");
         Metadata.License license = new Metadata.License();
-        license.setType("cc");
+        license.setType("one-license");
         TreeMap<String, String> params = new TreeMap<>();
-        params.put("y", "4");
-        params.put("b", "2");
+        params.put("sale", "no");
         license.setParameters(params);
         metadata.setLicense(license);
 
@@ -96,7 +100,7 @@ public class NodeTest {
         data.put("original", "https://yuanbenlian.com/");
 
         TreeMap<String, String> extra = new TreeMap<>();
-        extra.put("author", "原本链");
+        extra.put("author", "YuanBen chain");
         metadata.setExtra(extra);
 
         try {
@@ -109,22 +113,23 @@ public class NodeTest {
 
         System.out.println(metadata.toJson());
         try {
-            MetadataSaveResp resp = NodeProcessor.SaveMetadata(URL, null, metadata);
+            MetadataSaveResp resp = NodeProcessor.SaveMetadata(URL, metadata);
             if (resp == null) {
-                System.out.println("结果体转换异常");
+                System.out.println("convert failure");
             } else if (OK.equalsIgnoreCase(resp.getCode())) {
-                System.out.println("注册成功。" + resp.getData().getDna());
+                System.out.println("success。" + resp.getData().getDna());
             } else {
-                System.out.println("注册异常:" + resp.getMsg());
+                System.out.println("failure:" + resp.getMsg());
             }
         } catch (InvalidException e) {
             e.printStackTrace();
         }
     }
 
+    @Test
     public void QueryLatestBlockHashTest() {
         try {
-            BlockHashQueryResp resp = NodeProcessor.QueryLatestBlockHash(URL, null);
+            BlockHashQueryResp resp = NodeProcessor.QueryLatestBlockHash(URL);
             if (resp == null || !OK.equalsIgnoreCase(resp.getCode())) {
                 System.out.println("query failure :" + resp.getMsg());
             } else {
@@ -137,12 +142,13 @@ public class NodeTest {
         }
     }
 
-    public void ChechBlockHashTest() {
+    @Test
+    public void CheckBlockHashTest() {
         try {
             BlockHashCheckReq req = new BlockHashCheckReq();
             req.setHash("4A7FCE024C64061D28BEB91A3FC935465BE54B3B");
             req.setHeight(22102L);
-            BlockHashCheckResp resp = NodeProcessor.CheckBlockHash(URL, null, req);
+            BlockHashCheckResp resp = NodeProcessor.CheckBlockHash(URL, req);
             if (resp == null || !OK.equalsIgnoreCase(resp.getCode())) {
                 System.out.println("query failure :" + resp.getMsg());
             } else {
@@ -153,6 +159,7 @@ public class NodeTest {
         }
     }
 
+    @Test
     public void RegisterAccountTest() {
         String[] subKeys = new String[2];
         for (int i = 0; i < 2; i++) {
@@ -160,9 +167,11 @@ public class NodeTest {
         }
         try {
             RegisterAccountReq req = DTCPProcessor.GenRegisterAccountReq(private_key, subKeys);
-            NodeProcessor.RegisterAccount("http://localhost:8081", null, req);
+            NodeProcessor.RegisterAccount("http://localhost:8081/v1", req);
         } catch (InvalidException e) {
             e.printStackTrace();
         }
     }
 }
+
+

@@ -18,13 +18,15 @@ package com.yuanbenlian.model;
 
 /**
  * <p>密钥模型</p>
- * <p>包含公私钥</p>
+ * <p>include private key and public key</p>
  */
 public class SecretKey {
 
-    //16进制的私钥  长度64 chars
+    //private key
+    //length=64 chars
     private String privateKey;
-    //16进制的压缩公钥 长度66 chars
+    //compressed public key
+    // length=66  chars
     private String publicKey;
 
     public String getPrivateKey() {

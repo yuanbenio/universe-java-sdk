@@ -34,14 +34,20 @@ import static com.yuanbenlian.service.ECKeyProcessor.Sign;
 /**
  * <p>DTCP处理器</p>
  * <p>用于计算metadata，以及metadata中的各项值</p>
+ *
+ * <p>DTCP processor</p>
+ * <p>calculating metadata</p>
  */
 public class DTCPProcessor {
 
     /**
-     * 生成contentHash
+     * 计算 contentHash
+     * Calculating contentHash
+     *
+     * 算法
      * contentHash = Keccak256(content)
      *
-     * @return 16进制的contentHash
+     * @return Hex contentHash
      */
     public static String GenContentHash(String... content) {
         if (content == null) return Constants.STRING_EMPTY;
@@ -53,11 +59,11 @@ public class DTCPProcessor {
     }
 
     /**
-     * 生成闪电dna
+     * Calculating dna
      *
-     * @param signature 16进制的metadata签名串
-     * @return metadata的闪电dna
-     * @throws InvalidException 入参为空
+     * @param signature the signature of metadata
+     * @return dna
+     * @throws InvalidException signature is empty
      */
     public static String GeneratorDNA(String signature) throws InvalidException {
         if (StringUtils.isBlank(signature)) {
@@ -77,10 +83,11 @@ public class DTCPProcessor {
 
     /**
      * 对metadata签名 （签名内容为metadata中除去dna\content和signature字段外的所有字段值)
+     * sign(metadata)
      *
-     * @param metadata   metadata实例
-     * @param privateKey 16进制的私钥
-     * @return 16进制的metadata signature
+     * @param metadata   metadata
+     * @param privateKey private key
+     * @return signature
      * @throws InvalidException 入参为空
      */
     public static String GenMetadataSignature(Metadata metadata, String privateKey) throws InvalidException, UnsupportedEncodingException {
@@ -92,9 +99,10 @@ public class DTCPProcessor {
 
     /**
      * 对metadata进行签名验证 （签名内容为metadata中除去dna\content和signature字段外的所有字段值)
+     * verify metadata's signature
      *
      * @param metadata metadata
-     * @return 验证结果
+     * @return result
      * @throws InvalidException metadata为空
      */
     public static boolean VerifyMetadataSignature(Metadata metadata) throws InvalidException {
@@ -106,11 +114,16 @@ public class DTCPProcessor {
 
     /**
      * 对metadata进行补全
+     * completing metadata
      *
      * @param privateKey 16进制的私钥，用于签名
      * @param metadata   必须包含license\title\type\block_hash|block_height\category,如果contentHash为空，则必须传入content的值；如果type不是article，则必须传入contentHash;如果category为空，则必须传入content
-     * @return 信息补全的metadata
-     * @throws InvalidException 参数错误
+     *                   include(license\title\type\block_hash|block_height|category.
+     *                   if content is empty,you must pass content;
+     *                   if type isn't article,you must pass contentHash;
+     *                   if category is empty,you must pass content)
+     * @return full metadata
+     * @throws InvalidException invalid parameters
      */
     public static Metadata FullMetadata(String privateKey, Metadata metadata) throws InvalidException, UnsupportedEncodingException {
         if (metadata == null || !SecretUtil.CheckPrivateKey(privateKey)) {
@@ -183,11 +196,12 @@ public class DTCPProcessor {
 
     /**
      * 生成用于注册公钥的请求体
+     * register public key
      *
      * @param privateKey 16进制私钥
      * @param subPubKeys 需要注册的公钥数组
-     * @return 请求体封装
-     * @throws InvalidException 参数错误
+     * @return request
+     * @throws InvalidException invalid parameters
      */
     public static RegisterAccountReq GenRegisterAccountReq(String privateKey, String[] subPubKeys) throws InvalidException {
         if (subPubKeys == null || subPubKeys.length < 1 || !SecretUtil.CheckPrivateKey(privateKey)) {

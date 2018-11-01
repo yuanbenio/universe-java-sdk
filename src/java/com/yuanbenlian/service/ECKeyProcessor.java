@@ -29,12 +29,16 @@ import java.math.BigInteger;
 /**
  * <p>密钥服务类</p>
  * <p>支持密钥对生成、签名、校验、私钥推导公钥</p>
+ *
+ * <p>secret key service</p>
+ * <p>this is a base service, it support: generate key pair、calculating signature、verify signature、etc</p>
  */
 public class ECKeyProcessor {
     /**
      * 生成密钥对
+     * generate a key pair
      *
-     * @return secp256k1密钥
+     * @return secp256k1 key pair
      */
     public static SecretKey GeneratorSecp256k1Key() {
         SecretKey secretKey = new SecretKey();
@@ -48,9 +52,10 @@ public class ECKeyProcessor {
 
     /**
      * 根据私钥生成16进制对压缩公钥
+     * calculating public key by private key
      *
-     * @param privateKey 16进制私钥
-     * @return 16进制的公钥
+     * @param privateKey
+     * @return public key
      */
     public static String GetPubKeyFromPri(String privateKey) throws InvalidException {
         if (!SecretUtil.CheckPrivateKey(privateKey)) {
@@ -64,10 +69,11 @@ public class ECKeyProcessor {
 
     /**
      * 签名
+     * sign
      *
-     * @param privateKey 私钥
-     * @param content    签名内容 字节数组
-     * @return 16进制签名串
+     * @param privateKey
+     * @param content
+     * @return signature
      */
     public static String Sign(String privateKey, byte[]... content) throws InvalidException {
         if (!SecretUtil.CheckPrivateKey(privateKey)) {
@@ -78,18 +84,19 @@ public class ECKeyProcessor {
         for (byte[] b : content) {
             keccak256.update(b);
         }
-        //只能对contentHash签名
         ECKey.ECDSASignature ecdsaSignature = ecKey.sign(keccak256.digest());
         return ecdsaSignature.toHex();
     }
 
     /**
      * 签名验证
+     * verify signature
      *
-     * @param publicKey 16进制的压缩公钥
-     * @param signMsg   16进制的签名串
+     * @param publicKey
+     * @param signMsg  signature
      * @param data      被签名的原数据字节数组 keccak256哈希值
-     * @return 验证结果
+     *                  source data
+     * @return result
      */
     public static boolean VerifySignature(String publicKey, String signMsg, byte[] data) throws InvalidException {
         if (!SecretUtil.CheckPublicKey(publicKey, true)) {

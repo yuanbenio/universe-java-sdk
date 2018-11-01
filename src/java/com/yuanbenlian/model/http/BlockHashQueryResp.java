@@ -21,12 +21,9 @@ import com.yuanbenlian.util.GsonUtil;
 
 /**
  * <p>查询最新的blockHash的结果封装</p>
+ * <p>the latest block hash and block height</p>
  */
 public class BlockHashQueryResp {
-
-    /**
-     * <p>查询的最新的blcokHash的相关参数</p>
-     */
     public class BlockHashResp {
         @SerializedName(value = "latest_block_height")
         private Long latestBlockHeight;
@@ -60,7 +57,15 @@ public class BlockHashQueryResp {
         }
     }
 
+    /**
+     * 如果code为"ok",表示请求数据成功
+     * ok : success
+     */
     private String code;
+    /**
+     * 返回的错误信息
+     * error message
+     */
     private String msg;
     private BlockHashResp data;
 

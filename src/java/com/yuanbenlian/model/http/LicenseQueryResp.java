@@ -21,15 +21,18 @@ import com.yuanbenlian.util.GsonUtil;
 import java.util.Map;
 
 /**
- * <p>license查询结果封装</p>
+ * <p>查询license信息结果封装</p>
+ * <p>the response of query license</p>
  */
 public class LicenseQueryResp {
     /**
-     * code="error"表示请求失败
+     * 如果code为"ok",表示请求数据成功
+     * ok : success
      */
     private String code;
     /**
      * 返回的错误信息
+     * error message
      */
     private String msg;
     private Map<String, Object> data;

@@ -19,11 +19,13 @@ package com.yuanbenlian.model.http;
 public class RegisterAccountResp {
 
     /**
-     * code="error"表示请求失败
+     * 如果code为"ok",表示请求数据成功
+     * ok : success
      */
     private String code;
     /**
      * 返回的错误信息
+     * error message
      */
     private String msg;
 

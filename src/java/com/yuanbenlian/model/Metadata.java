@@ -27,34 +27,34 @@ import java.util.Set;
 import java.util.TreeMap;
 
 /**
- * <p>dtcp协议抽象模型</p>
+ * <p>DTCP协议抽象模型</p>
+ * <p>DTCP protocol abstract model</p>
  */
 public class Metadata {
     @SerializedName("pubkey")
     private String pubKey;
-    @SerializedName( "block_hash")
+    @SerializedName("block_hash")
     private String blockHash;
-    @SerializedName( "block_height")
+    @SerializedName("block_height")
     private String blockHeight;
     private String signature;
-    @SerializedName( "id")
+    @SerializedName("id")
     private String id;
 
 
-    //用逗号隔开
+    //split by ","
     private String category;
-    @SerializedName( "content_hash")
+    @SerializedName("content_hash")
     private String contentHash;
     private String type;
     private String title;
     private String content;
 
-    //时间戳
     private String created;
-    @SerializedName( "abstract")
-    private String abstractContent;  //其他版本该字段为：abstract
+    @SerializedName("abstract")
+    private String abstractContent;
     private String dna;
-    @SerializedName( "parent_dna")
+    @SerializedName("parent_dna")
     private String parentDna;
 
     private String language;
@@ -246,7 +246,7 @@ public class Metadata {
     /**
      * 获取metadata去除签名和dna的json字符串
      *
-     * @return json字符串
+     * @return json string exclude signature and DNA
      */
     public String toJsonRmSign() {
         String dna = this.dna;
@@ -276,9 +276,9 @@ public class Metadata {
         String json = gson.toJson(jsonElement);
 
         Set<String> htmlChars = Constants.HTML_SAFE_REPLACEMENT_CHARS.keySet();
-        for (String s:htmlChars) {
-            if (json.contains(s)){
-                json = json.replace(s,Constants.HTML_SAFE_REPLACEMENT_CHARS.get(s));
+        for (String s : htmlChars) {
+            if (json.contains(s)) {
+                json = json.replace(s, Constants.HTML_SAFE_REPLACEMENT_CHARS.get(s));
             }
         }
 

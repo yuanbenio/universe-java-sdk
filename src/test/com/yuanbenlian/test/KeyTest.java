@@ -19,6 +19,7 @@ import com.yuanbenlian.common.InvalidException;
 import com.yuanbenlian.crypto.HexUtil;
 import com.yuanbenlian.model.SecretKey;
 import com.yuanbenlian.service.ECKeyProcessor;
+import org.junit.Test;
 
 /**
  * ECKeyProcessor Test
@@ -37,6 +38,7 @@ public class KeyTest {
     //examples result:
     //private_key:3c4dbee4485557edce3c8878be34373c1a41d955f38d977cfba373642983ce4c
     //public_key: 03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77
+    @Test
     public void GeneratorSecp256k1KeyTest() {
         SecretKey secretKey = ECKeyProcessor.GeneratorSecp256k1Key();
         System.out.println("private_key:" + secretKey.getPrivateKey() +
@@ -45,6 +47,7 @@ public class KeyTest {
 
     //examples result:
     //03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77
+    @Test
     public void GetPubKeyFromPriTest() {
 
         try {
@@ -58,6 +61,7 @@ public class KeyTest {
 
     //examples result:
     //b7a59601d0a45ff33c93a61709fbc7586afbb952efb7eed19b348e44caa1fdbd6fbb963d4cb2fd58a128e5831a6f05e05e5064b12cfb3e44842b98a6abb2841c00
+    @Test
     public void SignTest() {
         try {
             String sign = ECKeyProcessor.Sign(private_key, "hello world".getBytes());
@@ -70,6 +74,7 @@ public class KeyTest {
 
     //examples result:
     //true
+    @Test
     public void VerifySignatureTest() {
         try {
             sign_msg = "89ab153d4f80565abd8f13e702106972fd2ac3a1975c9e7f5963c39ebd94a8eb452e6404e74ad391a74a4c9076f8e5a3f48bf5e16e9f355be835b5b63efa424200";
@@ -83,6 +88,7 @@ public class KeyTest {
 
     //examples result:
     //54ce1d0eb4759bae08f31d00095368b239af91d0dbb51f233092b65788f2a526
+    @Test
     public void Keccak256Test() {
         System.out.println(HexUtil.bytesToHex(ECKeyProcessor.Keccak256(content)));
     }

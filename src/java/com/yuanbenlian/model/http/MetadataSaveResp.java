@@ -20,6 +20,7 @@ import com.yuanbenlian.util.GsonUtil;
 
 /**
  * <p>向node节点注册metadata的返回结果体</p>
+ * <p>the result of save metadata</p>
  */
 public class MetadataSaveResp {
 
@@ -36,11 +37,13 @@ public class MetadataSaveResp {
     }
 
     /**
-     * code="error"表示请求失败
+     * 如果code为"ok",表示请求数据成功
+     * ok : success
      */
     private String code;
     /**
      * 返回的错误信息
+     * error message
      */
     private String msg;
     private Data data;

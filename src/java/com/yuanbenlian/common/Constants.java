@@ -31,9 +31,9 @@ public class Constants {
     public static final String TYPE_PRIVATE = "private";
     public static final String TYPE_CUSTOM = "custom";
 
-    public static final String VERSION = "v1.1";
+    public static final String VERSION = "v1.3";
 
-    public static final String CODE_ERROR = "error";
+    public static final String NODE_SUCCESS= "ok";
 
 
     private static final BigInteger SECP256K1N = new BigInteger("fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141", 16);

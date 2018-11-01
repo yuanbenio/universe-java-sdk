@@ -21,6 +21,7 @@ import com.yuanbenlian.model.Metadata;
 import com.yuanbenlian.model.http.RegisterAccountReq;
 import com.yuanbenlian.service.DTCPProcessor;
 import com.yuanbenlian.service.ECKeyProcessor;
+import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
 import java.util.TreeMap;
@@ -38,28 +39,29 @@ public class DTCPTest {
     public String block_hash = "4D36473D2FF1FE0772A6C0C55D7911295D8E1E27";
     public String sign_msg = "78c9082f22451fb9befd9adc8ebffa6e06599b94d4846cf7e52f45e92e42f16f2e5a8e411b560659735d13f4e2fa79031cf2a8dc752fe21f579c9ab5409e240e00";
 
+    @Test
     public void GenContentHashTest() {
         String contentHash = DTCPProcessor.GenContentHash(content);
         System.out.println(contentHash);
     }
 
-
+    @Test
     public void GenMetadataFromContentTest() {
         GenMetadataFromContent();
     }
 
+    @Test
     public Metadata GenMetadataFromContent() {
         Metadata metadata = new Metadata();
         metadata.setContent(content);
         metadata.setBlockHash(block_hash);
         metadata.setBlockHeight("22102");
         metadata.setType(Constants.TYPE_ARTICLE);
-        metadata.setTitle("原本链java版本sdk测试");
+        metadata.setTitle("YuanBen chain test");
         Metadata.License license = new Metadata.License();
-        license.setType("cc");
+        license.setType("one-license");
         TreeMap<String, String> params = new TreeMap<>();
-        params.put("y", "4");
-        params.put("b", "2");
+        params.put("sale", "no");
         license.setParameters(params);
         metadata.setLicense(license);
         try {
@@ -72,7 +74,7 @@ public class DTCPTest {
         }
         return metadata;
     }
-
+    @Test
     public void GenMetadataSignatureTest() {
         Metadata metadata = GenMetadataFromContent();
         try {
@@ -85,7 +87,7 @@ public class DTCPTest {
         }
     }
 
-
+    @Test
     public void GeneratorDNATest() {
         try {
             String dna = DTCPProcessor.GeneratorDNA(sign_msg);
@@ -95,6 +97,7 @@ public class DTCPTest {
         }
     }
 
+    @Test
     public void VerifyMetadataSignatureTest() {
 
         try {
@@ -106,6 +109,7 @@ public class DTCPTest {
         }
     }
 
+    @Test
     public void GenRegisterAccountReqTest() {
         String[] subKeys = new String[5];
         for (int i = 0; i < 5; i++) {

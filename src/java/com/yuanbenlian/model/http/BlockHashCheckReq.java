@@ -20,7 +20,7 @@ package com.yuanbenlian.model.http;
 import com.yuanbenlian.util.GsonUtil;
 
 /**
- * <p>检查blockHash的请求封装</p>
+ * <p>the response of query blockHash</p>
  */
 public class BlockHashCheckReq {
 
