@@ -36,7 +36,14 @@ public class MetadataQueryResp {
      * error message
      */
     private String msg;
+    /**
+     * metadata
+     */
     private Metadata data;
+    /**
+     * Transaction of DNA
+     *
+     */
     private Transaction tx;
 
     public String getCode() {
