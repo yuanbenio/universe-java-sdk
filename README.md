@@ -1,7 +1,7 @@
 # services
 Yuanben Chain SDK for Java developers
 
-![Yuanben chain](https://github.com/yuanbenio/universe-java-sdk/blob/master/yuanbenlian.png)
+![Yuanben chain](https://github.com/yuanbenio/universe-java-sdk/blob/master/img/yuanbenlian.png)
 
 jdk version ：1.7
 
@@ -35,6 +35,10 @@ build JAR : `maven clean package`
 |4004|ABCI query fail|
 |4005|Redis handling error|
 |5000|Unknown error|
+
+
+## Data flow diagram
+![Data-flow](https://github.com/yuanbenio/universe-java-sdk/blob/master/img/data-flow.png)
 
 
 ## API Document
