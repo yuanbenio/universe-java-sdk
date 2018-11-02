@@ -58,7 +58,7 @@ The Java-SDK provides three processors: Service/KeyProcessor, Service/DTCP Proce
     To access the YuanBen Chain Node, supports: query and saving metadata, query licenses, query latest BlockHash、registering public key
 ```
 
-### Metadata Introduce
+### Metadata Introduction
 
 
 | name           | type    | comment              |source|
