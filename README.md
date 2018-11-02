@@ -9,81 +9,81 @@ jdk version ：1.7
 ## jar
 build JAR : `maven clean package`
 
-## return code 
+## return code
 
 |code|describe|
 |---|---|
-|ok|success|
-|3001|invalid parameters|
-|3002|The parameter are empty|
-|3003|record does not exist|
-|3004|record already exists|记录已存在|
+|ok|Success|
+|3001|Invalid parameter|
+|3002|Empty parameter|
+|3003|Record does not exist|
+|3004|Record already exists|
 |3005|Permission denied: please register the public key first|
-|3006|Permission denied: please contract yuanbenlian support|
-|3007|incorrect data|
-|3009|store data fail|
-|3010|data not on Yuanben chain |
+|3006|Permission denied: please contract Yuanben chain support|
+|3007|Incorrect data|
+|3009|Data storage fail|
+|3010|Data not on YuanBen chain |
 |3011|block information is empty|
-|3012|query fail:|
-|3020|signature verify fail|
-|3023|parameters verify fail|
-|3021|invalid public key|
-|3022|license's parameters is empty|
-|4001|error to connect redis server|
-|4002|error to connect the first-level node|
-|4003|broadcast transaction fail|
+|3012|Query fail|
+|3020|Signature verification fail|
+|3023|Parameter verification fail|
+|3021|Invalid public key|
+|3022|License's parameters are empty|
+|4001|Error connecting to redis server|
+|4002|Error connecting to the first-level node|
+|4003|Broadcast transaction fail|
 |4004|ABCI query fail|
-|4005|redis handle error|
-|5000|unknown error|
+|4005|Redis handling error|
+|5000|Unknown error|
 
 
 ## API Document
 
-> testNet address: https://testnet.yuanbenlian.com
+> TestNet address: https://testnet.yuanbenlian.com
 
-### service introduce
+### Service Introduction
 
-Java-SDK provide three processors:service/KeyProcessor、service/DTCPProcessor、service/NodeProcessor。
+The Java-SDK provides three processors: Service/KeyProcessor, Service/DTCP Processor and Service/NodeProcessor.
 
 ```text
-1. service/KeyProcessor
-    this is a base service, it support: generate key pair、calculating signature、verify signature、etc
-2. service/DTCPProcessor
-    calculating metadata
-3. service/NodeProcessor
-    To Access YuanBen Chain Node,support:query and save metadata、query license、query latest blockHash、register public key
+1. Service/KeyProcessor
+    This is a base service, it supports: generating key pair, calculating signatures, verifying signatures, and more
+2. Service/DTCP Processor
+    Processing metadata
+3. Service/NodeProcessor
+    To access the YuanBen Chain Node, supports: query and saving metadata, query licenses, query latest BlockHash、registering public key
 ```
- 
-### metadata introduce
- 
- | name           | type    | comment                                     |source|
- | -------------- | ------- | ----------------------------------------    |------|
- | type           | string  | eg:image,article,audio,vedio,custom,private |user-defined|
- | language       | string  | 'zh-CN',                                    |default:zh-CN,user-defined|
- | title          | string  | title                                       |user-defined|
- | signature      | string  | sign by secp256k1                           |generate by system|
- | abstract       | string  | Content summary                             |default:content[:200],user-defined|
- | category       | string  | eg:"news"                                   |user-defined，if there is content, the system will add five more|
- | dna            | string  | metadata dna                                |generate by system|
- | parent_dna     | string  | -                                           |user-defined,link an other metadata|
- | block_hash     | string  | block_hash on YuanBen chain                 |user-defined|
- | block_height   | string  | block_hash corresponding block_height       |user-defined|
- | created        | integer | timestamp, eg:1506302092                    |generate by system|
- | content_hash   | string  | Keccak256(content)                          |default:Keccak256(content),user-defined|
- | extra          | TreeMap<String, Object>  | user-defined content       |user-defined|
- | license        | Metadata.License  |                                   |user-defined|
- | license.type   | string  | the type of license                         |user-defined|
- | license.parameters | TreeMap<String, Object>  | the parameters of license   |user-defined|
- | source         | string  | source link.                                |user-defined|
- | data           | TreeMap<String, Object>  | extension data of the type |user-defined|
- 
-### API详解
+
+### Metadata Introduce
+
+
+| name           | type    | comment              |source|
+| -------------- | ------- | ---------------------|------|
+| type           | string  | eg:image,article,audio,video,custom,private |user-defined|
+| language       | string  | 'zh-CN',                                    |default:zh-CN,user-defined|
+| title          | string  | title                                       |user-defined|
+| signature      | string  | sign by secp256k1                           |generate by system|
+| abstract       | string  | Content summary                             |default:content[:200],user-defined|
+| category       | string  | eg:"news"                                   |user-defined，if there is content, the system will add five more|
+| dna            | string  | metadata dna                                |generate by system|
+| parent_dna     | string  | -                                           |user-defined,link an other metadata|
+| block_hash     | string  | block_hash on YuanBen chain                 |user-defined|
+| block_height   | string  | block_hash corresponding block_height       |user-defined|
+| created        | integer | timestamp, eg:1506302092                    |generate by system|
+| content_hash   | string  | Keccak256(content)                          |default:Keccak256(content),user-defined|
+| extra          | TreeMap<String, Object>  | user-defined content       |user-defined|
+| license        | Metadata.License  |                                   |user-defined|
+| license.type   | string  | the type of license                         |user-defined|
+| license.parameters | TreeMap<String, Object>  | the parameters of license   |user-defined|
+| source         | string  | source link.                                |user-defined|
+| data           | TreeMap<String, Object>  | extension data of the type |user-defined|
+
+### API Interface
 
 #### GeneratorSecp256k1Key
 ```Java
 /**
-     * 生成密钥对
-     * generate a key pair
+     * Generate a key pair
      *
      * @return secp256k1 key pair
      */
@@ -104,12 +104,10 @@ Java-SDK provide three processors:service/KeyProcessor、service/DTCPProcessor�
 #### FullMetadata
 ```Java
    /**
-        * 对metadata进行补全
         * completing metadata
         *
-        * @param privateKey 16进制的私钥，用于签名
-        * @param metadata   必须包含license\title\type\block_hash|block_height\category,如果contentHash为空，则必须传入content的值；如果type不是article，则必须传入contentHash;如果category为空，则必须传入content
-        *                   include(license\title\type\block_hash|block_height|category.
+        * @param privateKey 
+        * @param metadata   include(license\title\type\block_hash|block_height|category.
         *                   if content is empty,you must pass content;
         *                   if type isn't article,you must pass contentHash;
         *                   if category is empty,you must pass content)
@@ -119,7 +117,7 @@ Java-SDK provide three processors:service/KeyProcessor、service/DTCPProcessor�
        public static Metadata FullMetadata(String privateKey, Metadata metadata) throws InvalidException, UnsupportedEncodingException {
          //......
     }
-   
+
 ```
 > location:DTCPProcessor.java，return a full metadata.
 
@@ -127,7 +125,6 @@ Java-SDK provide three processors:service/KeyProcessor、service/DTCPProcessor�
 #### SaveMetadata
 ```Java
   /**
-       * 向node节点注册metadata
        * submit metadata to YuanBen chain
        *
        * @param url node address（http://localhost:9000/v1)
@@ -146,7 +143,6 @@ Java-SDK provide three processors:service/KeyProcessor、service/DTCPProcessor�
 #### QueryLatestBlockHash
 ```Java
     /**
-        * 向node节点查询license
         * query license to YuanBen chain
         *
         * @param url         node address （http://localhost:9000/v1)
@@ -164,13 +160,12 @@ Java-SDK provide three processors:service/KeyProcessor、service/DTCPProcessor�
 #### QueryMetadata
 ```Java
     /**
-         * 向node节点查询metadata
          * query metadata from YuanBen chain
          *
          * @param url node address （http://localhost:9000/v1)
          * @param dna DNA
          * @return result include metadata and transaction information
-         * @throws InvalidException 参数有误或网络请求错误
+         * @throws InvalidException 
          */
         public static MetadataQueryResp QueryMetadata(String url, String dna) throws InvalidException {
             if (StringUtils.isBlank(url) || StringUtils.isBlank(dna)) {
@@ -187,11 +182,10 @@ Java-SDK provide three processors:service/KeyProcessor、service/DTCPProcessor�
 #### GenRegisterAccountReq
 ```Java
    /**
-        * 生成用于注册公钥的请求体
         * register public key
         *
-        * @param privateKey 16进制私钥
-        * @param subPubKeys 需要注册的公钥数组
+        * @param privateKey 
+        * @param subPubKeys 
         * @return request
         * @throws InvalidException invalid parameters
         */
@@ -205,7 +199,6 @@ Java-SDK provide three processors:service/KeyProcessor、service/DTCPProcessor�
 #### RegisterAccount
 ```Java
    /**
-        * 注册公钥
         * register public key to YuanBen chain
         *
         * @param url node address （http://localhost:9000/v1)
@@ -218,5 +211,3 @@ Java-SDK provide three processors:service/KeyProcessor、service/DTCPProcessor�
        }
 ```
 > location:NodeProcessor.java.
-
-
