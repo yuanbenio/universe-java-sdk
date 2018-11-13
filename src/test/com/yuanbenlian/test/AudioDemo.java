@@ -52,11 +52,14 @@ public class AudioDemo {
             license.setParameters(params);
             metadata.setLicense(license);
 
+            //Because the remaining audio information are required the other jar packets,
+            // the analog data is used here.
             Audio data = new Audio();
             data.setExt(audioPath.substring(audioPath.lastIndexOf(".") + 1));
             data.setSize("" + new File(audioPath).length());
             data.setDuration(""+10*60);//10 min
-            data.setThumb("https://github.com/yuanbenio/universe-java-sdk/yuanbenlian.png");
+            data.setSimpleRate("44000");  // 44 khz
+            data.setBitRate("180000");  //180 kb
             metadata.setData(data.toMap());
 
             TreeMap<String, String> extra = new TreeMap<>();
@@ -80,7 +83,7 @@ public class AudioDemo {
 
     @Test
     public void QueryAudioTx() {
-        String dna = "3KJ9NVUE9I79Y3JX65642JO16Z02IZ3VTE4M9GGPILG2F3M56K";
+        String dna = "GAD27EU1E8VFK458NQ54RR76QJHK5VZ5OGDKJGYMTWUOWM85E";
         try {
             MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, dna);
             if (resp != null && Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode())) {

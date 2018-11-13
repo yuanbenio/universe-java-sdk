@@ -1,6 +1,7 @@
 package com.yuanbenlian.model.entity;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.yuanbenlian.common.Constants;
 import com.yuanbenlian.util.GsonUtil;
 import com.yuanbenlian.util.StringUtils;
@@ -9,11 +10,13 @@ import java.util.TreeMap;
 
 public class Audio implements BaseEntity {
 
-    private String thumb;
-    private String original;
     private String ext;
     private String size;
     private String duration;
+    @SerializedName("simple_rate")
+    private String simpleRate;
+    @SerializedName("bit_rate")
+    private String bitRate;
 
     public String getDuration() {
         return duration;
@@ -26,21 +29,6 @@ public class Audio implements BaseEntity {
     public Audio() {
     }
 
-    public String getThumb() {
-        return thumb;
-    }
-
-    public void setThumb(String thumb) {
-        this.thumb = thumb;
-    }
-
-    public String getOriginal() {
-        return original;
-    }
-
-    public void setOriginal(String original) {
-        this.original = original;
-    }
 
     public String getExt() {
         return ext;
@@ -58,13 +46,29 @@ public class Audio implements BaseEntity {
         this.size = size;
     }
 
-    public Audio(String thumb, String original, String ext, String duration, String size) {
+    public String getSimpleRate() {
+        return simpleRate;
+    }
 
-        this.thumb = thumb;
-        this.original = original;
+    public void setSimpleRate(String simpleRate) {
+        this.simpleRate = simpleRate;
+    }
+
+    public String getBitRate() {
+        return bitRate;
+    }
+
+    public void setBitRate(String bitRate) {
+        this.bitRate = bitRate;
+    }
+
+    public Audio(String ext, String size, String duration, String simpleRate, String bitRate) {
+
         this.ext = ext;
         this.size = size;
         this.duration = duration;
+        this.simpleRate = simpleRate;
+        this.bitRate = bitRate;
     }
 
     @Override
@@ -75,13 +79,13 @@ public class Audio implements BaseEntity {
     @Override
     public int size() {
         int size = 0;
-        if (StringUtils.isNotBlank(thumb)) {
+        if (StringUtils.isNotBlank(this.simpleRate)) {
             size++;
         }
-        if (StringUtils.isNotBlank(original)) {
+        if (StringUtils.isNotBlank(this.bitRate)) {
             size++;
         }
-        if (StringUtils.isNotBlank(ext)) {
+        if (StringUtils.isNotBlank(this.ext)) {
             size++;
         }
         if (StringUtils.isNotBlank(this.duration)) {

@@ -2,8 +2,8 @@
 
 | Name           | Type            | Optional | Description
 | -------------- | --------------- | -------- | --------------------
-| thumb          | array           | n        | 内容截图url,[url1,url2]
-| original       | string          | n        | 原内容url
+| simple_rate    | integer         | n        | 采样率  (hz)
+| bit_rate       | integer         | n        | 码率 （bit）
 | ext            | string          | n        | 后缀名称, 例 'mp3'
 | duration       | integer         | n        | 时长, 秒
-| size           | integer         | n        | 图片大小, 单位 byte 402269
+| size           | integer         | n        | 文件大小, 单位 byte 402269
