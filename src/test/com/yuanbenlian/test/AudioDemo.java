@@ -25,7 +25,7 @@ public class AudioDemo {
     @Test
     public void SaveAudioTest() {
         Metadata metadata = new Metadata();
-        String audioPath = "/Users/envin_xie/work/universe/universe-java-sdk/test.mp3";
+        String audioPath = "test.mp3";
         try {
             byte[] readFully = IOUtils.readFully(new File(audioPath));
 
