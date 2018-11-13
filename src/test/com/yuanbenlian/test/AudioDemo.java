@@ -55,6 +55,7 @@ public class AudioDemo {
             Audio data = new Audio();
             data.setExt(audioPath.substring(audioPath.lastIndexOf(".") + 1));
             data.setSize("" + new File(audioPath).length());
+            data.setDuration(""+10*60);//10 min
             data.setThumb("https://github.com/yuanbenio/universe-java-sdk/yuanbenlian.png");
             metadata.setData(data.toMap());
 

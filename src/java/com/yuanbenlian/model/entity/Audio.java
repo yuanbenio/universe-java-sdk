@@ -13,6 +13,15 @@ public class Audio implements BaseEntity {
     private String original;
     private String ext;
     private String size;
+    private String duration;
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
 
     public Audio() {
     }
@@ -49,12 +58,13 @@ public class Audio implements BaseEntity {
         this.size = size;
     }
 
-    public Audio(String thumb, String original, String ext, String author, String size) {
+    public Audio(String thumb, String original, String ext, String duration, String size) {
 
         this.thumb = thumb;
         this.original = original;
         this.ext = ext;
         this.size = size;
+        this.duration = duration;
     }
 
     @Override
@@ -74,10 +84,12 @@ public class Audio implements BaseEntity {
         if (StringUtils.isNotBlank(ext)) {
             size++;
         }
-        if (size != 0) {
+        if (StringUtils.isNotBlank(this.duration)) {
             size++;
         }
-
+        if (StringUtils.isNotBlank(this.size)) {
+            size++;
+        }
         return size;
     }
 
@@ -89,10 +101,6 @@ public class Audio implements BaseEntity {
     @Override
     public TreeMap<String, String> toMap() {
         Gson gson = GsonUtil.getInstance();
-        System.out.println(gson.toJson(this));
-        TreeMap treeMap = gson.fromJson(gson.toJson(this), TreeMap.class);
-        System.out.println(gson.toJson(treeMap));
-
-        return treeMap;
+        return gson.fromJson(gson.toJson(this), TreeMap.class);
     }
 }
