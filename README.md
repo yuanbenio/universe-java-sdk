@@ -5,6 +5,8 @@ Yuanben Chain SDK for Java developers
 
 jdk version ：1.7
 
+![中文](https://github.com/yuanbenio/universe-java-sdk/blob/master/README-ZH.md)
+
 ***
 ## jar
 build JAR : `maven clean package`
@@ -215,3 +217,5 @@ The Java-SDK provides three processors: Service/KeyProcessor, Service/DTCP Proce
        }
 ```
 > location:NodeProcessor.java.
+
+![more examples](https://github.com/yuanbenio/universe-java-sdk/tree/master/src/test/com/yuanbenlian/test) 

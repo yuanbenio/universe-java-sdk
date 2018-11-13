@@ -1,9 +1,10 @@
 package com.yuanbenlian.test;
 
+import com.sun.javafx.tools.packager.bundlers.IOUtils;
 import com.yuanbenlian.common.Constants;
 import com.yuanbenlian.common.InvalidException;
 import com.yuanbenlian.model.Metadata;
-import com.yuanbenlian.model.entity.Image;
+import com.yuanbenlian.model.entity.Audio;
 import com.yuanbenlian.model.http.BlockHashQueryResp;
 import com.yuanbenlian.model.http.MetadataQueryResp;
 import com.yuanbenlian.model.http.MetadataSaveResp;
@@ -11,32 +12,22 @@ import com.yuanbenlian.service.DTCPProcessor;
 import com.yuanbenlian.service.NodeProcessor;
 import org.junit.Test;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.TreeMap;
 
-public class ImageDemo {
+public class AudioDemo {
 
     public String URL = "https://testnet.yuanbenlian.com/v1";
     public String private_key = "3c4dbee4485557edce3c8878be34373c1a41d955f38d977cfba373642983ce4c";
 
 
-    // *****************  save image demo *****************
+    // *****************  save Audio demo *****************
     @Test
-    public void SaveImage() {
+    public void SaveAudioTest() {
         Metadata metadata = new Metadata();
-        String imgPath = "yuanbenlian.png";
+        String audioPath = "/Users/envin_xie/work/universe/universe-java-sdk/test.mp3";
         try {
-
-            File f = new File(imgPath);
-            BufferedImage bi = ImageIO.read(f);
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(bi, imgPath.substring(imgPath.lastIndexOf(".") + 1), baos);
-            byte[] bytes = baos.toByteArray();
-            String imageBase64 = new sun.misc.BASE64Encoder().encodeBuffer(bytes).trim();
+            byte[] readFully = IOUtils.readFully(new File(audioPath));
 
             BlockHashQueryResp resp = NodeProcessor.QueryLatestBlockHash(URL);
             if (resp == null || !Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode())) {
@@ -49,25 +40,22 @@ public class ImageDemo {
             }
 
 
-            metadata.setContent(imageBase64);
-            metadata.setType(Constants.TYPE_IMAGE);
+            metadata.setContentHash(DTCPProcessor.GenContentHash(new String(readFully)));
+            metadata.setType(Constants.TYPE_AUDIO);
             metadata.setCategory("test,YuanBen chain");
 
             metadata.setTitle("YuanBen chain test");
             Metadata.License license = new Metadata.License();
-            license.setType("one-license");
+            license.setType("test-license");
             TreeMap<String, String> params = new TreeMap<>();
             params.put("sale", "no");
             license.setParameters(params);
             metadata.setLicense(license);
 
-            Image data = new Image();
-            data.setExt(imgPath.substring(imgPath.lastIndexOf(".") + 1));
+            Audio data = new Audio();
+            data.setExt(audioPath.substring(audioPath.lastIndexOf(".") + 1));
+            data.setSize("" + new File(audioPath).length());
             data.setThumb("https://github.com/yuanbenio/universe-java-sdk/yuanbenlian.png");
-            data.setOriginal("https://github.com/yuanbenio/universe-java-sdk/yuanbenlian.png");
-            data.setHeight(""+bi.getHeight());
-            data.setWidth(""+bi.getWidth());
-            data.setSize(""+imageBase64.length());
             metadata.setData(data.toMap());
 
             TreeMap<String, String> extra = new TreeMap<>();
@@ -78,21 +66,20 @@ public class ImageDemo {
 
             MetadataSaveResp saveResp = NodeProcessor.SaveMetadata(URL, metadata);
             if (saveResp == null) {
-                System.out.println("request failure");
-            } else if (!Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode())) {
-                System.out.println("save fail:" + resp.getMsg());
+                System.out.println("received empty result");
+            } else if (!Constants.NODE_SUCCESS.equals(saveResp.getCode())) {
+                System.out.println("save fail:" + saveResp.getMsg());
             } else {
                 System.out.println("success。" + saveResp.getData().getDna());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     @Test
-    public void QueryImageTx() {
-        String dna = "3TXJYV3CAOCJYUW9NUXCRT1M8F5IHOIXQS5BQZN1J26HXOS9ON";
+    public void QueryAudioTx() {
+        String dna = "3KJ9NVUE9I79Y3JX65642JO16Z02IZ3VTE4M9GGPILG2F3M56K";
         try {
             MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, dna);
             if (resp != null && Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode())) {
