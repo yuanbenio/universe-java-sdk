@@ -94,6 +94,29 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
 > 该方法位于KeyProcessor.java，需要传入16进制的私钥字符串，返回压缩格式的公钥。
 
 ***
+#### Address
+```Java
+ /**
+     * 根据公钥生成16进制对压缩公钥
+     * calculating address by public key
+     *
+     * @param publicKey
+     * @return address
+     */
+    public static String Address(String publicKey) throws InvalidException {
+        if (!SecretUtil.CheckPublicKey(publicKey)) {
+            throw new InvalidException("Incorrect public key");
+        }
+
+        ECKey ecKey = ECKey.fromPublicOnly(Hex.decode(publicKey));
+
+        return "0x"+Hex.toHexString(ecKey.getAddress()).toUpperCase();
+    }
+```
+> 该方法位于KeyProcessor.java，需要传入16进制的公钥字符串，返回address。
+
+
+***
 #### Sign
 ```Java
 /**

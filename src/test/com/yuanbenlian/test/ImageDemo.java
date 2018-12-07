@@ -7,6 +7,7 @@ import com.yuanbenlian.model.http.BlockHashQueryResp;
 import com.yuanbenlian.model.http.MetadataQueryResp;
 import com.yuanbenlian.model.http.MetadataSaveResp;
 import com.yuanbenlian.service.DTCPProcessor;
+import com.yuanbenlian.service.ECKeyProcessor;
 import com.yuanbenlian.service.NodeProcessor;
 import org.junit.Test;
 
@@ -69,15 +70,16 @@ public class ImageDemo {
             data.put("size", "" + imageBase64.length());
             metadata.setData(data);
 
+            //Determination of ownership
             TreeMap<String, String> extra = new TreeMap<>();
-            extra.put("author", "Seven Seals Technology");
+            extra.put("owner", ECKeyProcessor.GetPubKeyFromPri(private_key));
             metadata.setExtra(extra);
 
             metadata = DTCPProcessor.FullMetadata(private_key, metadata);
 
             MetadataSaveResp saveResp = NodeProcessor.SaveMetadata(URL, metadata);
-            assert (saveResp != null);
-            assert (Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode()));
+            assert (saveResp != null) : "response is empty";
+            assert (Constants.NODE_SUCCESS.equalsIgnoreCase(saveResp.getCode())) : saveResp.getMsg();
             System.out.println("success。" + saveResp.getData().getDna());
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,19 +89,48 @@ public class ImageDemo {
 
     @Test
     public void QueryImageTx() {
-        String dna = "3TXJYV3CAOCJYUW9NUXCRT1M8F5IHOIXQS5BQZN1J26HXOS9ON";
+//        String dna = "54Q6XUSQNOZ2CSAE5NOKLS09VEKKYPTMLZV71IWOJDPKCTFPZR";
+        String dna = "1OD37XO69A298CYTTF3YPC9EW6SF2V1VU4AAEUZ0WT4LJ2N965";
         try {
             MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, dna);
-            if (resp != null && Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode())) {
-                System.out.println("success:\n" + resp.toJson());
-            } else {
-                if (resp == null) {
-                    System.out.println("failure:result is empty");
-                } else {
-                    System.out.println("failure:" + resp.getMsg());
-                }
-            }
+            assert resp != null : "response  is empty";
+            assert Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode()) : resp.getMsg();
+            System.out.println("success:\n" + resp.toJson());
         } catch (InvalidException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void TransferOwnerShip () {
+        try {
+            String sourceDNA = "54Q6XUSQNOZ2CSAE5NOKLS09VEKKYPTMLZV71IWOJDPKCTFPZR";
+            MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, sourceDNA);
+
+            assert resp != null : "response  is empty";
+            assert Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode()) : resp.getMsg();
+
+            //link source data
+            Metadata metadata = resp.getData();
+            metadata.setSignature(null);
+            metadata.setParentDna(metadata.getDna());
+            metadata.setDna(null);
+            metadata.setTitle("[Transfer Ownership] "+metadata.getTitle());
+
+            //transfer ownership
+            TreeMap<String, String> extra = new TreeMap<>();
+            extra.put("owner", ECKeyProcessor.GeneratorSecp256k1Key().getPublicKey());
+            metadata.setExtra(extra);
+
+            //sign
+            metadata = DTCPProcessor.FullMetadata(private_key, metadata);
+
+            MetadataSaveResp saveResp = NodeProcessor.SaveMetadata(URL, metadata);
+            assert (saveResp != null) : "response is empty";
+            assert (Constants.NODE_SUCCESS.equalsIgnoreCase(saveResp.getCode())) : saveResp.getMsg();
+            System.out.println("success。" + saveResp.getData().getDna());
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
