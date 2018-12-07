@@ -4,6 +4,8 @@
 
 > 原本链测试地址：https://testnet.yuanbenlian.com
 
+> [jar包下载地址](https://github.com/yuanbenio/universe-java-sdk/blob/master/jar)
+
 ### git路径：
 ```
 https://github.com/yuanbenio/universe-java-sdk
