@@ -255,13 +255,13 @@ public class Metadata {
 
         // sort attributes
         if (getLicense() != null) {
-            getLicense().setParameters(MapUtil.sortMapByKey(getLicense().getParameters()));
+            getLicense().setParameters(MapUtil.sortMapByKey(license.parameters));
         }
         if (getData() != null) {
-            setData(MapUtil.sortMapByKey(getData()));
+            setData(MapUtil.sortMapByKey(this.data));
         }
         if (getExtra() != null) {
-            setExtra(MapUtil.sortMapByKey(getExtra()));
+            setExtra(MapUtil.sortMapByKey(this.extra));
         }
 
         this.dna = null;

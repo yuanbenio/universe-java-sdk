@@ -3,6 +3,7 @@ package com.yuanbenlian.test;
 import com.yuanbenlian.common.Constants;
 import com.yuanbenlian.common.InvalidException;
 import com.yuanbenlian.model.Metadata;
+import com.yuanbenlian.model.entity.Image;
 import com.yuanbenlian.model.http.BlockHashQueryResp;
 import com.yuanbenlian.model.http.MetadataQueryResp;
 import com.yuanbenlian.model.http.MetadataSaveResp;
@@ -61,14 +62,14 @@ public class ImageDemo {
             license.setParameters(params);
             metadata.setLicense(license);
 
-            TreeMap<String, String> data = new TreeMap<>();
-            data.put("ext", imgPath.substring(imgPath.lastIndexOf(".") + 1));
-            data.put("thumb", "https://github.com/yuanbenio/universe-java-sdk/yuanbenlian.png");
-            data.put("original", "https://github.com/yuanbenio/universe-java-sdk/yuanbenlian.png");
-            data.put("height", "" + bi.getHeight());
-            data.put("width", "" + bi.getWidth());
-            data.put("size", "" + imageBase64.length());
-            metadata.setData(data);
+            Image data = new Image();
+            data.setExt(imgPath.substring(imgPath.lastIndexOf(".") + 1));
+            data.setThumb("https://github.com/yuanbenio/universe-java-sdk/yuanbenlian.png");
+            data.setOriginal("https://github.com/yuanbenio/universe-java-sdk/yuanbenlian.png");
+            data.setHeight(""+bi.getHeight());
+            data.setWidth(""+bi.getWidth());
+            data.setSize(""+imageBase64.length());
+            metadata.setData(data.toMap());
 
             //Determination of ownership
             TreeMap<String, String> extra = new TreeMap<>();

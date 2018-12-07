@@ -494,3 +494,4 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
 ```
 > 该方法位于NodeProcessor.java，用于注册公钥，返回体的code为ok，则表示注册成功。
 
+![更多样例](https://github.com/yuanbenio/universe-java-sdk/tree/master/src/test/com/yuanbenlian/test) 
