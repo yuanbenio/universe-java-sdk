@@ -59,12 +59,29 @@ public class ECKeyProcessor {
      */
     public static String GetPubKeyFromPri(String privateKey) throws InvalidException {
         if (!SecretUtil.CheckPrivateKey(privateKey)) {
-            throw new InvalidException("private key`s format is error");
+            throw new InvalidException("Incorrect private key");
         }
         ECKey ecKey = ECKey.fromPrivate(Hex.decode(privateKey));
         ECPoint pubKeyPoint = ecKey.getPubKeyPoint();
         byte[] encoded = pubKeyPoint.getEncoded(true);
         return Hex.toHexString(encoded);
+    }
+
+    /**
+     * 根据公钥生成16进制对压缩公钥
+     * calculating address by public key
+     *
+     * @param publicKey
+     * @return address
+     */
+    public static String Address(String publicKey) throws InvalidException {
+        if (!SecretUtil.CheckPublicKey(publicKey)) {
+            throw new InvalidException("Incorrect public key");
+        }
+
+        ECKey ecKey = ECKey.fromPublicOnly(Hex.decode(publicKey));
+
+        return "0x"+Hex.toHexString(ecKey.getAddress()).toUpperCase();
     }
 
     /**
@@ -151,6 +168,4 @@ public class ECKeyProcessor {
         }
         return keccak256.digest();
     }
-
-
 }

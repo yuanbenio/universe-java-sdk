@@ -42,7 +42,7 @@ public class DTCPTest {
     @Test
     public void GenContentHashTest() {
         String contentHash = DTCPProcessor.GenContentHash(content);
-        System.out.println(contentHash);
+        assert "54ce1d0eb4759bae08f31d00095368b239af91d0dbb51f233092b65788f2a526".equals(contentHash);
     }
 
     @Test
@@ -50,7 +50,6 @@ public class DTCPTest {
         GenMetadataFromContent();
     }
 
-    @Test
     public Metadata GenMetadataFromContent() {
         Metadata metadata = new Metadata();
         metadata.setContent(content);
@@ -58,6 +57,7 @@ public class DTCPTest {
         metadata.setBlockHeight("22102");
         metadata.setType(Constants.TYPE_ARTICLE);
         metadata.setTitle("YuanBen chain test");
+        metadata.setCategory("test,Yuanben chain");
         Metadata.License license = new Metadata.License();
         license.setType("one-license");
         TreeMap<String, String> params = new TreeMap<>();
@@ -91,7 +91,7 @@ public class DTCPTest {
     public void GeneratorDNATest() {
         try {
             String dna = DTCPProcessor.GeneratorDNA(sign_msg);
-            System.out.println(dna);
+            assert "69MN1MU8QI42MPZFWBPXP1F5H3L10L1E10D17U3AFPO3SPR1YT".equals(dna);
         } catch (InvalidException e) {
             e.printStackTrace();
         }
@@ -102,8 +102,7 @@ public class DTCPTest {
 
         try {
             Metadata metadata = GenMetadataFromContent();
-            boolean b = DTCPProcessor.VerifyMetadataSignature(metadata);
-            System.out.println(b);
+            assert  DTCPProcessor.VerifyMetadataSignature(metadata): "invalid signature";
         } catch (InvalidException e) {
             e.printStackTrace();
         }

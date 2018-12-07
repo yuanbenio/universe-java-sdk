@@ -8,8 +8,7 @@
     <name>universe-java-sdk</name>
     <artifactId>universe-java-sdk</artifactId>
     <groupId>yuanbenlian.com</groupId>
-    <version>1.0-SNAPSHOT</version>
-
+    <version>${version}</version>
 
     <dependencies>
         <dependency>
@@ -51,6 +50,10 @@
 
     </dependencies>
 
+    <properties>
+        <version>1.4.0</version>
+
+    </properties>
     <build>
         <plugins>
             <plugin>
@@ -97,7 +100,6 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
-
                 </configuration>
                 <executions>
                     <execution>
@@ -110,8 +112,16 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.18.1</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
         </plugins>
-        <finalName>universe-java-sdk</finalName>
+        <finalName>universe-java-sdk-${version}</finalName>
     </build>
 
 </project>

@@ -3,6 +3,9 @@ Yuanben Chain SDK for Java developers
 
 ![Yuanben chain](https://github.com/yuanbenio/universe-java-sdk/blob/master/img/yuanbenlian.png)
 
+
+[Download Jar](https://github.com/yuanbenio/universe-java-sdk/blob/master/jar)
+
 jdk version ：1.7
 
 [中文文档](https://github.com/yuanbenio/universe-java-sdk/blob/master/README-ZH.md)
