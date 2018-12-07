@@ -106,8 +106,8 @@ public class ImageDemo {
     @Test
     public void TransferOwnerShip () {
         try {
-            String sourceDNA = "54Q6XUSQNOZ2CSAE5NOKLS09VEKKYPTMLZV71IWOJDPKCTFPZR";
-            MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, sourceDNA);
+            String ownerDNA = "54Q6XUSQNOZ2CSAE5NOKLS09VEKKYPTMLZV71IWOJDPKCTFPZR";
+            MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, ownerDNA);
 
             assert resp != null : "response  is empty";
             assert Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode()) : resp.getMsg();
