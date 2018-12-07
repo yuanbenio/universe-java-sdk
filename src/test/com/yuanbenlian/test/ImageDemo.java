@@ -104,7 +104,7 @@ public class ImageDemo {
 
 
     @Test
-    public void TransferOwnerShip () {
+    public void TransferOwnership () {
         try {
             String ownerDNA = "54Q6XUSQNOZ2CSAE5NOKLS09VEKKYPTMLZV71IWOJDPKCTFPZR";
             MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, ownerDNA);
@@ -144,6 +144,7 @@ public class ImageDemo {
             newMetadata.setAbstractContent(oldMetadata.getAbstractContent());
             TreeMap<String, String> extra = oldMetadata.getExtra();
             if (extra == null ){extra = new TreeMap<>();}
+            // transfer ownership to the recipient
             extra.put("owner",recipientPubKey);
             newMetadata.setExtra(extra);
 
