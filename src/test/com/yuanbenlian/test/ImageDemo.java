@@ -91,7 +91,7 @@ public class ImageDemo {
     @Test
     public void QueryImageTx() {
 //        String dna = "54Q6XUSQNOZ2CSAE5NOKLS09VEKKYPTMLZV71IWOJDPKCTFPZR";
-        String dna = "1OD37XO69A298CYTTF3YPC9EW6SF2V1VU4AAEUZ0WT4LJ2N965";
+        String dna = "689YBKTOSNZYDML45JG1ZLODEUN0YPWQY0MLIECHG1LKK167PK";
         try {
             MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, dna);
             assert resp != null : "response  is empty";
@@ -112,22 +112,46 @@ public class ImageDemo {
             assert resp != null : "response  is empty";
             assert Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode()) : resp.getMsg();
 
-            //link source data
-            Metadata metadata = resp.getData();
-            metadata.setSignature(null);
-            metadata.setParentDna(metadata.getDna());
-            metadata.setDna(null);
-            metadata.setTitle("[Transfer Ownership] "+metadata.getTitle());
+            String recipientPubKey = ECKeyProcessor.GeneratorSecp256k1Key().getPublicKey();
 
-            //transfer ownership
-            TreeMap<String, String> extra = new TreeMap<>();
-            extra.put("owner", ECKeyProcessor.GeneratorSecp256k1Key().getPublicKey());
-            metadata.setExtra(extra);
+            Metadata oldMetadata = resp.getData();
+            Metadata newMetadata = new Metadata();
+
+            newMetadata.setCategory(oldMetadata.getCategory());
+            newMetadata.setParentDna(oldMetadata.getDna());
+            newMetadata.setTitle("[Transfer Ownership] "+oldMetadata.getTitle());
+
+            BlockHashQueryResp blockHashResp = NodeProcessor.QueryLatestBlockHash(URL);
+            if (blockHashResp != null && Constants.NODE_SUCCESS.equalsIgnoreCase(blockHashResp.getCode())) {
+                newMetadata.setBlockHash(blockHashResp.getData().getLatestBlockHash());
+                newMetadata.setBlockHeight(blockHashResp.getData().getLatestBlockHeight().toString());
+            } else {
+                //use default value
+                newMetadata.setBlockHash("FD6C96C7EE44BE1774843CF6A806A757C3AD7FA1");
+                newMetadata.setBlockHeight("199130");
+            }
+
+            newMetadata.setSource(oldMetadata.getSource());
+            newMetadata.setContent(oldMetadata.getContent());
+            newMetadata.setContentHash(oldMetadata.getContentHash());
+            newMetadata.setLicense(oldMetadata.getLicense());
+            newMetadata.setLanguage(oldMetadata.getLanguage());
+            newMetadata.setType(oldMetadata.getType());
+            newMetadata.setPubKey(oldMetadata.getPubKey());
+            newMetadata.setData(oldMetadata.getData());
+            newMetadata.setAbstractContent(oldMetadata.getAbstractContent());
+
+            newMetadata.setAbstractContent(oldMetadata.getAbstractContent());
+            TreeMap<String, String> extra = oldMetadata.getExtra();
+            if (extra == null ){extra = new TreeMap<>();}
+            extra.put("owner",recipientPubKey);
+            newMetadata.setExtra(extra);
+
 
             //sign
-            metadata = DTCPProcessor.FullMetadata(private_key, metadata);
+            newMetadata = DTCPProcessor.FullMetadata(private_key, newMetadata);
 
-            MetadataSaveResp saveResp = NodeProcessor.SaveMetadata(URL, metadata);
+            MetadataSaveResp saveResp = NodeProcessor.SaveMetadata(URL, newMetadata);
             assert (saveResp != null) : "response is empty";
             assert (Constants.NODE_SUCCESS.equalsIgnoreCase(saveResp.getCode())) : saveResp.getMsg();
             System.out.println("success。" + saveResp.getData().getDna());
