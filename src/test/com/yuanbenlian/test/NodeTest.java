@@ -29,11 +29,8 @@ import java.util.TreeMap;
 
 public class NodeTest {
 
-    private static final String OK = Constants.NODE_SUCCESS;
-
     public String URL = "https://testnet.yuanbenlian.com/v1";
     public String private_key = "3c4dbee4485557edce3c8878be34373c1a41d955f38d977cfba373642983ce4c";
-    public String public_key = "03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77";
     public String content = "The Yuanben Chain is a distributed underlying data network\n" +
             "The Chain is efficient, secure, easy to use, scalable, global, enterprise-level trusted alliance chain\n" +
             "Yuanben Chain supports sustainable on-chain data interaction and secures data which transfers through an intelligent contract and digital encryption algorithm\n" +
@@ -47,13 +44,9 @@ public class NodeTest {
         String licenseType = "cc";
         try {
             LicenseQueryResp licenseQueryResp = NodeProcessor.QueryLicense(URL, licenseType, "v4.0");
-            if (licenseQueryResp == null) {
-                System.out.println("convert fail");
-            } else if (Constants.NODE_SUCCESS.equalsIgnoreCase(licenseQueryResp.getCode())) {
-                System.out.println("failure:" + licenseQueryResp.getMsg());
-            } else {
-                System.out.println("success。" + licenseQueryResp.toJson());
-            }
+            assert licenseQueryResp != null : "response is empty";
+            assert Constants.NODE_SUCCESS.equalsIgnoreCase(licenseQueryResp.getCode()) : licenseQueryResp.getMsg();
+            System.out.println("success。" + licenseQueryResp.toJson());
         } catch (InvalidException e) {
             e.printStackTrace();
         }
@@ -64,13 +57,9 @@ public class NodeTest {
         String dna = "3QKUIFVATBU8DBXSOUP3UN32EUWAYG4DFTRLKFFHYQYX8MK64V";
         try {
             MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, dna);
-            if (resp == null) {
-                System.out.println("convert failure");
-            } else if (Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode())) {
-                System.out.println("success。" + resp.toJson());
-            } else {
-                System.out.println("failure:" + resp.getMsg());
-            }
+            assert resp != null : "response is empty";
+            assert Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode()) : resp.getMsg();
+            System.out.println("success。" + resp.toJson());
         } catch (InvalidException e) {
             e.printStackTrace();
         }
@@ -114,13 +103,9 @@ public class NodeTest {
         System.out.println(metadata.toJson());
         try {
             MetadataSaveResp resp = NodeProcessor.SaveMetadata(URL, metadata);
-            if (resp == null) {
-                System.out.println("convert failure");
-            } else if (OK.equalsIgnoreCase(resp.getCode())) {
-                System.out.println("success。" + resp.getData().getDna());
-            } else {
-                System.out.println("failure:" + resp.getMsg());
-            }
+            assert resp != null : "response is empty";
+            assert Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode()) : resp.getMsg();
+            System.out.println("success。" + resp.toJson());
         } catch (InvalidException e) {
             e.printStackTrace();
         }
@@ -130,13 +115,11 @@ public class NodeTest {
     public void QueryLatestBlockHashTest() {
         try {
             BlockHashQueryResp resp = NodeProcessor.QueryLatestBlockHash(URL);
-            if (resp == null || !OK.equalsIgnoreCase(resp.getCode())) {
-                System.out.println("query failure :" + resp.getMsg());
-            } else {
-                System.out.println("latest block hash:" + resp.getData().getLatestBlockHash());
-                System.out.println("latest block height:" + resp.getData().getLatestBlockHeight());
-                System.out.println("latest block time:" + resp.getData().getLatestBlockTime());
-            }
+            assert resp != null : "response is empty";
+            assert Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode()) : resp.getMsg();
+            System.out.println("latest block hash:" + resp.getData().getLatestBlockHash());
+            System.out.println("latest block height:" + resp.getData().getLatestBlockHeight());
+            System.out.println("latest block time:" + resp.getData().getLatestBlockTime());
         } catch (InvalidException e) {
             e.printStackTrace();
         }
@@ -146,14 +129,12 @@ public class NodeTest {
     public void CheckBlockHashTest() {
         try {
             BlockHashCheckReq req = new BlockHashCheckReq();
-            req.setHash("4A7FCE024C64061D28BEB91A3FC935465BE54B3B");
-            req.setHeight(22102L);
+            req.setHash("DBAB03493B046B1224ADA1FF3645324CEE3D2D11");
+            req.setHeight(4512L);
             BlockHashCheckResp resp = NodeProcessor.CheckBlockHash(URL, req);
-            if (resp == null || !OK.equalsIgnoreCase(resp.getCode())) {
-                System.out.println("query failure :" + resp.getMsg());
-            } else {
-                System.out.println("check result:" + resp.getData());
-            }
+            assert resp != null : "response is empty";
+            assert Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode()) : resp.getMsg();
+            System.out.println("check result:" + resp.getData());
         } catch (InvalidException e) {
             e.printStackTrace();
         }
@@ -167,7 +148,10 @@ public class NodeTest {
         }
         try {
             RegisterAccountReq req = DTCPProcessor.GenRegisterAccountReq(private_key, subKeys);
-            NodeProcessor.RegisterAccount("http://localhost:8081/v1", req);
+            RegisterAccountResp resp = NodeProcessor.RegisterAccount(URL, req);
+            assert resp != null : "response is empty";
+            assert Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode()) :resp.getMsg() ;
+            System.out.println("success~");
         } catch (InvalidException e) {
             e.printStackTrace();
         }

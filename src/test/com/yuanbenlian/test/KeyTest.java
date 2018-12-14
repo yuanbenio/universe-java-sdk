@@ -41,56 +41,55 @@ public class KeyTest {
     @Test
     public void GeneratorSecp256k1KeyTest() {
         SecretKey secretKey = ECKeyProcessor.GeneratorSecp256k1Key();
+        assert secretKey != null;
         System.out.println("private_key:" + secretKey.getPrivateKey() +
                 " \npublic_key: " + secretKey.getPublicKey());
     }
 
-    //examples result:
-    //03d75b59a801f6db4bbb501ff8b88743902aa83a3e54237edcd532716fd27dea77
     @Test
     public void GetPubKeyFromPriTest() {
-
         try {
-            private_key = "E28D61220ADBBEFC0BE9421570C3B77BC24CA33C18CB62FCCFBC982C40B8F888A59A0F38301CF02E82666541D78D6981C5A6481D9AD25EC933FC9E2FB97C29FC";
-            String pubKeyFromPri = ECKeyProcessor.GetPubKeyFromPri(private_key);
-            System.out.println(pubKeyFromPri);
+            assert public_key.equals(ECKeyProcessor.GetPubKeyFromPri(private_key)) : "incorrect private key";
+        } catch (InvalidException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void Address() {
+        try {
+            assert "0x22207149C3B431B2DF3829B49404B1BC31211AAE".equals(ECKeyProcessor.Address(public_key)) : "Incorrect public key";
         } catch (InvalidException e) {
             e.printStackTrace();
         }
     }
 
     //examples result:
-    //b7a59601d0a45ff33c93a61709fbc7586afbb952efb7eed19b348e44caa1fdbd6fbb963d4cb2fd58a128e5831a6f05e05e5064b12cfb3e44842b98a6abb2841c00
     @Test
     public void SignTest() {
         try {
-            String sign = ECKeyProcessor.Sign(private_key, "hello world".getBytes());
-            System.out.println(sign);
+            assert "89ab153d4f80565abd8f13e702106972fd2ac3a1975c9e7f5963c39ebd94a8eb452e6404e74ad391a74a4c9076f8e5a3f48bf5e16e9f355be835b5b63efa424200"
+                    .equals(ECKeyProcessor.Sign(private_key, "hello world".getBytes()));
         } catch (InvalidException e) {
             e.printStackTrace();
         }
 
     }
 
-    //examples result:
-    //true
     @Test
     public void VerifySignatureTest() {
         try {
             sign_msg = "89ab153d4f80565abd8f13e702106972fd2ac3a1975c9e7f5963c39ebd94a8eb452e6404e74ad391a74a4c9076f8e5a3f48bf5e16e9f355be835b5b63efa424200";
             content = "hello world";
-            boolean b = ECKeyProcessor.VerifySignature(public_key, sign_msg, ECKeyProcessor.Keccak256(content));
-            System.out.println(b);
+            assert  ECKeyProcessor.VerifySignature(public_key, sign_msg, ECKeyProcessor.Keccak256(content)) : "invalid signature";
         } catch (InvalidException e) {
             e.printStackTrace();
         }
     }
 
-    //examples result:
-    //54ce1d0eb4759bae08f31d00095368b239af91d0dbb51f233092b65788f2a526
     @Test
     public void Keccak256Test() {
-        System.out.println(HexUtil.bytesToHex(ECKeyProcessor.Keccak256(content)));
+        assert "54ce1d0eb4759bae08f31d00095368b239af91d0dbb51f233092b65788f2a526".equals(HexUtil.bytesToHex(ECKeyProcessor.Keccak256(content))) : "Hash error";
     }
 
 }
