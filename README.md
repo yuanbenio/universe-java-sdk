@@ -7,9 +7,24 @@ jdk version ：1.7
 
 [中文文档](https://github.com/yuanbenio/universe-java-sdk/blob/master/README-ZH.md)
 
-***
-## jar
-build JAR : `maven clean package`
+
+## Download
+
+- [maven][1]
+- [the latest JAR][2]  
+
+[1]: https://oss.sonatype.org/content/groups/public/com/yuanbenlian/universe-java-sdk
+[2]: https://github.com/yuanbenio/universe-java-sdk/blob/master/jar
+
+## Maven
+
+```xml
+<dependency>
+  <groupId>com.yuanbenlian</groupId>
+  <artifactId>universe-java-sdk</artifactId>
+  <version>1.4.1-SNAPSHOT</version>
+</dependency>
+```
 
 ## return code
 
@@ -218,4 +233,4 @@ The Java-SDK provides three processors: Service/KeyProcessor, Service/DTCP Proce
 ```
 > location:NodeProcessor.java.
 
-![more examples](https://github.com/yuanbenio/universe-java-sdk/tree/master/src/test/com/yuanbenlian/test) 
+[more examples](https://github.com/yuanbenio/universe-java-sdk/tree/master/src/test/com/yuanbenlian/test) 

@@ -10,6 +10,25 @@ https://github.com/yuanbenio/universe-java-sdk
 ```
 **NOTE** 原本链中所有字节数组都以16进制的字符串存储，公钥为压缩格式。
 
+
+## 下载
+
+- [maven][1]
+- [最新版本下载][2]  
+
+[1]: https://oss.sonatype.org/content/groups/public/com/yuanbenlian/universe-java-sdk
+[2]: https://github.com/yuanbenio/universe-java-sdk/blob/master/jar
+
+## Maven
+
+```xml
+<dependency>
+  <groupId>com.yuanbenlian</groupId>
+  <artifactId>universe-java-sdk</artifactId>
+  <version>1.4.1-SNAPSHOT</version>
+</dependency>
+```
+
 ### 服务方法分布
 >  Java-SDK提供三个处理器来生成metadata的相关参数：service/KeyProcessor、service/DTCPProcessor、service/NodeProcessor。
 
@@ -469,4 +488,4 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
 ```
 > 该方法位于NodeProcessor.java，用于注册公钥，返回体的code为ok，则表示注册成功。
 
-![更多样例](https://github.com/yuanbenio/universe-java-sdk/tree/master/src/test/com/yuanbenlian/test) 
+[更多样例](https://github.com/yuanbenio/universe-java-sdk/tree/master/src/test/com/yuanbenlian/test) 
