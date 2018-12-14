@@ -98,7 +98,7 @@ public class ImageDemo {
 
 
     @Test
-    //If you don't need content, just fill in the contentHash, such as a large picture, don't want content.
+    //If you don't need content, just fill in the contentHash, such as a large picture.
     public void SaveImageRmContent() {
         Metadata metadata = new Metadata();
         String imgPath = "yuanbenlian.png";
