@@ -28,7 +28,7 @@ public class ImageDemo {
     @Test
     public void SaveImage() {
         Metadata metadata = new Metadata();
-        String imgPath = "yuanbenlian.png";
+        String imgPath = "/Users/envin_xie/work/universe/universe-java-sdk/src/test/com/yuanbenlian/test/yuanben.png";
         try {
 
             File f = new File(imgPath);
@@ -39,16 +39,7 @@ public class ImageDemo {
             byte[] bytes = baos.toByteArray();
             String imageBase64 = new sun.misc.BASE64Encoder().encodeBuffer(bytes).trim();
 
-            BlockHashQueryResp resp = NodeProcessor.QueryLatestBlockHash(URL);
-            if (resp == null || !Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode())) {
-                //use default value
-                metadata.setBlockHash("FD6C96C7EE44BE1774843CF6A806A757C3AD7FA1");
-                metadata.setBlockHeight("199130");
-            } else {
-                metadata.setBlockHash(resp.getData().getLatestBlockHash());
-                metadata.setBlockHeight(resp.getData().getLatestBlockHeight().toString());
-            }
-
+            fillBlockHash(metadata);
 
             metadata.setContent(imageBase64);
             metadata.setType(Constants.TYPE_IMAGE);
@@ -71,9 +62,89 @@ public class ImageDemo {
             data.setSize(""+imageBase64.length());
             metadata.setData(data.toMap());
 
-            //Determination of ownership
+            //user identity
+            String userID = "001";
             TreeMap<String, String> extra = new TreeMap<>();
+            //Determination of ownership
             extra.put("owner", ECKeyProcessor.GetPubKeyFromPri(private_key));
+            //Associate secondary user identity
+            extra.put("sub_account",userID);
+
+            metadata.setExtra(extra);
+
+            metadata = DTCPProcessor.FullMetadata(private_key, metadata);
+
+            MetadataSaveResp saveResp = NodeProcessor.SaveMetadata(URL, metadata);
+            assert (saveResp != null) : "response is empty";
+            assert (Constants.NODE_SUCCESS.equalsIgnoreCase(saveResp.getCode())) : saveResp.getMsg();
+            System.out.println("success。" + saveResp.getData().getDna());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void fillBlockHash (Metadata metadata) throws InvalidException {
+        BlockHashQueryResp resp = NodeProcessor.QueryLatestBlockHash(URL);
+        if (resp == null || !Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode())) {
+            //use default value
+            metadata.setBlockHash("FD6C96C7EE44BE1774843CF6A806A757C3AD7FA1");
+            metadata.setBlockHeight("199130");
+        } else {
+            metadata.setBlockHash(resp.getData().getLatestBlockHash());
+            metadata.setBlockHeight(resp.getData().getLatestBlockHeight().toString());
+        }
+    }
+
+
+    @Test
+    //If you don't need content, just fill in the contentHash, such as a large picture, don't want content.
+    public void SaveImageRmContent() {
+        Metadata metadata = new Metadata();
+        String imgPath = "yuanbenlian.png";
+        try {
+
+            File f = new File(imgPath);
+            BufferedImage bi = ImageIO.read(f);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(bi, imgPath.substring(imgPath.lastIndexOf(".") + 1), baos);
+            byte[] bytes = baos.toByteArray();
+            String imageBase64 = new sun.misc.BASE64Encoder().encodeBuffer(bytes).trim();
+
+            fillBlockHash(metadata);
+
+            //fill contentHash
+            metadata.setContentHash(DTCPProcessor.GenContentHash(imageBase64));
+            metadata.setType(Constants.TYPE_IMAGE);
+            metadata.setCategory("test,YuanBen chain");
+
+            metadata.setTitle("YuanBen chain test");
+            Metadata.License license = new Metadata.License();
+            license.setType("one-license");
+            TreeMap<String, String> params = new TreeMap<>();
+            params.put("sale", "no");
+            license.setParameters(params);
+            metadata.setLicense(license);
+
+            Image data = new Image();
+            data.setExt(imgPath.substring(imgPath.lastIndexOf(".") + 1));
+            data.setThumb("https://github.com/yuanbenio/universe-java-sdk/yuanbenlian.png");
+            data.setOriginal("https://github.com/yuanbenio/universe-java-sdk/yuanbenlian.png");
+            data.setHeight(""+bi.getHeight());
+            data.setWidth(""+bi.getWidth());
+            data.setSize(""+imageBase64.length());
+            metadata.setData(data.toMap());
+
+            //user identity
+            String userID = "100001";
+
+            TreeMap<String, String> extra = new TreeMap<>();
+            //Determination of ownership
+            extra.put("owner", ECKeyProcessor.GetPubKeyFromPri(private_key));
+            //Associate secondary user identity
+            extra.put("sub_account",userID);
+
             metadata.setExtra(extra);
 
             metadata = DTCPProcessor.FullMetadata(private_key, metadata);
