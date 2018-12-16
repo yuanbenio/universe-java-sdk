@@ -6,7 +6,7 @@
     <name>universe-java-sdk</name>
     <artifactId>universe-java-sdk</artifactId>
     <groupId>com.yuanbenlian</groupId>
-    <version>${version}</version>
+    <version>1.4.2</version>
     <description>Yuanben Chain SDK</description>
     <url>https://github.com/yuanbenio/universe-java-sdk</url>
 
@@ -75,7 +75,7 @@
         <connection>scm:git:git://github.com/yuanbenio/universe-java-sdk.git</connection>
         <developerConnection>scm:git:git@github.com:yuanbenio/universe-java-sdk.git</developerConnection>
         <url>https://github.com/github.com/yuanbenio/universe-java-sdk</url>
-        <tag>1.4.1-SNAPSHOT</tag>
+        <tag>1.4.2</tag>
     </scm>
     <developers>
         <developer>
