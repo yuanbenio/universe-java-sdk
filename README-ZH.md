@@ -19,7 +19,7 @@ https://github.com/yuanbenio/universe-java-sdk
 - [最新版本下载][2]  
 
 [1]: https://oss.sonatype.org/content/groups/public/com/yuanbenlian/universe-java-sdk
-[2]: https://github.com/yuanbenio/universe-java-sdk/blob/master/jar
+[2]: https://github.com/yuanbenio/universe-java-sdk/releases
 
 ## Maven
 
@@ -27,7 +27,7 @@ https://github.com/yuanbenio/universe-java-sdk
 <dependency>
   <groupId>com.yuanbenlian</groupId>
   <artifactId>universe-java-sdk</artifactId>
-  <version>1.4.1-SNAPSHOT</version>
+  <version>1.4.2-SNAPSHOT</version>
 </dependency>
 ```
 

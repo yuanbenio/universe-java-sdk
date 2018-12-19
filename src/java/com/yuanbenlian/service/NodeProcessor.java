@@ -72,32 +72,10 @@ public class NodeProcessor {
         if (StringUtils.isBlank(md.getSignature())) {
             throw new InvalidException("signature is null");
         }
-        if (md.getLicense() == null || StringUtils.isBlank(md.getLicense().getType()) || MapUtils.isEmpty(md.getLicense().getParameters())) {
+        if (md.getLicense() == null || (!Metadata.License.NoneLicense.getType().equals(md.getLicense().getType()) && MapUtils.isEmpty(md.getLicense().getParameters()))) {
             throw new InvalidException("license is null");
         }
         String s = HttpUtil.sendPost(url, md.toJson());
-        return GsonUtil.getInstance().fromJson(s, MetadataSaveResp.class);
-    }
-
-    /**
-     * 向node节点注册metadata
-     * submit metadata to YuanBen chain
-     *
-     * @param url  node address（http://localhost:9000/v1)
-     * @param data the bytes of metadata
-     * @return result
-     * @throws InvalidException
-     */
-    public static MetadataSaveResp SaveMetadata(String url, byte[] data) throws InvalidException {
-        if (StringUtils.isBlank(url)) {
-            throw new InvalidException("url is empty");
-        }
-
-        url += "/metadata";
-        if (data == null || data.length < 1) {
-            throw new InvalidException("metadata is null");
-        }
-        String s = HttpUtil.sendPost(url, data);
         return GsonUtil.getInstance().fromJson(s, MetadataSaveResp.class);
     }
 
@@ -118,7 +96,7 @@ public class NodeProcessor {
         req.setType(licenseType);
         req.setVersion(licenseVersion);
 
-        url += "/license";
+        url += "/queryLicense";
         String s = HttpUtil.sendPost(url, req.toJson());
         return GsonUtil.getInstance().fromJson(s, LicenseQueryResp.class);
 

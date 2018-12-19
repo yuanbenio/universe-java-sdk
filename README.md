@@ -17,7 +17,7 @@ jdk version ：1.7
 - [the latest JAR][2]  
 
 [1]: https://oss.sonatype.org/content/groups/public/com/yuanbenlian/universe-java-sdk
-[2]: https://github.com/yuanbenio/universe-java-sdk/blob/master/jar
+[2]: https://github.com/yuanbenio/universe-java-sdk/releases
 
 ## Maven
 

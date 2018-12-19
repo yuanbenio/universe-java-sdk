@@ -5,7 +5,6 @@ import com.yuanbenlian.common.Constants;
 import com.yuanbenlian.common.InvalidException;
 import com.yuanbenlian.model.Metadata;
 import com.yuanbenlian.model.entity.Audio;
-import com.yuanbenlian.model.http.BlockHashQueryResp;
 import com.yuanbenlian.model.http.MetadataQueryResp;
 import com.yuanbenlian.model.http.MetadataSaveResp;
 import com.yuanbenlian.service.DTCPProcessor;
@@ -29,16 +28,7 @@ public class AudioDemo {
         try {
             byte[] readFully = IOUtils.readFully(new File(audioPath));
 
-            BlockHashQueryResp resp = NodeProcessor.QueryLatestBlockHash(URL);
-            if (resp == null || !Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode())) {
-                //use default value
-                metadata.setBlockHash("FD6C96C7EE44BE1774843CF6A806A757C3AD7FA1");
-                metadata.setBlockHeight("199130");
-            } else {
-                metadata.setBlockHash(resp.getData().getLatestBlockHash());
-                metadata.setBlockHeight(resp.getData().getLatestBlockHeight().toString());
-            }
-
+            TestUtil.fillBlockHash(metadata, URL);
 
             metadata.setContentHash(DTCPProcessor.GenContentHash(new String(readFully)));
             metadata.setType(Constants.TYPE_AUDIO);
@@ -57,7 +47,7 @@ public class AudioDemo {
             Audio data = new Audio();
             data.setExt(audioPath.substring(audioPath.lastIndexOf(".") + 1));
             data.setSize("" + new File(audioPath).length());
-            data.setDuration(""+10*60);//10 min
+            data.setDuration("" + 10 * 60);//10 min
             data.setSimpleRate("44000");  // 44 khz
             data.setBitRate("180000");  //180 kb
             metadata.setData(data.toMap());
@@ -86,15 +76,9 @@ public class AudioDemo {
         String dna = "GAD27EU1E8VFK458NQ54RR76QJHK5VZ5OGDKJGYMTWUOWM85E";
         try {
             MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, dna);
-            if (resp != null && Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode())) {
-                System.out.println("success:\n" + resp.toJson());
-            } else {
-                if (resp == null) {
-                    System.out.println("failure:result is empty");
-                } else {
-                    System.out.println("failure:" + resp.getMsg());
-                }
-            }
+            assert resp != null : "response  is empty";
+            assert Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode()) : resp.getMsg();
+            System.out.println("QueryAudioTx success:\n" + resp.toJson());
         } catch (InvalidException e) {
             e.printStackTrace();
         }

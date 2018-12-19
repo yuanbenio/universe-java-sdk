@@ -31,6 +31,7 @@ import java.util.TreeMap;
  * <p>DTCP protocol abstract model</p>
  */
 public class Metadata {
+
     @SerializedName("pubkey")
     private String pubKey;
     @SerializedName("block_hash")
@@ -65,6 +66,12 @@ public class Metadata {
     private Metadata.License license;
 
     public static class License {
+
+        public static License NoneLicense = new License();
+        static {
+            NoneLicense.setType("none");
+        }
+
         private String type;
         private TreeMap<String, String> parameters;
 
