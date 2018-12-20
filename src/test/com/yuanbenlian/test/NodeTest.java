@@ -43,7 +43,7 @@ public class NodeTest {
     public void QueryLicenseTest() {
         String licenseType = "cc";
         try {
-            LicenseQueryResp licenseQueryResp = NodeProcessor.QueryLicense(URL, licenseType, "v4.0");
+            LicenseQueryResp licenseQueryResp = NodeProcessor.QueryLicense(URL, licenseType, "4.0");
             assert licenseQueryResp != null : "response is empty";
             assert Constants.NODE_SUCCESS.equalsIgnoreCase(licenseQueryResp.getCode()) : licenseQueryResp.getMsg();
             System.out.println("success。" + licenseQueryResp.toJson());

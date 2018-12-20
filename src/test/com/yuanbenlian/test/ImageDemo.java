@@ -39,7 +39,7 @@ public class ImageDemo {
             byte[] bytes = baos.toByteArray();
             String imageBase64 = new sun.misc.BASE64Encoder().encodeBuffer(bytes).trim();
 
-            fillBlockHash(metadata);
+            TestUtil.fillBlockHash(metadata, URL);
 
             metadata.setContent(imageBase64);
             metadata.setType(Constants.TYPE_IMAGE);
@@ -57,9 +57,9 @@ public class ImageDemo {
             data.setExt(imgPath.substring(imgPath.lastIndexOf(".") + 1));
             data.setThumb("https://github.com/yuanbenio/universe-java-sdk/yuanbenlian.png");
             data.setOriginal("https://github.com/yuanbenio/universe-java-sdk/yuanbenlian.png");
-            data.setHeight(""+bi.getHeight());
-            data.setWidth(""+bi.getWidth());
-            data.setSize(""+imageBase64.length());
+            data.setHeight("" + bi.getHeight());
+            data.setWidth("" + bi.getWidth());
+            data.setSize("" + imageBase64.length());
             metadata.setData(data.toMap());
 
             //user identity
@@ -68,7 +68,7 @@ public class ImageDemo {
             //Determination of ownership
             extra.put("owner", ECKeyProcessor.GetPubKeyFromPri(private_key));
             //Associate secondary user identity
-            extra.put("sub_account",userID);
+            extra.put("sub_account", userID);
 
             metadata.setExtra(extra);
 
@@ -84,21 +84,9 @@ public class ImageDemo {
 
     }
 
-    private void fillBlockHash (Metadata metadata) throws InvalidException {
-        BlockHashQueryResp resp = NodeProcessor.QueryLatestBlockHash(URL);
-        if (resp == null || !Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode())) {
-            //use default value
-            metadata.setBlockHash("FD6C96C7EE44BE1774843CF6A806A757C3AD7FA1");
-            metadata.setBlockHeight("199130");
-        } else {
-            metadata.setBlockHash(resp.getData().getLatestBlockHash());
-            metadata.setBlockHeight(resp.getData().getLatestBlockHeight().toString());
-        }
-    }
-
 
     @Test
-    //If you don't need content, just fill in the contentHash, such as a large picture, don't want content.
+    //If you don't need content, just fill in the contentHash, such as a large picture.
     public void SaveImageRmContent() {
         Metadata metadata = new Metadata();
         String imgPath = "yuanbenlian.png";
@@ -112,7 +100,7 @@ public class ImageDemo {
             byte[] bytes = baos.toByteArray();
             String imageBase64 = new sun.misc.BASE64Encoder().encodeBuffer(bytes).trim();
 
-            fillBlockHash(metadata);
+            TestUtil.fillBlockHash(metadata, URL);
 
             //fill contentHash
             metadata.setContentHash(DTCPProcessor.GenContentHash(imageBase64));
@@ -131,9 +119,9 @@ public class ImageDemo {
             data.setExt(imgPath.substring(imgPath.lastIndexOf(".") + 1));
             data.setThumb("https://github.com/yuanbenio/universe-java-sdk/yuanbenlian.png");
             data.setOriginal("https://github.com/yuanbenio/universe-java-sdk/yuanbenlian.png");
-            data.setHeight(""+bi.getHeight());
-            data.setWidth(""+bi.getWidth());
-            data.setSize(""+imageBase64.length());
+            data.setHeight("" + bi.getHeight());
+            data.setWidth("" + bi.getWidth());
+            data.setSize("" + imageBase64.length());
             metadata.setData(data.toMap());
 
             //user identity
@@ -143,7 +131,7 @@ public class ImageDemo {
             //Determination of ownership
             extra.put("owner", ECKeyProcessor.GetPubKeyFromPri(private_key));
             //Associate secondary user identity
-            extra.put("sub_account",userID);
+            extra.put("sub_account", userID);
 
             metadata.setExtra(extra);
 
@@ -167,7 +155,7 @@ public class ImageDemo {
             MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, dna);
             assert resp != null : "response  is empty";
             assert Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode()) : resp.getMsg();
-            System.out.println("success:\n" + resp.toJson());
+            System.out.println("QueryImageTx success:\n" + resp.toJson());
         } catch (InvalidException e) {
             e.printStackTrace();
         }
@@ -175,7 +163,7 @@ public class ImageDemo {
 
 
     @Test
-    public void TransferOwnership () {
+    public void TransferOwnership() {
         try {
             String ownerDNA = "54Q6XUSQNOZ2CSAE5NOKLS09VEKKYPTMLZV71IWOJDPKCTFPZR";
             MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, ownerDNA);
@@ -190,7 +178,7 @@ public class ImageDemo {
 
             newMetadata.setCategory(oldMetadata.getCategory());
             newMetadata.setParentDna(oldMetadata.getDna());
-            newMetadata.setTitle("[Transfer Ownership] "+oldMetadata.getTitle());
+            newMetadata.setTitle("[Transfer Ownership] " + oldMetadata.getTitle());
 
             BlockHashQueryResp blockHashResp = NodeProcessor.QueryLatestBlockHash(URL);
             if (blockHashResp != null && Constants.NODE_SUCCESS.equalsIgnoreCase(blockHashResp.getCode())) {
@@ -214,9 +202,11 @@ public class ImageDemo {
 
             newMetadata.setAbstractContent(oldMetadata.getAbstractContent());
             TreeMap<String, String> extra = oldMetadata.getExtra();
-            if (extra == null ){extra = new TreeMap<>();}
+            if (extra == null) {
+                extra = new TreeMap<>();
+            }
             // transfer ownership to the recipient
-            extra.put("owner",recipientPubKey);
+            extra.put("owner", recipientPubKey);
             newMetadata.setExtra(extra);
 
 
