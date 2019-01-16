@@ -28,7 +28,7 @@ public class Transaction {
     private String blockHash;
     @SerializedName(value = "block_height")
     private Long blockHeight;
-    @SerializedName(value = "data_height")
+    @SerializedName(value = "sender")
     private String sender;
     private Long time;
 
