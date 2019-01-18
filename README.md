@@ -25,7 +25,7 @@ jdk version ：1.7
 <dependency>
   <groupId>com.yuanbenlian</groupId>
   <artifactId>universe-java-sdk</artifactId>
-  <version>1.4.1-SNAPSHOT</version>
+  <version>1.4.2-SNAPSHOT</version>
 </dependency>
 ```
 
