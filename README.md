@@ -81,26 +81,26 @@ The Java-SDK provides three processors: Service/KeyProcessor, Service/DTCP Proce
 ### Metadata Introduction
 
 
-| name           | type    | comment              |source|
-| -------------- | ------- | ---------------------|------|
-| type           | string  | eg:image,article,audio,video,custom,private |user-defined|
-| language       | string  | 'zh-CN',                                    |default:zh-CN,user-defined|
-| title          | string  | title                                       |user-defined|
-| signature      | string  | sign by secp256k1                           |generate by system|
-| abstract       | string  | Content summary                             |default:content[:200],user-defined|
-| category       | string  | eg:"news"                                   |user-defined，if there is content, the system will add five more|
-| dna            | string  | metadata dna                                |generate by system|
-| parent_dna     | string  | -                                           |user-defined,link an other metadata|
-| block_hash     | string  | block_hash on YuanBen chain                 |user-defined|
-| block_height   | string  | block_hash corresponding block_height       |user-defined|
-| created        | integer | timestamp, eg:1506302092                    |generate by system|
-| content_hash   | string  | Keccak256(content)                          |default:Keccak256(content),user-defined|
-| extra          | TreeMap<String, Object>  | user-defined content       |user-defined|
-| license        | Metadata.License  |                                   |user-defined|
-| license.type   | string  | the type of license                         |user-defined|
-| license.parameters | TreeMap<String, Object>  | the parameters of license   |user-defined|
-| source         | string  | source link.                                |user-defined|
-| data           | TreeMap<String, Object>  | extension data of the type |user-defined|
+| name           | type    |must| comment              |source|
+| -------------- | ------- | ----|---------------------|------|
+| type           | string  | Y |eg:image,article,audio,video,custom,private |user-defined|
+| language       | string  | Y |'zh-CN',                                    |default:zh-CN,user-defined|
+| title          | string  | N |title                                       |user-defined|
+| signature      | string  | Y |sign by secp256k1                           |generate by system|
+| abstract       | string  | N |Content summary                             |default:content[:200],user-defined|
+| category       | string  | N |eg:"news"                                   |user-defined，if there is content, the system will add five more|
+| dna            | string  | Y |metadata dna                                |generate by system|
+| parent_dna     | string  | N |-                                           |user-defined,link an other metadata|
+| block_hash     | string  | Y |block_hash on YuanBen chain                 |user-defined|
+| block_height   | string  | Y |block_hash corresponding block_height       |user-defined|
+| created        | integer | Y |timestamp, eg:1506302092                    |generate by system|
+| content_hash   | string  | Y |Keccak256(content)                          |default:Keccak256(content),user-defined|
+| extra          | TreeMap<String, Object>  | N | user-defined content       |user-defined|
+| license        | Metadata.License  | Y |                                 |user-defined|
+| license.type   | string  | Y |the type of license                         |user-defined|
+| license.parameters | TreeMap<String, Object>  | N | the parameters of license   |user-defined|
+| source         | string  | N |source link.                                |user-defined|
+| data           | TreeMap<String, Object>  | N |extension data of the type |user-defined|
 
 ### API Interface
 
