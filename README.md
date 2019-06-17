@@ -4,7 +4,7 @@ Yuanben Chain SDK for Java developers
 ![Yuanben chain](https://github.com/yuanbenio/universe-java-sdk/blob/master/img/yuanbenlian.png)
 
 
-[Download Jar](https://github.com/yuanbenio/universe-java-sdk/blob/master/jar)
+[Download Jar](https://github.com/yuanbenio/universe-java-sdk/releases)
 
 jdk version ：1.7
 
@@ -25,7 +25,7 @@ jdk version ：1.7
 <dependency>
   <groupId>com.yuanbenlian</groupId>
   <artifactId>universe-java-sdk</artifactId>
-  <version>1.4.2-SNAPSHOT</version>
+  <version>1.4.3-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -84,17 +84,17 @@ The Java-SDK provides three processors: Service/KeyProcessor, Service/DTCP Proce
 | name           | type    |must| comment              |source|
 | -------------- | ------- | ----|---------------------|------|
 | type           | string  | Y |eg:image,article,audio,video,custom,private |user-defined|
-| language       | string  | Y |'zh-CN',                                    |default:zh-CN,user-defined|
+| language       | string  | Y |'zh-CN',                                    |user-defined,default:zh-CN|
 | title          | string  | N |title                                       |user-defined|
 | signature      | string  | Y |sign by secp256k1                           |generate by system|
 | abstract       | string  | N |Content summary                             |default:content[:200],user-defined|
 | category       | string  | N |eg:"news"                                   |user-defined，if there is content, the system will add five more|
 | dna            | string  | Y |metadata dna                                |generate by system|
-| parent_dna     | string  | N |-                                           |user-defined,link an other metadata|
+| parent_dna     | string  | N |link an other metadata|user-defined|
 | block_hash     | string  | Y |block_hash on YuanBen chain                 |user-defined|
 | block_height   | string  | Y |block_hash corresponding block_height       |user-defined|
 | created        | integer | Y |timestamp, eg:1506302092                    |generate by system|
-| content_hash   | string  | Y |Keccak256(content)                          |default:Keccak256(content),user-defined|
+| content_hash   | string  | Y |Keccak256(content)                          |user-defined. default:Keccak256(content)|
 | extra          | TreeMap<String, Object>  | N | user-defined content       |user-defined|
 | license        | Metadata.License  | Y |                                 |user-defined|
 | license.type   | string  | Y |the type of license                         |user-defined|
@@ -124,8 +124,8 @@ The Java-SDK provides three processors: Service/KeyProcessor, Service/DTCP Proce
 ```
 > location:KeyProcessor.java，return a key pair.
 
-***
-#### FullMetadata
+
+
 ```Java
    /**
         * completing metadata
@@ -134,7 +134,7 @@ The Java-SDK provides three processors: Service/KeyProcessor, Service/DTCP Proce
         * @param metadata   include(license\title\type\block_hash|block_height|category.
         *                   if content is empty,you must pass content;
         *                   if type isn't article,you must pass contentHash;
-        *                   if category is empty,you must pass content)
+        *                   if type isn't private,you must pass category)
         * @return full metadata
         * @throws InvalidException invalid parameters
         */

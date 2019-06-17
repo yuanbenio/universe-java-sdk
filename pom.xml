@@ -57,7 +57,7 @@
     </dependencies>
 
     <properties>
-        <version>1.4.2-SNAPSHOT</version>
+        <version>1.4.3-SNAPSHOT</version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -87,7 +87,7 @@
     <developers>
         <developer>
             <name>xieyiwen</name>
-            <email>wsxieyiwen@gmail.com</email>
+            <email>wsxieyiwen@outlook.com</email>
             <organization>Seven Seals Technology</organization>
             <organizationUrl>https://yuanbenlian.com/</organizationUrl>
         </developer>

@@ -76,12 +76,7 @@ public class NodeTest {
 
         metadata.setTitle("YuanBen chain test");
         metadata.setParentDna("2QXZNC992KGDMMLU80YR5BMGMXTSNQI2ZPTN962J8ZBO4J1XNL");
-        Metadata.License license = new Metadata.License();
-        license.setType("one-license");
-        TreeMap<String, String> params = new TreeMap<>();
-        params.put("sale", "no");
-        license.setParameters(params);
-        metadata.setLicense(license);
+        metadata.setLicense(Metadata.License.NoneLicense);
 
         TreeMap<String, String> data = new TreeMap<>();
         data.put("ext", "jep");
