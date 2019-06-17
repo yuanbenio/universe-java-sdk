@@ -4,7 +4,7 @@
 
 > 原本链测试地址：https://testnet.yuanbenlian.com
 
-> [jar包下载地址](https://github.com/yuanbenio/universe-java-sdk/blob/master/jar)
+> [jar包下载地址](https://github.com/yuanbenio/universe-java-sdk/releases)
 
 ### git路径：
 ```
@@ -27,7 +27,7 @@ https://github.com/yuanbenio/universe-java-sdk
 <dependency>
   <groupId>com.yuanbenlian</groupId>
   <artifactId>universe-java-sdk</artifactId>
-  <version>1.4.2-SNAPSHOT</version>
+  <version>1.4.3-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -54,7 +54,7 @@ https://github.com/yuanbenio/universe-java-sdk
 | title          | string  | N|内容标题                                       |用户传入|
 | signature      | string  | Y|内容签名, 算法(secp256k1)                      |系统生成|
 | abstract       | string  | N|描述,内容摘要                                       |用户传入，为空时，系统自动取内容的前200个字符|
-| category       | string  | N|分类集, 以逗号分隔 "新闻, 商业"                      |用户传入，如果有传入content，则系统会追加五个|
+| category       | string  | N|分类集, 以逗号分隔 "新闻, 商业"                      |用户传入|
 | dna            | string  | Y|metadata dna                             |系统生成|
 | parent_dna            | string | N | 该metadata修改前的dna                             |用户传入，如果时修改前一个metadata的数据，则需要传入前一个metadata的dna|
 | block_hash            | string  |Y| 区块链上的一个block_hash值                             |用户传入，会到链上做校验|
