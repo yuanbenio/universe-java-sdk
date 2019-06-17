@@ -34,7 +34,7 @@ import static com.yuanbenlian.service.ECKeyProcessor.Sign;
 /**
  * <p>DTCP处理器</p>
  * <p>用于计算metadata，以及metadata中的各项值</p>
- *
+ * <p>
  * <p>DTCP processor</p>
  * <p>calculating metadata</p>
  */
@@ -43,7 +43,7 @@ public class DTCPProcessor {
     /**
      * 计算 contentHash
      * Calculating contentHash
-     *
+     * <p>
      * 算法
      * contentHash = Keccak256(content)
      *
@@ -117,11 +117,15 @@ public class DTCPProcessor {
      * completing metadata
      *
      * @param privateKey 16进制的私钥，用于签名
-     * @param metadata   必须包含license\title\type\block_hash|block_height\category,如果contentHash为空，则必须传入content的值；如果type不是article，则必须传入contentHash;如果category为空，则必须传入content
+     * @param metadata   必须包含license\title\type\block_hash|block_height\category,
+     *                   如果contentHash为空，则必须传入content的值；
+     *                   如果type不是article，则必须传入contentHash;
+     *                   如果type不是private，则必须传入category;
+     *
      *                   include(license\title\type\block_hash|block_height|category.
      *                   if content is empty,you must pass content;
      *                   if type isn't article,you must pass contentHash;
-     *                   if category is empty,you must pass content)
+     *                   if type isn't privatge,you must pass category)
      * @return full metadata
      * @throws InvalidException invalid parameters
      */
@@ -190,6 +194,7 @@ public class DTCPProcessor {
         String dna = GeneratorDNA(sign);
         metadata.setSignature(sign);
         metadata.setDna(dna);
+        metadata.setContent(null);
         return metadata;
 
     }
