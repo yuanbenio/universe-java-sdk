@@ -101,6 +101,8 @@ The Java-SDK provides three processors: Service/KeyProcessor, Service/DTCP Proce
 | license.parameters | TreeMap<String, Object>  | N | the parameters of license   |user-defined|
 | source         | string  | N |source link.                                |user-defined|
 | data           | TreeMap<String, Object>  | N |extension data of the type |user-defined|
+| id         | string  | N |business id    |user-defined|
+| pubkey         | string  | N |public key     |generate by private key|
 
 ### API Interface
 
@@ -125,7 +127,7 @@ The Java-SDK provides three processors: Service/KeyProcessor, Service/DTCP Proce
 > location:KeyProcessor.java，return a key pair.
 
 
-
+#### FullMetadata
 ```Java
    /**
         * completing metadata
@@ -143,6 +145,34 @@ The Java-SDK provides three processors: Service/KeyProcessor, Service/DTCP Proce
     }
 
 ```
+
+input metadata:
+
+| name           | type    |must| comment              |source|
+| -------------- | ------- | ----|---------------------|------|
+| type           | string  | Y |eg:image,article,audio,video,custom,private |user-defined|
+| title          | string  | Y |content title       |user-defined,private can be empty|
+| category       | string  | N |eg:"news,article"    |user-defined,private can be empty|
+| block_hash     | string  | Y |block_hash on YuanBen chain                 |user-defined|
+| block_height   | string  | Y |block_hash corresponding block_height       |user-defined|
+| content   | string  | N |content                        |user-defined,content and content_hash can't be empty at same time|
+| content_hash   | string  | N |Keccak256(content)                          |user-defined. default:Keccak256(content),content and content_hash can't be empty at same time|
+| data           | TreeMap<String, Object>  | Y |extension data of the type |user-defined,private\custom\article can be nil|
+| license        | Metadata.License  | Y |                                 |user-defined|
+| license.type   | string  | Y |the type of license                         |user-defined|
+| license.parameters | TreeMap<String, Object>  | Y | the parameters of license   |user-defined,none can be nil|
+| created        | integer | N |timestamp, eg:1506302092                    |generate by system|
+| language       | string  | N |'zh-CN',          |user-defined,default:zh-CN|
+| parent_dna     | string  | N |link an other metadata|user-defined|
+| abstract       | string  | N |Content summary                             |default:content[:200],user-defined|
+| source         | string  | N |source link.                                |user-defined|
+| id         | string  | N |business id    |user-defined|
+| pubkey         | string  | N |public key                               |generate by private key|
+| extra          | TreeMap<String, Object>  | N | more information by user defined  |user-defined|
+| signature      | string  | N |sign by secp256k1     |generate by system|
+| dna            | string  | N |metadata dna                                |generate by system|
+
+
 > location:DTCPProcessor.java，return a full metadata.
 
 ***
@@ -161,6 +191,32 @@ The Java-SDK provides three processors: Service/KeyProcessor, Service/DTCP Proce
     }
 
 ```
+
+input metadata:
+
+| name           | type    |must| comment              |
+| -------------- | ------- | ----|---------------------|
+| content_hash   | string  | Y |content                        |
+| created        | integer | Y |timestamp, eg:1506302092       |
+| license        | Metadata.License  | Y | license information|
+| license.type   | string  | Y |the type of license     |
+| license.parameters | TreeMap<String, Object>  | Y | the parameters of license |
+| type           | string  | Y |eg:image,article,audio,video,custom,private |
+| block_hash     | string  | Y |block_hash on YuanBen chain        |
+| block_height   | string  | Y |block_hash corresponding block_height|
+| pubkey         | string  | Y |public key   |
+| signature      | string  | Y |sign by secp256k1  |
+| language       | string  | Y |'zh-CN'|
+| dna            | string  | N |metadata dna       |
+| title          | string  | N |content title       |
+| category       | string  | N |eg:"news,article"    |
+| data           | TreeMap<String, Object>  | N |extension data of the type |
+| parent_dna     | string  | N |link an other metadata|
+| abstract       | string  | N |Content summary  |
+| source         | string  | N |source link.    |
+| id         | string  | N |business id    |
+| extra          | TreeMap<String, Object>  | N | more information by user defined  |
+
 > location:NodeProcessor.java.
 
 ***

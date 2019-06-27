@@ -67,6 +67,8 @@ https://github.com/yuanbenio/universe-java-sdk
 | license.parameters | TreeMap<String, Object>  | N |许可证参数对象,自定义内容                            |用户传入|
 | source         | string  |N| 原内容的链接, article,image的官网或者内容的链接                |用户传入|
 | data           | TreeMap<String, Object>  |N| 存放和原数据相关的内容。|用户传入|
+| id         | string  | N |业务编号    |用户传入|
+| pubkey         | string  | N |记录所有权的公钥     |用户传入|
 
 
 ## 数据流图
