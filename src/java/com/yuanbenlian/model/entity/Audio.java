@@ -11,7 +11,7 @@ import java.util.TreeMap;
 public class Audio implements BaseEntity {
 
     private String ext;
-    private String size;
+    private String size; //bytes
     private String duration;
     @SerializedName("simple_rate")
     private String simpleRate;
@@ -72,7 +72,7 @@ public class Audio implements BaseEntity {
     }
 
     @Override
-    public String GetType() {
+    public String getType() {
         return Constants.TYPE_AUDIO;
     }
 

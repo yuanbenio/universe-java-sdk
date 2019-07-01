@@ -3,7 +3,7 @@ package com.yuanbenlian.model.entity;
 import java.util.TreeMap;
 
 public interface BaseEntity {
-    String GetType();
+    String getType();
 
     int size();
 

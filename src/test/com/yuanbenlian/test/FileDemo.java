@@ -1,26 +1,9 @@
-/*
- * Copyright 2018 Seven Seals Technology
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.yuanbenlian.test;
 
 import com.sun.javafx.tools.packager.bundlers.IOUtils;
 import com.yuanbenlian.common.Constants;
 import com.yuanbenlian.common.InvalidException;
 import com.yuanbenlian.model.Metadata;
-import com.yuanbenlian.model.entity.Audio;
 import com.yuanbenlian.model.http.MetadataQueryResp;
 import com.yuanbenlian.model.http.MetadataSaveResp;
 import com.yuanbenlian.service.DTCPProcessor;
@@ -30,41 +13,32 @@ import org.junit.Test;
 import java.io.File;
 import java.util.TreeMap;
 
-public class AudioDemo {
+public class FileDemo {
 
     public String URL = "https://testnet.yuanbenlian.com/v1";
     public String private_key = "3c4dbee4485557edce3c8878be34373c1a41d955f38d977cfba373642983ce4c";
 
 
-    // *****************  save Audio demo *****************
     @Test
-    public void SaveAudioTest() {
+    public void saveFile() {
         Metadata metadata = new Metadata();
-        String audioPath = "test.mp3";
+        String filePath = "test.txt";
         try {
-            byte[] readFully = IOUtils.readFully(new File(audioPath));
+            File file = new File(filePath);
+            byte[] readFully = IOUtils.readFully(file);
 
             TestUtil.fillBlockHash(metadata, URL);
 
             metadata.setContentHash(DTCPProcessor.GenContentHash(new String(readFully)));
-            metadata.setCategory("test,YuanBen chain");
+            metadata.setCategory("test,file,flower");
 
             metadata.setTitle("YuanBen chain test");
-            Metadata.License license = new Metadata.License();
-            license.setType("test-license");
-            TreeMap<String, String> params = new TreeMap<>();
-            params.put("sale", "no");
-            license.setParameters(params);
-            metadata.setLicense(license);
+            //no license from outside
+            metadata.setLicense(Metadata.License.NoneLicense);
 
-            //Because the remaining audio information are required the other jar packets,
-            // the analog data is used here.
-            Audio data = new Audio();
-            data.setExt(audioPath.substring(audioPath.lastIndexOf(".") + 1));
-            data.setSize("" + new File(audioPath).length());//bytes
-            data.setDuration("" + 10 * 60);//10 min
-            data.setSimpleRate("44000");  // 44 khz
-            data.setBitRate("180000");  //180 kb
+            com.yuanbenlian.model.entity.File data = new com.yuanbenlian.model.entity.File();
+            data.setExt(filePath.substring(filePath.lastIndexOf(".") + 1));
+            data.setSize("" + file.length()); //bytes
             metadata.setData(data.toMap());
 
             metadata.setType(data.getType());
@@ -85,16 +59,15 @@ public class AudioDemo {
     }
 
     @Test
-    public void QueryAudioTx() {
-        String dna = "GAD27EU1E8VFK458NQ54RR76QJHK5VZ5OGDKJGYMTWUOWM85E";
+    public void QueryFileTx() {
+        String dna = "197AFHUD3ZZH5YVVQISMUZNNU9IGIR9I7NDKTOR41EDYA56EZL";
         try {
             MetadataQueryResp resp = NodeProcessor.QueryMetadata(URL, dna);
             assert resp != null : "response  is empty";
             assert Constants.NODE_SUCCESS.equalsIgnoreCase(resp.getCode()) : resp.getMsg();
-            System.out.println("QueryAudioTx success:\n" + resp.toJson());
+            System.out.println("QueryFileTx success:\n" + resp.toJson());
         } catch (InvalidException e) {
             e.printStackTrace();
         }
     }
-    // *****************  demo completed! *****************
 }

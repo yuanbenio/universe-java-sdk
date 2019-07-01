@@ -14,7 +14,7 @@ public class Image implements BaseEntity {
     private String ext;
     private String width;
     private String height;
-    private String size;
+    private String size; //bytes
 
     public Image() {
     }
@@ -77,7 +77,7 @@ public class Image implements BaseEntity {
     }
 
     @Override
-    public String GetType() {
+    public String getType() {
         return Constants.TYPE_IMAGE;
     }
     @Override
