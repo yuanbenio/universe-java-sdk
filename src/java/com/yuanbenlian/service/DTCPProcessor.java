@@ -169,6 +169,7 @@ public class DTCPProcessor {
                 }
                 break;
             case Constants.TYPE_AUDIO:
+            case Constants.TYPE_FILE:
             case Constants.TYPE_IMAGE:
             case Constants.TYPE_VIDEO:
                 if (metadata.getData() == null || metadata.getData().size() < 1) {

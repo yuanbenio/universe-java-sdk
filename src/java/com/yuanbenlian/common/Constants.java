@@ -25,6 +25,7 @@ public class Constants {
     public static final String Language_ZH = "zh-CN";
 
     public static final String TYPE_ARTICLE = "article";
+    public static final String TYPE_FILE = "file";
     public static final String TYPE_IMAGE = "image";
     public static final String TYPE_VIDEO = "video";
     public static final String TYPE_AUDIO = "audio";
@@ -33,7 +34,7 @@ public class Constants {
 
     public static final String VERSION = "v1.3";
 
-    public static final String NODE_SUCCESS= "ok";
+    public static final String NODE_SUCCESS = "ok";
 
 
     private static final BigInteger SECP256K1N = new BigInteger("fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141", 16);

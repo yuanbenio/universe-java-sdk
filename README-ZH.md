@@ -27,7 +27,7 @@ https://github.com/yuanbenio/universe-java-sdk
 <dependency>
   <groupId>com.yuanbenlian</groupId>
   <artifactId>universe-java-sdk</artifactId>
-  <version>1.4.3-SNAPSHOT</version>
+  <version>1.4.4-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -50,13 +50,13 @@ https://github.com/yuanbenio/universe-java-sdk
 | name           | type    | 必传|comment                                  |source|
 | -------------- | ------- | ----| ---------------------------------------- |------|
 | type           | string  | Y|类型, image,article,audio,vedio,custom,private |用户传入|
-| language       | string  | Y|语言 'zh-CN',                              |默认zh-cn,可用户传入|
-| title          | string  | N|内容标题                                       |用户传入|
+| language       | string  | Y|语言 'zh-CN',                 |默认zh-cn,可用户传入|
+| title          | string  | N|内容标题                          |用户传入|
 | signature      | string  | Y|内容签名, 算法(secp256k1)                      |系统生成|
-| abstract       | string  | N|描述,内容摘要                                       |用户传入，为空时，系统自动取内容的前200个字符|
+| abstract       | string  | N|描述,内容摘要       |用户传入，为空时，系统自动取内容的前200个字符|
 | category       | string  | N|分类集, 以逗号分隔 "新闻, 商业"                      |用户传入|
-| dna            | string  | Y|metadata dna                             |系统生成|
-| parent_dna            | string | N | 该metadata修改前的dna                             |用户传入，如果时修改前一个metadata的数据，则需要传入前一个metadata的dna|
+| dna            | string  | Y|metadata dna                         |系统生成|
+| parent_dna            | string | N | 该metadata修改前的dna         |用户传入，如果时修改前一个metadata的数据，则需要传入前一个metadata的dna|
 | block_hash            | string  |Y| 区块链上的一个block_hash值                             |用户传入，会到链上做校验|
 | created        | integer |Y| 创建的时间,时间戳,10位长度, 1506302092               |系统生成|
 | content_hash   | string  | Y| 内容哈希,hash算法(keccak256)                   |可用户传入，如果没有，系统根据content生成|
@@ -321,23 +321,36 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
          ......
     }
 ```
+
+input metadata:
+
+| name           | type    |must| comment              |source|
+| -------------- | ------- | ----|---------------------|------|
+| type           | string  | Y |存证记录类型，有:image,article,audio,video,custom,private,file |用户指定|
+| title          | string  | Y |内容标题      |用户指定，private类型可以为空|
+| category       | string  | N |内容类别，如:"news,article"    |用户指定，private类型可以为空|
+| block_hash     | string  | Y |双向锚定的区块哈希（可以通过QueryLatestBlockHash获取）    |用户指定|
+| block_height   | string  | Y |双向锚定的区块高度 （可以通过QueryLatestBlockHash获取）     |用户指定|
+| content   | string  | N |内容                      |用户指定，和contentHash不能同时为空|
+| content_hash   | string  | N |内容哈希，SDK中使用Keccak256哈希算法   |用户指定，如果为空，则根据content生成，所以content和contentHash不能同时为空|
+| data           | TreeMap<String, Object>  | Y |类型相关的扩展信息，如图片的宽和高 |用户指定,private\custom\article可以为空|
+| license        | Metadata.License  | Y | 授权信息                   |用户指定|
+| license.type   | string  | Y |授权协议名称                     |用户指定|
+| license.parameters | TreeMap<String, Object>  | Y | 授权内容   |用户指定，None协议可以为空|
+| created        | integer | N |生成记录的时间, eg:1506302092                    |系统生成|
+| language       | string  | N |语言          |用户指定,默认:zh-CN|
+| parent_dna     | string  | N |链接到另外一条存证记录，表示关联关系（如对link的修改）|用户指定|
+| abstract       | string  | N |内容摘要                    |用户指定，默认内容的前200字符|
+| source         | string  | N |原内容地址，如原文发布的URL                 |用户指定|
+| id         | string  | N |业务编号，如购物单ID   |用户指定|
+| pubkey         | string  | N |签名者的公钥                               |由传入的私钥生成|
+| extra          | TreeMap<String, Object>  | N | 用户需要添加的附加信息 |用户指定|
+| signature      | string  | N |数字签名    |数字签名，系统生成|
+| dna            | string  | N |记录DNA                                |系统生成|
+
 > 该方法位于DTCPProcessor.java，需要传入metadata和私钥，返回可被node节点接收的完整metadata。
 
-***
-#### FullMetadata
-```Java
-   /**
-     * 对metadata进行补全
-     * @param privateKey 16进制的私钥，用于签名
-     * @param metadata  必须包含license\title\type\block_hash,如果contentHash为空，则必须传入content的值；如果type不是article，则必须传入contentHash
-     * @return 信息补全的metadata
-     * @throws InvalidException
-     */
-    public static Metadata FullMetadata(String privateKey, Metadata metadata) throws InvalidException {
-         ......
-    }
-```
-> 该方法位于DTCPProcessor.java，需要传入metadata和私钥，返回可被node节点接收的完整metadata。
+
 
 ***
 #### GenRegisterAccountReq
@@ -403,6 +416,32 @@ public static String GetPubKeyFromPri(String privateKey) throws InvalidException
     }
 
 ```
+
+输入的Metadata: 此方法传入的Metadata请预先使用FullMetadata进行处理，防止存证失败
+
+| name           | type    |must| comment              |
+| -------------- | ------- | ----|---------------------|
+| content_hash   | string  | Y |内容哈希，hash(content)                         |
+| created        | integer | Y |记录生成的时间戳, eg:1506302092       |
+| license        | Metadata.License  | Y | 授权信息|
+| license.type   | string  | Y |授权协议   |
+| license.parameters | TreeMap<String, Object>  | Y | 授权内容|
+| type           | string  | Y |存证记录类型，有:image,article,audio,video,custom,private,file |
+| block_hash     | string  | Y |双向锚定区块的哈希 |
+| block_height   | string  | Y |双向锚定区块高度|
+| pubkey         | string  | Y |签名者的公钥   |
+| signature      | string  | Y |数据签名  |
+| language       | string  | Y |语言，'zh-CN'|
+| dna            | string  | N |本条记录的DNA      |
+| title          | string  | N |存证记录的标题  |
+| category       | string  | N |存证内容的类别，如:"news,article"    |
+| data           | TreeMap<String, Object>  | N |不同类型数据的扩展信息描述 |
+| parent_dna     | string  | N |链接到另外一条存证记录，表示关联关系（如对link的修改）|
+| abstract       | string  | N |内容摘要信息 |
+| source         | string  | N |原内容地址，如原文发布的URL   |
+| id         | string  | N |业务编号   |
+| extra          | TreeMap<String, Object>  | N | 附加信息 |
+
 > 该方法位于NodeProcessor.java，需要传入metadata，注册成功则返回metadata的dna。
 
 ***

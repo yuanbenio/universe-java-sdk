@@ -75,7 +75,7 @@ public class ImageDemo {
             data.setOriginal("https://github.com/yuanbenio/universe-java-sdk/yuanbenlian.png");
             data.setHeight("" + bi.getHeight());
             data.setWidth("" + bi.getWidth());
-            data.setSize("" + imageBase64.length());
+            data.setSize("" + imageBase64.length()); //bytes
             metadata.setData(data.toMap());
 
             //user identity

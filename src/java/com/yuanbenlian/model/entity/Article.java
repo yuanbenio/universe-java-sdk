@@ -7,7 +7,7 @@ import java.util.TreeMap;
 
 public class Article extends TreeMap implements BaseEntity {
     @Override
-    public String GetType() {
+    public String getType() {
         return Constants.TYPE_ARTICLE;
     }
     @Override

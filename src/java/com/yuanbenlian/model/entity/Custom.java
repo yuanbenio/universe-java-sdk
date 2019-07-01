@@ -7,7 +7,7 @@ import java.util.TreeMap;
 
 public class Custom extends TreeMap<String, String> implements BaseEntity {
     @Override
-    public String GetType() {
+    public String getType() {
         return Constants.TYPE_CUSTOM;
     }
 

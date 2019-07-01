@@ -25,7 +25,7 @@ jdk version ：1.7
 <dependency>
   <groupId>com.yuanbenlian</groupId>
   <artifactId>universe-java-sdk</artifactId>
-  <version>1.4.3-SNAPSHOT</version>
+  <version>1.4.4-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -153,8 +153,8 @@ input metadata:
 | type           | string  | Y |eg:image,article,audio,video,custom,private |user-defined|
 | title          | string  | Y |content title       |user-defined,private can be empty|
 | category       | string  | N |eg:"news,article"    |user-defined,private can be empty|
-| block_hash     | string  | Y |block_hash on YuanBen chain                 |user-defined|
-| block_height   | string  | Y |block_hash corresponding block_height       |user-defined|
+| block_hash     | string  | Y |block_hash on YuanBen chain  （get by QueryLatestBlockHash）        |user-defined|
+| block_height   | string  | Y |block_hash corresponding block_height  （get by QueryLatestBlockHash）    |user-defined|
 | content   | string  | N |content                        |user-defined,content and content_hash can't be empty at same time|
 | content_hash   | string  | N |Keccak256(content)                          |user-defined. default:Keccak256(content),content and content_hash can't be empty at same time|
 | data           | TreeMap<String, Object>  | Y |extension data of the type |user-defined,private\custom\article can be nil|
@@ -196,7 +196,7 @@ input metadata:
 
 | name           | type    |must| comment              |
 | -------------- | ------- | ----|---------------------|
-| content_hash   | string  | Y |content                        |
+| content_hash   | string  | Y |hash(content)                   |
 | created        | integer | Y |timestamp, eg:1506302092       |
 | license        | Metadata.License  | Y | license information|
 | license.type   | string  | Y |the type of license     |

@@ -45,7 +45,6 @@ public class ArticleDemo {
         try {
             TestUtil.fillBlockHash(metadata, URL);
             metadata.setContent(content);
-            metadata.setType(Constants.TYPE_ARTICLE);
             metadata.setCategory("Test,YuanBen chain");
 
             metadata.setTitle("YuanBen chain test");
@@ -56,6 +55,8 @@ public class ArticleDemo {
             //company
             article.put("unit", "Seven Seals Technology");
             metadata.setData(article.toMap());
+
+            metadata.setType(article.getType());
 
             //user identity
             String userID = "001";
