@@ -443,7 +443,22 @@ input metadata:
 | extra          | TreeMap<String, Object>  | N | 附加信息 |
 
 > 该方法位于NodeProcessor.java，需要传入metadata，注册成功则返回metadata的dna。
-
+***
+#### QueryMetadata
+```Java
+    /**
+         * query metadata from YuanBen chain
+         *
+         * @param url node address （http://localhost:9000/v1)
+         * @param dna DNA
+         * @return result include metadata and transaction information
+         * @throws InvalidException 
+         */
+        public static MetadataQueryResp QueryMetadata(String url, String dna) throws InvalidException {
+         ...
+        }
+```
+>  该方法位于NodeProcessor.java，查询DNA对应数据的上链信息，同时会返回上链的原始数据和数据所在区块信息。
 ***
 #### QueryLicense
 ```Java
